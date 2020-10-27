@@ -29,8 +29,7 @@ RSpec.describe "As a visitor", type: :feature do
 
       expect(current_path).to eq("/profile")
       expect(page).to have_content("You are now registered and logged in!")
-
+      expect(page).to have_content("Hello, #{user.name}")
     end
   end
-
 end
