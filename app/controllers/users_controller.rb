@@ -4,14 +4,15 @@ class UsersController < ApplicationController
   end
 
   def create
-    if user_params.password == params[:password_confirmation]
-      User.create(user_params)
+    if params[:password] == params[:password_confirmation]
+      new_user = User.create(user_params)
+      flash[:success] = 'You are now registered and logged in!'
+      session[:user_id] = new_user.id
       redirect_to "/profile"
     end
   end
 
   def show
-
   end
 
   private
