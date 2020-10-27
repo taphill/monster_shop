@@ -15,6 +15,9 @@ class UsersController < ApplicationController
     elsif params[:password] != params[:password_confirmation]
       flash[:error] = 'Your passwords do not match' 
       redirect_to "/register"
+    elsif @user.email_exists?
+      flash[:error] = 'A user with this email already exists'
+      render :new
     else
       flash[:error] = 'Missing required fields' 
       render :new
