@@ -45,7 +45,6 @@ RSpec.describe "As a visitor", type: :feature do
 
       click_button "Create User"
 
-      expect(current_path).to eq('/register')
       expect(page).to have_content('Missing required fields')
     end
 
@@ -74,7 +73,7 @@ RSpec.describe "As a visitor", type: :feature do
       expect(find_field(:user_password).value).to eq(nil) 
       expect(find_field(:user_password_confirmation).value).to eq(nil)
 
-      expect(page).to have_content('Missing required fields')
+      expect(page).to have_content('A user with this email already exists')
     end
   end
 end

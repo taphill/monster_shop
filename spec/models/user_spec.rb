@@ -12,4 +12,15 @@ describe User, type: :model do
 
     it { should validate_uniqueness_of(:email) }
   end
+
+  describe 'instance methods' do
+    it '.email_exists?' do
+      user1 = build(:user, email: 'jun.lee@gmail.com')  
+      expect(user1.email_exists?).to eq(false)
+
+      user1.save
+      user2 = build(:user, email: 'jun.lee@gmail.com')  
+      expect(user2.email_exists?).to eq(true)
+    end
+  end
 end
