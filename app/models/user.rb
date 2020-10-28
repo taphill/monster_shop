@@ -4,8 +4,4 @@ class User < ApplicationRecord
   validates :email, uniqueness: true, presence: true
 
   enum role: ['default', 'merchant']
-
-  def email_exists?
-    User.exists?(email: self.email)
-  end
 end
