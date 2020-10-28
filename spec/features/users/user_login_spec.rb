@@ -41,4 +41,19 @@ describe 'As a visitor' do
       expect(page).to have_content("Welcome, #{admin.name}")
     end
   end
+
+  describe 'when I login with bad credentials' do
+    it 'redirects me to login page with flash message' do
+      visit login_path
+
+      user = create(:user)
+
+      fill_in :email, with: user.email
+      fill_in :password, with: 'password7'
+      click_button 'Login'
+      save_and_open_page
+      expect(current_path).to eq(login_path)
+      expect(page).to have_content("Your login credentials were incorrect.")
+    end
+  end
 end
