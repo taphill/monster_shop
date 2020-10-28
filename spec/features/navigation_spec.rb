@@ -124,7 +124,6 @@ RSpec.describe 'Site Navigation' do
   describe 'As a merchant employee' do
     it "I see link to merchant dashboard among main nav links" do
       merchant = create(:user, role: 1)
-      # allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant)
 
       visit root_path
 
@@ -150,6 +149,25 @@ RSpec.describe 'Site Navigation' do
         click_link('Dashboard')
         expect(current_path).to eq('/merchant')
       end
+    end
+
+    it "I can't access paths for admins" do
+      merchant = create(:user, role: 1)
+
+      visit root_path
+
+      within 'nav' do
+        click_link 'Login'
+      end
+
+      fill_in :email, with: merchant.email
+      fill_in :password, with: 'password'
+      click_button 'Login'
+      
+      no_pass = "The page you were looking for doesn't exist."
+
+      visit '/admin'
+      expect(page).to have_content(no_pass)
     end
   end
 
