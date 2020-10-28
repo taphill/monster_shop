@@ -52,4 +52,33 @@ RSpec.describe 'Site Navigation' do
       end
     end
   end
+
+  describe 'As a default user' do
+    it "I see profile & logout links plus my name" do
+      user = create(:user)
+
+      visit root_path
+
+      within 'nav' do
+        click_link 'Login'
+      end
+
+      fill_in :email, with: user.email
+      fill_in :password, with: 'password'
+      click_button 'Login'
+
+      expect(current_path).to eq('/profile')
+
+      within 'nav' do
+        expect(page).to have_link('Home')
+        expect(page).to have_link('All Items')
+        expect(page).to have_link('Cart: 0')
+        expect(page).to have_link('Profile')
+        expect(page).to have_link('Logout')
+        expect(page).to_not have_link('Login')
+        expect(page).to_not have_link('Register')
+        expect(page).to have_content("Logged in as #{user.name}")
+      end
+    end
+  end
 end
