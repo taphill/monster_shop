@@ -163,7 +163,7 @@ RSpec.describe 'Site Navigation' do
       fill_in :email, with: merchant.email
       fill_in :password, with: 'password'
       click_button 'Login'
-      
+
       no_pass = "The page you were looking for doesn't exist."
 
       visit '/admin'
@@ -202,6 +202,28 @@ RSpec.describe 'Site Navigation' do
         click_link('All Users')
         expect(current_path).to eq('/admin/users')
       end
+    end
+
+    it "I can't access paths for admins" do
+      admin = create(:user, role: 2)
+
+      visit root_path
+
+      within 'nav' do
+        click_link 'Login'
+      end
+
+      fill_in :email, with: admin.email
+      fill_in :password, with: 'password'
+      click_button 'Login'
+
+      no_pass = "The page you were looking for doesn't exist."
+
+      visit '/merchant'
+      expect(page).to have_content(no_pass)
+
+      visit '/cart'
+      expect(page).to have_content(no_pass)
     end
   end
 end
