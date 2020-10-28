@@ -5,4 +5,8 @@ class WelcomeController < ApplicationController
   def merchant
     render "merchant_dashboard"
   end
+
+  def admin
+    render "admin_dashboard"
+  end
 end
