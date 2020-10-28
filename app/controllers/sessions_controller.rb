@@ -11,6 +11,7 @@ class SessionsController < ApplicationController
     elsif current_admin?
       redirect_to '/admin'
     else
+      flash[:notice] = "Welcome, #{@user.name}"
       redirect_to '/profile'
     end
   end
