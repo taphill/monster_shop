@@ -3,10 +3,13 @@ class WelcomeController < ApplicationController
   end
 
   def merchant
-    render "merchant_dashboard"
+    # render status: 404 if !current_user
+    render file: "public/404" unless current_merchant?
+    render "merchant_dashboard" if current_merchant?
   end
 
   def admin
-    render "admin_dashboard"
+    render file: "public/404" unless current_admin?
+    render "admin_dashboard" if current_admin?
   end
 end
