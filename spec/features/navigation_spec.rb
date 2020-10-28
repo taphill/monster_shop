@@ -73,11 +73,47 @@ RSpec.describe 'Site Navigation' do
         expect(page).to have_link('Home')
         expect(page).to have_link('All Items')
         expect(page).to have_link('Cart: 0')
+        expect(page).to_not have_link('Login')
+        expect(page).to_not have_link('Register')
+        expect(page).to have_content("Logged in as #{user.name}")
+
+        click_link('Profile')
+        expect(current_path).to eq('/profile')
+
+        click_link('Logout')
+        expect(current_path).to eq('/logout')
+      end
+    end
+  end
+
+  describe 'As a merchant employee' do
+    it "I see link to merchant dashboard among main nav links" do
+      merchant = create(:user, role: 1)
+      # allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant)
+
+      visit root_path
+
+      within 'nav' do
+        click_link 'Login'
+      end
+
+      fill_in :email, with: merchant.email
+      fill_in :password, with: 'password'
+      click_button 'Login'
+
+      expect(current_path).to eq('/merchant')
+
+      within 'nav' do
+        expect(page).to have_link('Home')
+        expect(page).to have_link('All Items')
+        expect(page).to have_link('Cart: 0')
         expect(page).to have_link('Profile')
         expect(page).to have_link('Logout')
         expect(page).to_not have_link('Login')
         expect(page).to_not have_link('Register')
-        expect(page).to have_content("Logged in as #{user.name}")
+        expect(page).to have_content("Logged in as #{merchant.name}")
+        click_link('Dashboard')
+        expect(current_path).to eq('/merchant')
       end
     end
   end
