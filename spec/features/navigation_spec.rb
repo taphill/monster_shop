@@ -97,6 +97,28 @@ RSpec.describe 'Site Navigation' do
         expect(current_path).to eq('/logout')
       end
     end
+
+    it "I can't access paths for admins or merchants" do
+      user = create(:user)
+
+      visit root_path
+
+      within 'nav' do
+        click_link 'Login'
+      end
+
+      fill_in :email, with: user.email
+      fill_in :password, with: 'password'
+      click_button 'Login'
+
+      no_pass = "The page you were looking for doesn't exist."
+
+      visit '/merchant'
+      expect(page).to have_content(no_pass)
+
+      visit '/admin'
+      expect(page).to have_content(no_pass)
+    end
   end
 
   describe 'As a merchant employee' do
