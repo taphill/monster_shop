@@ -51,7 +51,14 @@ describe 'As a visitor' do
       fill_in :email, with: user.email
       fill_in :password, with: 'password7'
       click_button 'Login'
-      save_and_open_page
+
+      expect(current_path).to eq(login_path)
+      expect(page).to have_content("Your login credentials were incorrect.")
+
+      fill_in :email, with: "jun.lee@example.com"
+      fill_in :password, with: 'password'
+      click_button 'Login'
+
       expect(current_path).to eq(login_path)
       expect(page).to have_content("Your login credentials were incorrect.")
     end
