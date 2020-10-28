@@ -117,4 +117,38 @@ RSpec.describe 'Site Navigation' do
       end
     end
   end
+
+  describe 'As an admin' do
+    it "I see the normal links plus dashboard and all users, not cart" do
+      admin = create(:user, role: 2)
+
+      visit root_path
+
+      within 'nav' do
+        click_link 'Login'
+      end
+
+      fill_in :email, with: admin.email
+      fill_in :password, with: 'password'
+      click_button 'Login'
+
+      expect(current_path).to eq('/admin')
+
+      within 'nav' do
+        expect(page).to have_link('Home')
+        expect(page).to have_link('All Items')
+        expect(page).to_not have_link('Cart: 0')
+        expect(page).to have_link('Profile')
+        expect(page).to have_link('Logout')
+        expect(page).to_not have_link('Login')
+        expect(page).to_not have_link('Register')
+
+        click_link('Dashboard')
+        expect(current_path).to eq('/admin')
+
+        click_link('All Users')
+        expect(current_path).to eq('/admin/users')
+      end
+    end
+  end
 end
