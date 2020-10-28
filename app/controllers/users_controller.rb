@@ -7,19 +7,13 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    if params[:password] == params[:password_confirmation] && @user.valid?
+    if @user.valid?
       @user.save
       flash[:success] = 'You are now registered and logged in!'
       session[:user_id] = @user.id
       redirect_to "/profile"
-    elsif params[:password] != params[:password_confirmation]
-      flash[:error] = 'Your passwords do not match' 
-      redirect_to "/register"
-    elsif @user.email_exists?
-      flash[:error] = 'A user with this email already exists'
-      render :new
     else
-      flash[:error] = 'Missing required fields' 
+      flash[:error] = @user.errors.full_messages.to_sentence
       render :new
     end
   end
@@ -30,6 +24,15 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :street_address, :city, :state, :zip, :email, :password)
+    params.require(:user).permit(
+      :name,
+      :street_address,
+      :city, 
+      :state,
+      :zip,
+      :email,
+      :password,
+      :password_confirmation
+    )
   end
 end
