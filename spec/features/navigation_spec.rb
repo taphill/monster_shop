@@ -94,7 +94,7 @@ RSpec.describe 'Site Navigation' do
         expect(current_path).to eq('/profile')
 
         click_link('Logout')
-        expect(current_path).to eq('/logout')
+        expect(current_path).to eq('/')
       end
     end
 
