@@ -51,6 +51,19 @@ RSpec.describe 'Site Navigation' do
         expect(page).to have_content("Cart: 0")
       end
     end
+
+    it "I can't access paths for users of any type" do
+      no_pass = "The page you were looking for doesn't exist."
+
+      visit '/merchant'
+      expect(page).to have_content(no_pass)
+
+      visit '/admin'
+      expect(page).to have_content(no_pass)
+
+      visit '/profile'
+      expect(page).to have_content(no_pass)
+    end
   end
 
   describe 'As a default user' do
