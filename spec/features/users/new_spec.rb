@@ -45,11 +45,28 @@ RSpec.describe "As a visitor", type: :feature do
 
       click_button "Create User"
 
-      expect(page).to have_content('Missing required fields')
+      expect(page).to have_content("Name can't be blank")
+    end
+
+    it 'cannot enter two different passwords' do
+      visit '/register'
+
+      fill_in :user_name, with: "Jun Lee"
+      fill_in :user_street_address, with: "1234 America Lane"
+      fill_in :user_city, with: "Denver"
+      fill_in :user_state, with: "CO"
+      fill_in :user_zip, with: "80017"
+      fill_in :user_email, with: "jun.lee@gmail.com"
+      fill_in :user_password, with: "password"
+      fill_in :user_password_confirmation, with: "password1"
+
+      click_button "Create User"
+
+      expect(page).to have_content("Password confirmation doesn't match")
     end
 
     it 'can not register user unless email is unique' do
-      user = create(:user, email: 'jun.lee@gmail.com')  
+      user = create(:user, email: 'jun.lee@gmail.com')
 
       visit '/register'
 
@@ -64,16 +81,16 @@ RSpec.describe "As a visitor", type: :feature do
 
       click_button "Create User"
 
-      expect(find_field(:user_name).value).to eq('Jun Lee') 
-      expect(find_field(:user_street_address).value).to eq('1234 America Lane') 
-      expect(find_field(:user_city).value).to eq('Denver') 
-      expect(find_field(:user_state).value).to eq('CO') 
-      expect(find_field(:user_zip).value).to eq('80017') 
-      expect(find_field(:user_email).value).to eq(nil) 
-      expect(find_field(:user_password).value).to eq(nil) 
+      expect(find_field(:user_name).value).to eq('Jun Lee')
+      expect(find_field(:user_street_address).value).to eq('1234 America Lane')
+      expect(find_field(:user_city).value).to eq('Denver')
+      expect(find_field(:user_state).value).to eq('CO')
+      expect(find_field(:user_zip).value).to eq('80017')
+      expect(find_field(:user_email).value).to eq(nil)
+      expect(find_field(:user_password).value).to eq(nil)
       expect(find_field(:user_password_confirmation).value).to eq(nil)
 
-      expect(page).to have_content('A user with this email already exists')
+      expect(page).to have_content('Email has already been taken')
     end
   end
 end
