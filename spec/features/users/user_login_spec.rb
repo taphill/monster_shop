@@ -63,4 +63,23 @@ describe 'As a visitor' do
       expect(page).to have_content("Your login credentials were incorrect.")
     end
   end
+
+  describe 'as a logged in user' do
+    it 'redirects me to my dashboard/profile when I click login' do
+      user = create(:user)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+      visit login_path
+      expect(current_path).to eq("/profile")
+
+      merchant = create(:user, role: 1)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant)
+      visit login_path
+      expect(current_path).to eq("/merchant")
+
+      admin = create(:user, role: 2)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(admin)
+      visit login_path
+      expect(current_path).to eq("/admin")
+    end
+  end
 end
