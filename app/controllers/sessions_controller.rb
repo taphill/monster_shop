@@ -7,7 +7,15 @@ class SessionsController < ApplicationController
   def create
     @user = User.find_by(login_params)
     session[:user_id] = @user.id
-    redirect_to '/profile'
+    if @user.role == 'default'
+      redirect_to '/profile'
+    elsif @user.role == 'merchant'
+      redirect_to '/merchant'
+    end
+  end
+
+  def logout
+
   end
 
   private
