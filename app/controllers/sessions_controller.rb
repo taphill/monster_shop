@@ -6,10 +6,12 @@ class SessionsController < ApplicationController
   def create
     @user = User.find_by(login_params)
     session[:user_id] = @user.id
-    if @user.role == 'default'
-      redirect_to '/profile'
-    elsif @user.role == 'merchant'
+    if current_merchant?
       redirect_to '/merchant'
+    elsif current_admin?
+      redirect_to '/admin'
+    else
+      redirect_to '/profile'
     end
   end
 
