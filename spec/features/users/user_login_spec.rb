@@ -14,5 +14,18 @@ describe 'As a visitor' do
       expect(current_path).to eq("/profile")
       expect(page).to have_content("Welcome, #{user.name}")
     end
+
+    it 'as a merchant I am redirected to dashboard & see a flash message' do
+      visit login_path
+
+      merchant = create(:user, role: 1)
+
+      fill_in :email, with: merchant.email
+      fill_in :password, with: 'password'
+      click_button 'Login'
+
+      expect(current_path).to eq("/merchant")
+      expect(page).to have_content("Welcome, #{merchant.name}")
+    end
   end
 end

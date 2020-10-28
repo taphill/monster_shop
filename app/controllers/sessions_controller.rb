@@ -7,6 +7,7 @@ class SessionsController < ApplicationController
     @user = User.find_by(login_params)
     session[:user_id] = @user.id
     if current_merchant?
+      flash[:notice] = "Welcome, #{@user.name}"
       redirect_to '/merchant'
     elsif current_admin?
       redirect_to '/admin'
