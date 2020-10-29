@@ -10,6 +10,13 @@ class Cart
     @contents[item] += 1
   end
 
+  def remove_one(item)
+    @contents[item] -= 1
+    if @contents[item] == 0
+      @contents.delete(item)
+    end
+  end
+
   def total_items
     @contents.values.sum
   end
