@@ -6,6 +6,13 @@ class CartController < ApplicationController
     redirect_to "/items"
   end
 
+  def change_quantity
+    item = Item.find(params[:item_id])
+    cart.add_item(item.id.to_s)
+    flash.now[:success] = "#{item.name} was successfully updated"
+    redirect_to '/cart'
+  end
+
   def show
     render file: "public/404" if current_admin?
     @items = cart.items
