@@ -66,16 +66,37 @@ RSpec.describe 'Cart show' do
         @items_in_cart.each do |item|
           within "#cart-item-#{item.id}" do
             expect(page).to have_link(item.name)
-            expect(page).to have_button('+1')
+            expect(page).to have_button('+')
           end
         end
 
         within "#cart-item-#{ruler.id}" do
-          click_on '+1'
+          click_on '+'
           expect(page).to have_content("2")
           expect(page).to have_content("$2")
-          expect(page).to_not have_button('+1')
+          expect(page).to_not have_button('+')
         end
+      end
+
+      it 'Next to each item is a way to decrease the amount of that item' do
+        visit '/cart'
+
+        @items_in_cart.each do |item|
+          within "#cart-item-#{item.id}" do
+            expect(page).to have_link(item.name)
+            expect(page).to have_button('+')
+          end
+        end
+
+        within "#cart-item-#{@pencil.id}" do
+          click_on '+'
+          expect(page).to have_content("2")
+          click_on '-'
+          expect(page).to have_content("1")
+          click_on '-'
+        end
+
+        expect(page).to_not have_content(@pencil.name)
       end
     end
   end
