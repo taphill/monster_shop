@@ -55,6 +55,28 @@ RSpec.describe 'Cart show' do
 
         expect(page).to have_content("Total: $124")
       end
+
+      it 'Next to each item is a way to increase the amount of that item' do
+        ruler = @mike.items.create(name: "Ruler", description: "Measure away!", price: 1, image: "https://static6.depositphotos.com/1106005/640/i/450/depositphotos_6403604-stock-photo-wooden-ruler.jpg", inventory: 2)
+        visit "/items/#{ruler.id}"
+        click_on "Add To Cart"
+
+        visit '/cart'
+
+        @items_in_cart.each do |item|
+          within "#cart-item-#{item.id}" do
+            expect(page).to have_link(item.name)
+            expect(page).to have_button('+1')
+          end
+        end
+
+        within "#cart-item-#{ruler.id}" do
+          click_on '+1'
+          expect(page).to have_content("2")
+          expect(page).to have_content("$2")
+          expect(page).to_not have_button('+1')
+        end
+      end
     end
   end
   describe "When I haven't added anything to my cart" do
