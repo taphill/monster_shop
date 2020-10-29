@@ -31,6 +31,21 @@ RSpec.describe Cart do
         })
     end
 
+    it ".remove_one()" do
+      @cart.remove_one(@giant.id.to_s)
+
+      expect(@cart.contents).to eq({
+        @ogre.id.to_s => 1,
+        @giant.id.to_s => 1
+        })
+
+      @cart.remove_one(@giant.id.to_s)
+
+      expect(@cart.contents).to eq({
+        @ogre.id.to_s => 1
+        })
+    end
+
     it '.total_items' do
       expect(@cart.total_items).to eq(3)
     end
@@ -47,5 +62,7 @@ RSpec.describe Cart do
       expect(@cart.subtotal(@ogre)).to eq(20)
       expect(@cart.subtotal(@giant)).to eq(100)
     end
+
+
   end
 end
