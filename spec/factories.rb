@@ -11,11 +11,10 @@ FactoryBot.define do
   end
 
   factory :merchant do
-    name { Faker::Superhero.name }
+    name { Faker::Company.name }
     address { Faker::Address.street_address }
     city { Faker::Address.city }
     state { Faker::Address.state_abbr }
     zip { Faker::Address.zip }
   end
-
 end
