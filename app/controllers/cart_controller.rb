@@ -8,7 +8,11 @@ class CartController < ApplicationController
 
   def change_quantity
     item = Item.find(params[:item_id])
-    cart.add_item(item.id.to_s)
+    if params[:type] == 'up'
+      cart.add_item(item.id.to_s)
+    elsif params[:type] == 'down'
+      cart.remove_one(item.id.to_s)
+    end
     flash.now[:success] = "#{item.name} was successfully updated"
     redirect_to '/cart'
   end
