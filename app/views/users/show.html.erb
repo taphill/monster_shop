@@ -1,1 +1,4 @@
 <h1>Hello, <%= current_user.name %></h1>
+<% if current_user.orders %>
+<%= link_to "My Orders", "/profile/orders" %>
+<% end %>
