@@ -28,19 +28,4 @@ describe 'as a registered user' do
       expect(current_path).to eq('/profile/orders')
     end
   end
-
-  describe 'when I visit my profile page and do not have orders in the system' do
-    it 'does not have a link called my orders' do
-      user_2= create(:user)
-      visit login_path
-
-      fill_in :email, with: user_2.email
-      fill_in :password, with: user_2.password
-
-      click_button "Login"
-
-      expect(current_path).to eq(profile_path)
-      expect(page).to_not have_content("My Orders")
-    end
-  end
 end
