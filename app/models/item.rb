@@ -32,4 +32,7 @@ class Item <ApplicationRecord
     item_orders.empty?
   end
 
+  def quantity_purchased
+    item_orders.sum(:quantity)
+  end
 end
