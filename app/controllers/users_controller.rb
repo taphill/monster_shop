@@ -31,10 +31,17 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find_by(email: params[:old_email])
-    @user.update(update_params)
-    flash[:success] = "Your profile data is updated."
-    redirect_to profile_path
+    @user = current_user
+    @user.update(update_params) if profile_update?
+    @user.update(password_params) if password_update?
+    if @user.save
+      flash[:success] = "Your profile is updated." if profile_update?
+      flash[:success] = "Your password is updated." if password_update?
+      redirect_to profile_path
+    else
+      flash[:error] = @user.errors.full_messages.to_sentence
+      redirect_to profile_edit_path
+    end
   end
 
   private
@@ -68,4 +75,13 @@ class UsersController < ApplicationController
       :password_confirmation
     )
   end
+
+  def profile_update?
+    params[:commit] == "Update Profile"
+  end
+
+  def password_update?
+    params[:commit] == "Update Password"
+  end
+
 end
