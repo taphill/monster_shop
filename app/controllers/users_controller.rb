@@ -35,11 +35,12 @@ class UsersController < ApplicationController
     @user.update(update_params) if profile_update?
     @user.update(password_params) if password_update?
     if @user.save
-      flash[:success] = "Your profile is updated." if profile_update?
-      flash[:success] = "Your password is updated." if password_update?
+      flash[:success] = "Your profile is updated" if profile_update?
+      flash[:success] = "Your password is updated" if password_update?
       redirect_to profile_path
     else
       flash[:error] = @user.errors.full_messages.to_sentence
+      return redirect_to "/profile/edit?request=profile" if profile_update?
       redirect_to profile_edit_path
     end
   end

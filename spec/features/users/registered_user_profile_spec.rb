@@ -54,7 +54,7 @@ RSpec.describe "As a registered user", type: :feature do
 
       expect(current_path).to eq(profile_path)
 
-      expect(page).to have_content("Your profile is updated.")
+      expect(page).to have_content("Your profile is updated")
 
       within ".user-profile" do
         expect(page).to have_content(user.name)
@@ -67,7 +67,7 @@ RSpec.describe "As a registered user", type: :feature do
       end
     end
 
-    it "I can edit my password" do
+    it "I can edit my password as long as my password fields match" do
       user = create(:user)
 
       visit login_path
@@ -96,7 +96,37 @@ RSpec.describe "As a registered user", type: :feature do
       click_button "Update Password"
 
       expect(current_path).to eq(profile_path)
-      expect(page).to have_content("Your password is updated.")
+      expect(page).to have_content("Your password is updated")
+    end
+
+    it "I can update my email if it is a unique email" do
+      user1 = create(:user, email: "mike.dao@example.com")
+      user2 = create(:user)
+
+      visit login_path
+
+      fill_in :email, with: user2.email
+      fill_in :password, with: 'password'
+      click_button 'Login'
+
+      visit profile_path(user2)
+
+      click_link "Edit Profile Data"
+
+      fill_in :email, with: user1.email
+
+      click_button "Update Profile"
+
+      expect(current_path).to eq(profile_edit_path)
+      expect(page).to have_content("Email has already been taken")
+      expect(find_field(:name).value).to eq(user2.name)
+      expect(find_field(:street_address).value).to eq(user2.street_address)
+      expect(find_field(:city).value).to eq(user2.city)
+      expect(find_field(:state).value).to eq(user2.state)
+      expect(find_field(:zip).value).to eq(user2.zip)
+      expect(find_field(:email).value).to eq(user2.email)
+      expect(page).to_not have_field(:password)
+      expect(page).to_not have_field(:password_confirmation)
     end
 
   end
