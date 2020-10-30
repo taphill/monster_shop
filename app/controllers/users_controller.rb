@@ -28,6 +28,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find_by(email: params[:old_email])
     @user.update(update_params)
+    flash[:success] = "Your profile data is updated."
     redirect_to profile_path
   end
 

@@ -48,10 +48,13 @@ RSpec.describe "As a registered user", type: :feature do
       fill_in :city, with: "Denver"
       fill_in :state, with: "CO"
       fill_in :zip, with: "80209"
+      fill_in :email, with: "fake@example.com"
 
       click_button "Update Profile"
 
       expect(current_path).to eq(profile_path)
+
+      expect(page).to have_content("Your profile data is updated.")
 
       within ".user-profile" do
         expect(page).to have_content(user.name)
@@ -59,9 +62,13 @@ RSpec.describe "As a registered user", type: :feature do
         expect(page).to have_content("Denver")
         expect(page).to have_content("CO")
         expect(page).to have_content("80209")
-        expect(page).to have_content(user.email)
+        expect(page).to have_content("fake@example.com")
         expect(page).to have_content(user.created_at.strftime("%m/%d/%Y"))
       end
+    end
+
+    it "I can edit my password" do
+
     end
 
   end
