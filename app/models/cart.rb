@@ -39,4 +39,8 @@ class Cart
     end
   end
 
+  def inventory_check(item)
+    @contents[item.id.to_s] < item.inventory
+  end
+
 end
