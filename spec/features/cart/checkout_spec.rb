@@ -42,7 +42,10 @@ RSpec.describe 'Cart show' do
 
     it 'I can complete checkout when logged in' do
       user = create(:user)
-      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+      visit '/login'
+      fill_in :email, with: user.email
+      fill_in :password, with: 'password'
+      click_button 'Login'
 
       visit "/cart"
       click_on "Checkout"
@@ -55,7 +58,7 @@ RSpec.describe 'Cart show' do
       click_on "Create Order"
 
       new_order = Order.last
-      expect(new_order.status).to eq("Pending")
+      expect(new_order.status).to eq("pending")
       expect(new_order.user_id).to eq(user.id)
       expect(current_path).to eq("/profile/orders")
       expect(page).to have_content("Your order was successfully created!")
