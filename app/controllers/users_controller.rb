@@ -22,6 +22,29 @@ class UsersController < ApplicationController
     render file: "public/404" unless current_user
   end
 
+  def edit
+    if params[:request] == "profile"
+      @render = 'edit_profile'
+    else
+      @render = 'edit_password'
+    end
+  end
+
+  def update
+    @user = current_user
+    @user.update(update_params) if profile_update?
+    @user.update(password_params) if password_update?
+    if @user.save
+      flash[:success] = "Your profile is updated" if profile_update?
+      flash[:success] = "Your password is updated" if password_update?
+      redirect_to profile_path
+    else
+      flash[:error] = @user.errors.full_messages.to_sentence
+      return redirect_to "/profile/edit?request=profile" if profile_update?
+      redirect_to profile_edit_path
+    end
+  end
+
   private
 
   def user_params
@@ -36,4 +59,30 @@ class UsersController < ApplicationController
       :password_confirmation
     )
   end
+
+  def update_params
+    params.permit(
+      :name,
+      :street_address,
+      :city,
+      :state,
+      :zip,
+      :email)
+  end
+
+  def password_params
+    params.permit(
+      :password,
+      :password_confirmation
+    )
+  end
+
+  def profile_update?
+    params[:commit] == "Update Profile"
+  end
+
+  def password_update?
+    params[:commit] == "Update Password"
+  end
+
 end
