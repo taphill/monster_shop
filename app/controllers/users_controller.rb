@@ -22,6 +22,15 @@ class UsersController < ApplicationController
     render file: "public/404" unless current_user
   end
 
+  def edit
+  end
+
+  def update
+    @user = User.find_by(email: params[:old_email])
+    @user.update(update_params)
+    redirect_to profile_path
+  end
+
   private
 
   def user_params
@@ -35,5 +44,15 @@ class UsersController < ApplicationController
       :password,
       :password_confirmation
     )
+  end
+
+  def update_params
+    params.permit(
+      :name,
+      :street_address,
+      :city,
+      :state,
+      :zip,
+      :email)
   end
 end
