@@ -68,15 +68,15 @@ describe 'as a default user' do
       within "#item-#{@gelatinous_cube.id}" do
         expect(page).to have_content(@gelatinous_cube.name)
         expect(page).to have_content(@gelatinous_cube.description)
-        expect(page).to have_content(@gelatinous_cube.image)
-        expect(page).to have_content(@gelatinous_cube.quantity)
+        expect(page).to have_xpath("//img[contains(@src,'#{@gelatinous_cube.image}')]")
+        expect(page).to have_content(@item_order_1.quantity)
         expect(page).to have_content(@gelatinous_cube.price)
-        expect(page).to have_content(@gelatinous_cube.item_orders.subtotal)
+        expect(page).to have_content(@item_order_1.subtotal)
       end
 
       within "#item-#{@owlbear.id}" do
         expect(page).to have_content(@owlbear.name)
-        expect(page).to have_content(@owlbear.item_orders.subtotal)
+        expect(page).to have_content(@item_order_2.subtotal)
       end
     end
   end
