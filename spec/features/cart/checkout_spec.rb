@@ -39,6 +39,29 @@ RSpec.describe 'Cart show' do
       expect(page).to have_link("Login")
       expect(page).to have_content("Ready to checkout? Please login or register to continue.")
     end
+
+    it 'I can complete checkout when logged in' do
+      user = create(:user)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+
+      visit "/cart"
+      click_on "Checkout"
+
+      fill_in :name, with: user.name
+      fill_in :address, with: user.street_address
+      fill_in :city, with: user.city
+      fill_in :state, with: user.state
+      fill_in :zip, with: user.zip
+      click_on "Create Order"
+
+      new_order = Order.last
+      expect(new_order.status).to eq("Pending")
+      expect(new_order.user_id).to eq(user.id)
+      expect(current_path).to eq("/profile/orders")
+      expect(page).to have_content("Your order was successfully created!")
+      expect(page).to have_content(new_order.id)
+      expect(page).to have_content("Cart: 0")
+    end
   end
 
   describe 'When I havent added items to my cart' do
