@@ -1,0 +1,22 @@
+<section class="order-info">
+  <h1>Order Information for Order #<%= @order.id %></h1>
+  <p>Order Created On: <%= @order.created_at %></p>
+  <p>Order Updated On: <%= @order.updated_at %></p>
+  <p>Order Status: <%= @order.status %></p>
+  <p>Total Quantity of Items: <%= @order.total_quantity %></p>
+  <p>Grand Total: <%= @order.grandtotal %></p>
+</section>
+
+<section class="items">
+  <h2>Items In This Order:</h2>
+  <% @order.item_orders.each do |item_order| %>
+    <section id="item-<%= item_order.item.id %>">
+      <h3><%= item_order.item.name %></h3><br/>
+      <%= image_tag(item_order.item.image) %>
+      <p><%= item_order.item.description %></p>
+      <p><%= item_order.item.price %></p>
+      <p><%= item_order.quantity %></p>
+      <p><%= item_order.subtotal %></p>
+    </section>
+  <% end %>
+</section>
