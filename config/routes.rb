@@ -49,4 +49,7 @@ Rails.application.routes.draw do
   post "/users", to: "users#create"
   get "/profile", to: "users#show"
 
+  namespace :profile do
+    get "/orders", to: "orders#index"
+  end
 end
