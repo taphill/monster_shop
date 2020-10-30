@@ -42,7 +42,7 @@ RSpec.describe("Order Creation") do
       fill_in :zip, with: zip
 
       click_button "Create Order"
-
+      
       new_order = Order.last
 
       expect(current_path).to eq("/orders/#{new_order.id}")

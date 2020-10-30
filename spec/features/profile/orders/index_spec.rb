@@ -41,4 +41,43 @@ describe 'as a default user' do
       end
     end
   end
+
+  describe 'from the profile/orders page when I click on a link for orders show page' do
+    it 'has all information about that specific order' do
+      visit login_path
+      fill_in :email, with: @user.email
+      fill_in :password, with: @user.password
+      click_button "Login"
+      click_link "My Orders"
+
+      within "#order-#{@order_1.id}" do
+        click_link(@order_1.id)
+      end
+
+      expect(current_path).to eq("/profile/orders/#{@order_1.id}")
+
+      within ".order-info" do
+        expect(page).to have_content(@order_1.id)
+        expect(page).to have_content(@order_1.created_at)
+        expect(page).to have_content(@order_1.updated_at)
+        expect(page).to have_content(@order_1.status)
+        expect(page).to have_content(@order_1.total_quantity)
+        expect(page).to have_content(@order_1.grandtotal)
+      end
+
+      within "#item-#{@gelatinous_cube.id}" do
+        expect(page).to have_content(@gelatinous_cube.name)
+        expect(page).to have_content(@gelatinous_cube.description)
+        expect(page).to have_content(@gelatinous_cube.image)
+        expect(page).to have_content(@gelatinous_cube.quantity)
+        expect(page).to have_content(@gelatinous_cube.price)
+        expect(page).to have_content(@gelatinous_cube.item_orders.subtotal)
+      end
+
+      within "#item-#{@owlbear.id}" do
+        expect(page).to have_content(@owlbear.name)
+        expect(page).to have_content(@owlbear.item_orders.subtotal)
+      end
+    end
+  end
 end
