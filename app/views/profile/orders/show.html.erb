@@ -13,10 +13,10 @@
     <section id="item-<%= item_order.item.id %>">
       <h3><%= item_order.item.name %></h3><br/>
       <%= image_tag(item_order.item.image) %>
-      <p><%= item_order.item.description %></p>
-      <p><%= item_order.item.price %></p>
-      <p><%= item_order.quantity %></p>
-      <p><%= item_order.subtotal %></p>
+      <p>Item Description: <%= item_order.item.description %></p>
+      <p>Item Price: <%= item_order.item.price %></p>
+      <p>Quantity of Item in Order: <%= item_order.quantity %></p>
+      <p>Order Subtotal: <%= item_order.subtotal %></p>
     </section>
   <% end %>
 </section>
