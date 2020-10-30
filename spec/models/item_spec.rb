@@ -43,10 +43,10 @@ describe Item, type: :model do
       create(:item_order, item: merchant.items[0], quantity: 10)
       create(:item_order, item: merchant.items[4], quantity: 9)
 
-      create(:item_order, item: merchant.items[5], quantity: 5)
       create(:item_order, item: merchant.items[6], quantity: 4)
-      create(:item_order, item: merchant.items[7], quantity: 3)
+      create(:item_order, item: merchant.items[5], quantity: 5)
       create(:item_order, item: merchant.items[8], quantity: 2)
+      create(:item_order, item: merchant.items[7], quantity: 3)
       create(:item_order, item: merchant.items[9], quantity: 1)
 
       expected = [merchant.items[9], merchant.items[8], merchant.items[7], merchant.items[6], merchant.items[5]]
@@ -84,6 +84,15 @@ describe Item, type: :model do
       order = Order.create(name: 'Meg', address: '123 Stang Ave', city: 'Hershey', state: 'PA', zip: 17033)
       order.item_orders.create(item: @chain, price: @chain.price, quantity: 2)
       expect(@chain.no_orders?).to eq(false)
+    end
+
+    it '#amount_purchased' do
+      merchant = create(:merchant, :with_items, item_count: 1)
+      create(:item_order, item: merchant.items[0], quantity: 6)
+      create(:item_order, item: merchant.items[0], quantity: 4)
+      create(:item_order, item: merchant.items[0], quantity: 2)
+
+      expect(merchant.items[0].quantity_purchased).to eq(12)
     end
   end
 end
