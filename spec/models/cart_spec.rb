@@ -63,6 +63,10 @@ RSpec.describe Cart do
       expect(@cart.subtotal(@giant)).to eq(100)
     end
 
+    it '.inventory_check(item)' do
+      expect(@cart.inventory_check(@giant)).to eq(false)
+      expect(@cart.inventory_check(@ogre)).to eq(true)
+    end
 
   end
 end
