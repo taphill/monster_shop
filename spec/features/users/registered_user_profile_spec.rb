@@ -54,7 +54,7 @@ RSpec.describe "As a registered user", type: :feature do
 
       expect(current_path).to eq(profile_path)
 
-      expect(page).to have_content("Your profile data is updated.")
+      expect(page).to have_content("Your profile is updated.")
 
       within ".user-profile" do
         expect(page).to have_content(user.name)
@@ -83,13 +83,12 @@ RSpec.describe "As a registered user", type: :feature do
       expect(current_path).to eq(profile_edit_path)
       expect(find_field(:password).value).to eq(nil)
       expect(find_field(:password_confirmation).value).to eq(nil)
-      save_and_open_page
 
       fill_in :password, with: "password1"
       fill_in :password_confirmation, with: "password"
 
       click_button "Update Password"
-      expect(page).to have_content("Your passwords do not match.")
+      expect(page).to have_content("Password confirmation doesn't match Password")
 
       fill_in :password, with: "password1"
       fill_in :password_confirmation, with: "password1"
