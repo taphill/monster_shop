@@ -23,6 +23,11 @@ class UsersController < ApplicationController
   end
 
   def edit
+    if params[:request] == "profile"
+      @render = 'edit_profile'
+    else
+      @render = 'edit_password'
+    end
   end
 
   def update
@@ -55,5 +60,12 @@ class UsersController < ApplicationController
       :state,
       :zip,
       :email)
+  end
+
+  def password_params
+    params.permit(
+      :password,
+      :password_confirmation
+    )
   end
 end
