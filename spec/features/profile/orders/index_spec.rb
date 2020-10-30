@@ -73,7 +73,7 @@ describe 'as a default user' do
         expect(page).to have_content(@gelatinous_cube.price)
         expect(page).to have_content(@item_order_1.subtotal)
       end
-
+      save_and_open_page
       within "#item-#{@owlbear.id}" do
         expect(page).to have_content(@owlbear.name)
         expect(page).to have_content(@item_order_2.subtotal)
