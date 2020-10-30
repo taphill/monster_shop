@@ -31,8 +31,8 @@
       <td>
         <center>
           <p><%= quantity %></p>
-          <%= button_to "+", "/cart/#{item.id}", method: :patch, params: {type: 'up'} if item.inventory > quantity %>
-          <%= button_to "-", "/cart/#{item.id}", method: :patch, params: {type: 'down'} if quantity > 0 %>
+          <%= button_to "+", "/cart/#{item.id}", method: :patch, params: {type: 'up'} if cart.inventory_check(item) %>
+          <%= button_to "-", "/cart/#{item.id}", method: :patch, params: {type: 'down'} unless quantity.zero? %>
           <p><%= link_to "Remove", "/cart/#{item.id}",method: :delete %></p>
         </center>
         </td>
