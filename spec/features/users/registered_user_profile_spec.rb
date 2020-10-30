@@ -34,7 +34,7 @@ RSpec.describe "As a registered user", type: :feature do
 
       click_link("Edit Profile Data")
 
-      expect(current_path).to eq(profile_edit_path(user))
+      expect(current_path).to eq(profile_edit_path)
 
       expect(find_field(:name).value).to eq(user.name)
       expect(find_field(:street_address).value).to eq(user.street_address)
@@ -68,7 +68,36 @@ RSpec.describe "As a registered user", type: :feature do
     end
 
     it "I can edit my password" do
+      user = create(:user)
 
+      visit login_path
+
+      fill_in :email, with: user.email
+      fill_in :password, with: 'password'
+      click_button 'Login'
+
+      visit profile_path(user)
+
+      click_link "Edit Password"
+
+      expect(current_path).to eq(profile_edit_path)
+      expect(find_field(:password).value).to eq(nil)
+      expect(find_field(:password_confirmation).value).to eq(nil)
+      save_and_open_page
+
+      fill_in :password, with: "password1"
+      fill_in :password_confirmation, with: "password"
+
+      click_button "Update Password"
+      expect(page).to have_content("Your passwords do not match.")
+
+      fill_in :password, with: "password1"
+      fill_in :password_confirmation, with: "password1"
+
+      click_button "Update Password"
+
+      expect(current_path).to eq(profile_path)
+      expect(page).to have_content("Your password is updated.")
     end
 
   end
