@@ -16,23 +16,30 @@ describe 'as a registered user' do
 
   describe 'when I visit my profile page and have orders in system' do
     it 'has a link called my orders that takes me to /profile/orders' do
-      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
+      visit login_path
 
-      visit profile_path
+      fill_in :email, with: @user.email
+      fill_in :password, with: @user.password
 
-      expect(page).to have_link("My Orders")
-      click_link("My Orders")
-      expect(current_path).to eq("/profile/orders")
+      click_button "Login"
+      expect(current_path).to eq(profile_path)
+
+      click_on "My Orders"
+      expect(current_path).to eq('/profile/orders')
     end
   end
 
   describe 'when I visit my profile page and do not have orders in the system' do
     it 'does not have a link called my orders' do
       user_2= create(:user)
-      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
+      visit login_path
 
-      visit profile_path
+      fill_in :email, with: user_2.email
+      fill_in :password, with: user_2.password
 
+      click_button "Login"
+
+      expect(current_path).to eq(profile_path)
       expect(page).to_not have_content("My Orders")
     end
   end
