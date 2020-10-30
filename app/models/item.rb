@@ -12,6 +12,13 @@ class Item <ApplicationRecord
   validates_inclusion_of :active?, :in => [true, false]
   validates_numericality_of :price, greater_than: 0
 
+  def self.most_popular_five
+    Item.joins(:item_orders).order(quantity: :desc).limit(5)
+  end
+
+  def self.least_popular_five
+    Item.joins(:item_orders).order(:quantity).limit(5)
+  end
 
   def average_review
     reviews.average(:rating)
