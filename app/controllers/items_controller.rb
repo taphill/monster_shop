@@ -49,7 +49,13 @@ class ItemsController<ApplicationController
     item = Item.find(params[:id])
     Review.where(item_id: item.id).destroy_all
     item.destroy
-    redirect_to "/items"
+    if params[:merchant_id]
+      merchant = Merchant.find(params[:merchant_id])
+      flash[:alert] = 'This item is now deleted.'
+      redirect_to "/merchants/#{merchant.id}/items"
+    else
+      redirect_to "/items"
+    end
   end
 
   def update_status
