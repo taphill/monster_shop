@@ -40,7 +40,7 @@ RSpec.describe "Merchant Items Index Page" do
       end
     end
 
-    it 'shows me a link to deactivate active items' do
+    it 'gives me a link to deactivate active items' do
       visit "merchants/#{@meg.id}/items"
 
       within "#item-#{@shifter.id}" do
@@ -52,7 +52,6 @@ RSpec.describe "Merchant Items Index Page" do
       within "#item-#{@chain.id}" do
         expect(page).to have_content(@chain.name)
         expect(page).to have_content("Active")
-        expect(page).to have_link('Deactivate')
         click_on 'Deactivate'
       end
 
@@ -63,6 +62,31 @@ RSpec.describe "Merchant Items Index Page" do
         expect(page).to have_content(@chain.name)
         expect(page).to have_content("Inactive")
         expect(page).to_not have_link('Deactivate')
+      end
+    end
+
+    it 'gives me a link to activate inactive items' do
+      visit "merchants/#{@meg.id}/items"
+
+      within "#item-#{@chain.id}" do
+        expect(page).to have_content(@chain.name)
+        expect(page).to have_content("Active")
+        expect(page).to_not have_link('Activate')
+      end
+
+      within "#item-#{@shifter.id}" do
+        expect(page).to have_content(@shifter.name)
+        expect(page).to have_content("Inactive")
+        click_on 'Activate'
+      end
+
+      expect(current_path).to eq("/merchants/#{@meg.id}/items")
+      expect(page).to have_content('This item is available for sale.')
+
+      within "#item-#{@shifter.id}" do
+        expect(page).to have_content(@shifter.name)
+        expect(page).to have_content("Active")
+        expect(page).to_not have_link('Activate')
       end
     end
   end
