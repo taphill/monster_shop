@@ -23,17 +23,19 @@ describe 'as a registered user' do
     fill_in :password, with: @user.password
     click_button "Login"
     click_link "My Orders"
-
-    within "#order-#{@order_1.id}" do
-      click_link(@order_1.id)
-    end
-
-    within ".order-info" do
-      click_button("Cancel Order")
-    end
   end
 
   describe 'visiting an orders show page to delete that order' do
+    before :each do
+      within "#order-#{@order_1.id}" do
+        click_link(@order_1.id)
+      end
+
+      within ".order-info" do
+        click_button("Cancel Order")
+      end
+    end
+
     it 'i can click to cancel an order and each row is given status "unfulfilled"' do
       expect(@item_order_1.fulfill_status).to eq("unfulfilled")
       expect(@item_order_2.fulfill_status).to eq("unfulfilled")
@@ -54,6 +56,23 @@ describe 'as a registered user' do
     it 'i can click to cancel and i am returned to my profile page with a flash message' do
       expect(current_path).to eq(profile_path)
       expect(page).to have_content("Order #{@order_1.id} has been cancelled.")
+    end
+  end
+
+  describe 'when all items have been fulfilled by their merchants' do
+    it 'changes the order status from "pending" to "packaged"' do
+      @item_order_1.fulfill_status = "fulfilled"
+      @item_order_1.save
+      @item_order_2.fulfill_status = "fulfilled"
+      @item_order_2.save
+
+      within "#order-#{@order_1.id}" do
+        click_link(@order_1.id)
+      end
+      save_and_open_page
+      within ".order-info" do
+        expect(page).to have_content("packaged")
+      end
     end
   end
 end
