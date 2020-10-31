@@ -33,8 +33,7 @@ describe 'as an admin user' do
     end
 
     it 'displays all orders in the system' do
-      visit admin_path
-      save_and_open_page
+
       within ".all-orders" do
         expect(page).to have_content(@order_1.id)
         expect(page).to have_content(@order_2.id)
@@ -45,7 +44,6 @@ describe 'as an admin user' do
     end
 
     it 'has information for each order' do
-      visit admin_path
 
       within "#order-#{@order_1.id}" do
         expect(page).to have_link(@order_1.name)
@@ -61,7 +59,6 @@ describe 'as an admin user' do
     end
 
     it 'sorts the orders by status' do
-      visit admin_path
 
       within ".packaged-orders" do
         expect(page).to have_link(@order_3.name)
@@ -89,6 +86,16 @@ describe 'as an admin user' do
         expect(page).to have_content(@order_5.id)
         expect(page).to have_content(@order_5.created_at)
       end
+    end
+
+    it 'can ship any packaged order and update order status to shipped' do
+      within ".packaged-orders" do
+        click_link("Ship Order")
+        click_link(@order_3.name)
+      end
+
+      expect(current_path).to eq("/admin/orders/#{@order_3.id}")
+      expect(page).to have_content("shipped")
     end
   end
 end
