@@ -91,11 +91,13 @@ describe 'as an admin user' do
     it 'can ship any packaged order and update order status to shipped' do
       within ".packaged-orders" do
         click_link("Ship Order")
-        click_link(@order_3.name)
       end
 
-      expect(current_path).to eq("/admin/orders/#{@order_3.id}")
-      expect(page).to have_content("shipped")
+      expect(current_path).to eq("/admin")
+
+      within ".shipped-orders" do
+        expect(page).to have_content(@order_3.name)
+      end
     end
   end
 end
