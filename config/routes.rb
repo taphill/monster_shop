@@ -54,4 +54,8 @@ Rails.application.routes.draw do
     get "/orders/:order_id", to: "orders#show"
     patch "/orders/:id", to: "orders#update"
   end
+
+  namespace :admin do
+    get "/orders/:order_id", to: "orders#update"
+  end
 end
