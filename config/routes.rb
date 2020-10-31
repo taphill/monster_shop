@@ -52,5 +52,6 @@ Rails.application.routes.draw do
   namespace :profile do
     get "/orders", to: "orders#index"
     get "/orders/:order_id", to: "orders#show"
+    patch "/orders/:id", to: "orders#update"
   end
 end
