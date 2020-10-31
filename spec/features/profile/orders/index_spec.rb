@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'as a default user' do
   before :each do
-    @merchant = create(:merchant)
+    @merchant = Merchant.create!(name: "Big Bertha's Monster Depot", address: "Beyond the Firey Pit", city: "Hell-Adjacent", state: "Arizona", zip: "66666")
     @user = create(:user)
     @gelatinous_cube = @merchant.items.create(name: "Gelatinous Cube", description: "A ten-foot cube of transparent gelatinous ooze.", price: 100, image: "https://www.epicpath.org/images/thumb/8/80/Gelatinous_cube.jpg/550px-Gelatinous_cube.jpg", inventory: 10)
     @owlbear = @merchant.items.create(name: "Owlbear", description: "A cross between a bear and an owl. Owlbear.", price: 1000, image: "https://static.wikia.nocookie.net/forgottenrealms/images/4/43/Monster_Manual_5e_-_Owlbear_-_p249.jpg/revision/latest?cb=20141113191357", inventory: 1)
@@ -73,7 +73,6 @@ describe 'as a default user' do
         expect(page).to have_content(@gelatinous_cube.price)
         expect(page).to have_content(@item_order_1.subtotal)
       end
-      save_and_open_page
       within "#item-#{@owlbear.id}" do
         expect(page).to have_content(@owlbear.name)
         expect(page).to have_content(@item_order_2.subtotal)
