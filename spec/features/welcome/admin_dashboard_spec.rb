@@ -33,8 +33,8 @@ describe 'as an admin user' do
     end
 
     it 'displays all orders in the system' do
+      visit admin_path
       save_and_open_page
-
       within ".all-orders" do
         expect(page).to have_content(@order_1.id)
         expect(page).to have_content(@order_2.id)
@@ -84,7 +84,7 @@ describe 'as an admin user' do
         expect(page).to have_content(@order_4.created_at)
       end
 
-      within ".shipped-orders" do
+      within ".cancelled-orders" do
         expect(page).to have_link(@order_5.name)
         expect(page).to have_content(@order_5.id)
         expect(page).to have_content(@order_5.created_at)
