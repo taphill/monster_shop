@@ -20,7 +20,9 @@ class ItemsController<ApplicationController
   def create
     @merchant = Merchant.find(params[:merchant_id])
     item = @merchant.items.create(item_params)
+    check_default_image(item)
     if item.save
+      flash[:alert] = 'New item saved successfully!'
       redirect_to "/merchants/#{@merchant.id}/items"
     else
       flash[:error] = item.errors.full_messages.to_sentence
@@ -76,5 +78,11 @@ class ItemsController<ApplicationController
     params.permit(:name,:description,:price,:inventory,:image)
   end
 
+  def check_default_image(item)
+    if params[:image] == ''
+      item.update(image: '/images/image.png')
+      item.save
+    end
+  end
 
 end
