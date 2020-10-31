@@ -24,4 +24,40 @@ RSpec.describe 'merchant index page', type: :feature do
       expect(current_path).to eq("/merchants/new")
     end
   end
+
+  describe 'As an Admin' do
+    let!(:merchant1) { create(:merchant) }
+    let!(:merchant2) { create(:merchant, enabled: false) }
+
+    before do
+      visit admin_merchants_path
+    end
+
+    context 'when a merchant is enabled' do
+      it 'has a disable button' do
+        within "#merchant-#{merchant1.id}" do
+          expect(page).to have_button('Disable')
+        end
+      end
+
+      it 'can disable an account' do
+        within "#merchant-#{merchant1.id}" do
+          click_button 'Disable'
+        end
+
+        expect(page).to have_current_path(admin_merchants_path)
+        within "#merchant-#{merchant1.id}" do
+          expect(page).to have_content('Disabled')
+        end
+      end
+
+      it 'can see a flash message' do
+        within "#merchant-#{merchant1.id}" do
+          click_button 'Disable'
+        end
+
+        expect(page).to have_content("#{merchant1.name}'s account is now disabled")
+      end
+    end
+  end
 end
