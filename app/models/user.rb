@@ -4,5 +4,7 @@ class User < ApplicationRecord
   validates_presence_of :password, if: :password
   validates :email, uniqueness: true, presence: true
 
+  # has_many :items, through: :merchant
+
   enum role: ['default', 'merchant', 'admin']
 end
