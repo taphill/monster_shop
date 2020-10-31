@@ -1,4 +1,4 @@
-class Item <ApplicationRecord
+class Item < ApplicationRecord
   belongs_to :merchant
   has_many :reviews, dependent: :destroy
   has_many :item_orders
@@ -13,11 +13,13 @@ class Item <ApplicationRecord
   validates_numericality_of :price, greater_than: 0
 
   def self.most_popular_five
-    Item.joins(:item_orders).order(quantity: :desc).limit(5)
+    Item.joins(:item_orders).select('items.*, sum(quantity) as total_quantity')
+        .group(:id).order('total_quantity DESC').limit(5)
   end
 
   def self.least_popular_five
-    Item.joins(:item_orders).order(:quantity).limit(5)
+    Item.joins(:item_orders).select('items.*, sum(quantity) as total_quantity')
+        .group(:id).order('total_quantity').limit(5)
   end
 
   def average_review
