@@ -75,4 +75,16 @@ describe 'as a registered user' do
       end
     end
   end
+
+  describe 'when an order has been shipped' do
+    it 'the user can no longer cancel it' do
+      @order_1.status = "shipped"
+      @order_1.save
+      click_link(@order_1.id)
+
+      within ".order-info" do
+        expect(page).to_not have_button("Cancel Order")
+      end
+    end
+  end
 end
