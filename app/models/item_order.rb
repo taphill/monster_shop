@@ -4,6 +4,10 @@ class ItemOrder <ApplicationRecord
   belongs_to :item
   belongs_to :order
 
+  def self.unique_items
+    select(:item_id).distinct.count
+  end
+
   def subtotal
     price * quantity
   end
