@@ -51,6 +51,21 @@ describe Merchant, type: :model do
       expect(@meg.distinct_cities).to include("Denver")
       expect(@meg.distinct_cities).to include("Hershey")
     end
+    
+    it '#enabled?' do
+      merchant1 = create(:merchant)
+      merchant2 = create(:merchant, enabled: false)
+      
+      expect(merchant1.enabled?).to eq(true)
+      expect(merchant2.enabled?).to eq(false)
+    end
 
+    it '#status' do
+      merchant1 = create(:merchant)
+      merchant2 = create(:merchant, enabled: false)
+      
+      expect(merchant1.status).to eq('Enabled')
+      expect(merchant2.status).to eq('Disabled')
+    end
   end
 end
