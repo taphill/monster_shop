@@ -54,8 +54,13 @@ class ItemsController<ApplicationController
 
   def update_status
     @item = Item.find(params[:id])
-    @item.update(:active? => false)
-    flash[:alert] = 'This item is no longer for sale.'
+    if params[:status] == 'deactivate'
+      @item.update(:active? => false)
+      flash[:alert] = 'This item is no longer for sale.'
+    elsif params[:status] == 'activate'
+      @item.update(:active? => true)
+      flash[:alert] = 'This item is available for sale.'
+    end
     redirect_to "/merchants/#{@item.merchant_id}/items"
   end
 
