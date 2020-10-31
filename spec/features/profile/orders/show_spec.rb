@@ -69,7 +69,7 @@ describe 'as a registered user' do
       within "#order-#{@order_1.id}" do
         click_link(@order_1.id)
       end
-      save_and_open_page
+
       within ".order-info" do
         expect(page).to have_content("packaged")
       end
