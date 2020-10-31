@@ -5,7 +5,9 @@
   <p>Order Status: <%= @order.status_check %></p>
   <p>Total Quantity of Items: <%= @order.total_quantity %></p>
   <p>Grand Total: <%= @order.grandtotal %></p>
-  <%= button_to "Cancel Order", "/profile/orders/#{@order.id}", method: :patch %>
+  <% unless @order.status == "shipped" %>
+    <%= button_to "Cancel Order", "/profile/orders/#{@order.id}", method: :patch %>
+  <% end %>
 </section>
 
 <section class="items">
