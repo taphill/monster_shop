@@ -4,6 +4,11 @@ RSpec.describe "Create Merchant Items" do
   describe "When I visit the merchant items index page" do
     before(:each) do
       @brian = Merchant.create(name: "Brian's Dog Shop", address: '125 Doggo St.', city: 'Denver', state: 'CO', zip: 80210)
+      user = create(:user, role: 1)
+      visit login_path
+      fill_in :email, with: user.email
+      fill_in :password, with: 'password'
+      click_button "Login"
     end
 
     it 'I see a link to add a new item for that merchant' do
@@ -44,11 +49,34 @@ RSpec.describe "Create Merchant Items" do
       expect(Item.last.active?).to be(true)
       expect("#item-#{Item.last.id}").to be_present
       expect(page).to have_content(name)
+      expect(page).to have_content("New item saved successfully!")
       expect(page).to have_content("Price: $#{new_item.price}")
       expect(page).to have_css("img[src*='#{new_item.image}']")
       expect(page).to have_content("Active")
       expect(page).to_not have_content(new_item.description)
       expect(page).to have_content("Inventory: #{new_item.inventory}")
+    end
+
+    it 'I can add an item without an image and get a placeholder' do
+      visit "/merchants/#{@brian.id}/items"
+
+      name = "Chamois Buttr"
+      price = 18
+      description = "No more chaffin'!"
+      inventory = 25
+
+      click_on "Add New Item"
+
+      expect(page).to have_link(@brian.name)
+      expect(current_path).to eq("/merchants/#{@brian.id}/items/new")
+      fill_in :name, with: name
+      fill_in :price, with: price
+      fill_in :description, with: description
+      fill_in :inventory, with: inventory
+
+      click_button "Create Item"
+
+      expect(page).to have_css("img[src*='/images/image.png']")
     end
 
     it 'I get an alert if I dont fully fill out the form' do
