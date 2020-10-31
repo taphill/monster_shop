@@ -26,11 +26,14 @@ describe 'as an admin user' do
       @item_order_5 = ItemOrder.create!(item: @gelatinous_cube, price: @gelatinous_cube.price, quantity: 1, order_id: @order_4.id, item_id: @gelatinous_cube.id)
       @item_order_6 = ItemOrder.create!(item: @owlbear, price: @owlbear.price, quantity: 5, order_id: @order_5.id, item_id: @owlbear.id)
 
-      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@admin_user)
+      visit login_path
+      fill_in :email, with: @admin.email
+      fill_in :password, with: @admin.password
+      click_button "Login"
     end
 
     it 'displays all orders in the system' do
-      visit admin_path
+      save_and_open_page
 
       within ".all-orders" do
         expect(page).to have_content(@order_1.id)
