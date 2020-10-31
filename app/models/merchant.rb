@@ -1,4 +1,4 @@
-class Merchant <ApplicationRecord
+class Merchant < ApplicationRecord
   has_many :items, dependent: :destroy
   has_many :item_orders, through: :items
 
@@ -7,7 +7,6 @@ class Merchant <ApplicationRecord
                         :city,
                         :state,
                         :zip
-
 
   def no_orders?
     item_orders.empty?
@@ -25,4 +24,13 @@ class Merchant <ApplicationRecord
     item_orders.distinct.joins(:order).pluck(:city)
   end
 
+  def enabled?
+    enabled
+  end
+
+  def status
+    return 'Disabled' unless enabled?
+
+    'Enabled'
+  end
 end
