@@ -30,7 +30,9 @@
       </td>
       <td>
         <center>
-          <p><%=quantity%></p>
+          <p><%= quantity %></p>
+          <%= button_to "+", "/cart/#{item.id}", method: :patch, params: {type: 'up'} if cart.inventory_check(item) %>
+          <%= button_to "-", "/cart/#{item.id}", method: :patch, params: {type: 'down'} unless quantity.zero? %>
           <p><%= link_to "Remove", "/cart/#{item.id}",method: :delete %></p>
         </center>
         </td>
@@ -42,7 +44,11 @@
 </table>
   <p>Total: <%= number_to_currency(cart.total) %></p>
   <p><%= link_to "Empty Cart", "/cart", method: :delete %></p>
-  <p><%= link_to "Checkout", "/orders/new", method: :get %></p>
+  <p><%= link_to "Checkout", "/orders/new", method: :get if current_user %></p>
+  <% if !current_user %>
+    <p>Ready to checkout? Please login or register to continue.</p>
+    <p><%= link_to "Register", "/register" %> / <%= link_to "Login", "/login" %></p>
+  <% end %>
 <% else %>
   <h3 align= "center">Cart is currently empty</h3>
 <% end %>
