@@ -24,3 +24,21 @@
     </section>
     <% end %>
 </section>
+
+<% if ItemOrder.unique_items >= 10 %>
+  <section class="item-statistics">
+    <section id="most-popular">
+      <h4>Most Popular Items:</h4>
+      <% Item.most_popular_five.each do |item| %>
+        <p><%= link_to "#{item.name}", item_path(item) %> Total Quantity Purchased: <%= item.quantity_purchased %></p>
+      <% end %>
+    </section>
+
+    <section id="least-popular">
+      <h4>Least Popular Items:</h4>
+      <% Item.least_popular_five.each do |item| %>
+        <p><%= link_to "#{item.name}", item_path(item) %> Total Quantity Purchased: <%= item.quantity_purchased %></p>
+      <% end %>
+    </section>
+  </section>
+<% end %>
