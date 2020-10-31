@@ -35,7 +35,9 @@ class ItemsController<ApplicationController
   def update
     @item = Item.find(params[:id])
     @item.update(item_params)
-    if @item.save
+    if params[:status]
+      update_status
+    elsif @item.save
       redirect_to "/items/#{@item.id}"
     else
       flash[:error] = @item.errors.full_messages.to_sentence
@@ -48,6 +50,13 @@ class ItemsController<ApplicationController
     Review.where(item_id: item.id).destroy_all
     item.destroy
     redirect_to "/items"
+  end
+
+  def update_status
+    @item = Item.find(params[:id])
+    @item.update(:active? => false)
+    flash[:alert] = 'This item is no longer for sale.'
+    redirect_to "/merchants/#{@item.merchant_id}/items"
   end
 
   private
