@@ -2,7 +2,7 @@
   <h1>Order Information for Order #<%= @order.id %></h1>
   <p>Order Created On: <%= @order.created_at %></p>
   <p>Order Updated On: <%= @order.updated_at %></p>
-  <p>Order Status: <%= @order.status %></p>
+  <p>Order Status: <%= @order.status_check %></p>
   <p>Total Quantity of Items: <%= @order.total_quantity %></p>
   <p>Grand Total: <%= @order.grandtotal %></p>
   <%= button_to "Cancel Order", "/profile/orders/#{@order.id}", method: :patch %>
