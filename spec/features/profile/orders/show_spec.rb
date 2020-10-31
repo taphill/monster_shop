@@ -50,7 +50,7 @@ describe 'as a registered user' do
 
     it 'i can click to cancel and i am returned to my profile page with a flash message' do
       expect(current_path).to eq(profile_path)
-      expect(page).to have_content("Your order has been cancelled.")
+      expect(page).to have_content("Order #{@order_1.id} has been cancelled.")
 
       click_link("My Orders")
       within "#order-#{@order_1.id}" do
