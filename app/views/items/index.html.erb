@@ -20,6 +20,9 @@
       <% else %>
         <p>Inactive | <%= link_to 'Activate', "/items/#{item.id}?status=activate", method: :patch %></p>
       <% end %>
+      <% if item.no_orders? %>
+        <p><%= button_to 'Delete', "/items/#{item.id}", params: { merchant_id: @merchant.id }, method: :delete %></p>
+      <% end %>
     </section>
     <% end %>
 </section>
