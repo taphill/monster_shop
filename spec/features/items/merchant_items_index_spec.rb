@@ -39,5 +39,31 @@ RSpec.describe "Merchant Items Index Page" do
         expect(page).to have_content("Inventory: #{@shifter.inventory}")
       end
     end
+
+    it 'shows me a link to deactivate active items' do
+      visit "merchants/#{@meg.id}/items"
+
+      within "#item-#{@shifter.id}" do
+        expect(page).to have_content(@shifter.name)
+        expect(page).to have_content("Inactive")
+        expect(page).to_not have_link('Deactivate')
+      end
+
+      within "#item-#{@chain.id}" do
+        expect(page).to have_content(@chain.name)
+        expect(page).to have_content("Active")
+        expect(page).to have_link('Deactivate')
+        click_on 'Deactivate'
+      end
+
+      expect(current_path).to eq("/merchants/#{@meg.id}/items")
+      expect(page).to have_content('This item is no longer for sale.')
+
+      within "#item-#{@chain.id}" do
+        expect(page).to have_content(@chain.name)
+        expect(page).to have_content("Inactive")
+        expect(page).to_not have_link('Deactivate')
+      end
+    end
   end
 end
