@@ -44,13 +44,11 @@ RSpec.describe "Merchant Items Index Page" do
       visit "merchants/#{@meg.id}/items"
 
       within "#item-#{@shifter.id}" do
-        expect(page).to have_content(@shifter.name)
         expect(page).to have_content("Inactive")
         expect(page).to_not have_link('Deactivate')
       end
 
       within "#item-#{@chain.id}" do
-        expect(page).to have_content(@chain.name)
         expect(page).to have_content("Active")
         click_on 'Deactivate'
       end
@@ -59,7 +57,6 @@ RSpec.describe "Merchant Items Index Page" do
       expect(page).to have_content('This item is no longer for sale.')
 
       within "#item-#{@chain.id}" do
-        expect(page).to have_content(@chain.name)
         expect(page).to have_content("Inactive")
         expect(page).to_not have_link('Deactivate')
       end
@@ -69,13 +66,11 @@ RSpec.describe "Merchant Items Index Page" do
       visit "merchants/#{@meg.id}/items"
 
       within "#item-#{@chain.id}" do
-        expect(page).to have_content(@chain.name)
         expect(page).to have_content("Active")
         expect(page).to_not have_link('Activate')
       end
 
       within "#item-#{@shifter.id}" do
-        expect(page).to have_content(@shifter.name)
         expect(page).to have_content("Inactive")
         click_on 'Activate'
       end
@@ -84,10 +79,41 @@ RSpec.describe "Merchant Items Index Page" do
       expect(page).to have_content('This item is available for sale.')
 
       within "#item-#{@shifter.id}" do
-        expect(page).to have_content(@shifter.name)
         expect(page).to have_content("Active")
         expect(page).to_not have_link('Activate')
       end
+    end
+
+    it 'gives me the ability to delete an item never ordered' do
+      user = create(:user)
+      order = user.orders.create(
+        name: user.name,
+        address: user.street_address,
+        city: user.city,
+        state: user.state,
+        zip: user.zip
+      )
+      ItemOrder.create(order_id: order.id, item_id: @tire.id)
+
+      visit "merchants/#{@meg.id}/items"
+
+      within "#item-#{@tire.id}" do
+        expect(page).to_not have_content("Delete")
+      end
+
+      within "#item-#{@shifter.id}" do
+        expect(page).to have_content("Inactive")
+        expect(page).to have_content("Delete")
+      end
+
+      within "#item-#{@chain.id}" do
+        expect(page).to have_content("Active")
+        click_on 'Delete'
+      end
+
+      expect(current_path).to eq("/merchants/#{@meg.id}/items")
+      expect(page).to have_content('This item is now deleted.')
+      expect(page).to_not have_content(@chain.name)
     end
   end
 end
