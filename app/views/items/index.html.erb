@@ -18,7 +18,7 @@
       <% if item.active? %>
         <p>Active | <%= link_to 'Deactivate', "/items/#{item.id}?status=deactivate", method: :patch %></p>
       <% else %>
-        <p>Inactive</p>
+        <p>Inactive | <%= link_to 'Activate', "/items/#{item.id}?status=activate", method: :patch %></p>
       <% end %>
     </section>
     <% end %>
