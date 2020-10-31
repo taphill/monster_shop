@@ -40,22 +40,20 @@ describe 'as a registered user' do
     end
 
     it 'i can click to cancel and the order has a cancelled status' do
-      expect(@order_1.status).to eq("cancelled")
+      click_link("My Orders")
+      within "#order-#{@order_1.id}" do
+        expect(page).to have_content("cancelled")
+      end
     end
 
     it 'i can click to cancel and the item quantities are returned to inventory' do
       expect(@gelatinous_cube.inventory).to eq(10)
-      expect(@gelatinous_cube.inventory).to eq(2)
+      expect(@owlbear.inventory).to eq(2)
     end
 
     it 'i can click to cancel and i am returned to my profile page with a flash message' do
       expect(current_path).to eq(profile_path)
       expect(page).to have_content("Order #{@order_1.id} has been cancelled.")
-
-      click_link("My Orders")
-      within "#order-#{@order_1.id}" do
-        expect(page).to have_content("cancelled")
-      end
     end
   end
 end
