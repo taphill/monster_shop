@@ -85,7 +85,12 @@ RSpec.describe "Merchant Items Index Page" do
     end
 
     it 'gives me the ability to delete an item never ordered' do
-      user = create(:user)
+      user = create(:user, role: 1)
+      visit login_path
+      fill_in :email, with: user.email
+      fill_in :password, with: 'password'
+      click_button "Login"
+
       order = user.orders.create(
         name: user.name,
         address: user.street_address,
@@ -93,17 +98,22 @@ RSpec.describe "Merchant Items Index Page" do
         state: user.state,
         zip: user.zip
       )
-      ItemOrder.create(order_id: order.id, item_id: @tire.id)
+      ItemOrder.create!(
+        order_id: order.id,
+        item_id: @tire.id,
+        price: @tire.price,
+        quantity: 1
+      )
 
       visit "merchants/#{@meg.id}/items"
 
       within "#item-#{@tire.id}" do
-        expect(page).to_not have_content("Delete")
+        expect(page).to_not have_button("Delete")
       end
 
       within "#item-#{@shifter.id}" do
         expect(page).to have_content("Inactive")
-        expect(page).to have_content("Delete")
+        expect(page).to have_button("Delete")
       end
 
       within "#item-#{@chain.id}" do
