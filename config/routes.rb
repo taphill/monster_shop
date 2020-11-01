@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   delete "/merchants/:id", to: "merchants#destroy"
 
   get "/items", to: "items#index"
-  get "/items/:id", to: "items#show"
+  get "/items/:id", to: "items#show", as: 'item'
   get "/items/:id/edit", to: "items#edit"
   patch "/items/:id", to: "items#update"
   get "/merchants/:merchant_id/items", to: "items#index"
@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   delete "/reviews/:id", to: "reviews#destroy"
 
   post "/cart/:item_id", to: "cart#add_item"
+  patch "/cart/:item_id", to: "cart#change_quantity"
   get "/cart", to: "cart#show"
   delete "/cart", to: "cart#empty"
   delete "/cart/:item_id", to: "cart#remove_item"
@@ -44,10 +45,13 @@ Rails.application.routes.draw do
   get "/orders/new", to: "orders#new"
   post "/orders", to: "orders#create"
   get "/orders/:id", to: "orders#show"
+  get "/profile/orders", to: "orders#index"
 
   get "/register", to: "users#new"
   post "/users", to: "users#create"
   get "/profile", to: "users#show"
+  get "/profile/edit", to: "users#edit"
+  patch "/profile", to: "users#update"
 
   namespace :profile do
     get "/orders", to: "orders#index"

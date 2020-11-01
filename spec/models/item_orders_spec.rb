@@ -13,8 +13,20 @@ describe ItemOrder, type: :model do
     it {should belong_to :order}
   end
 
+  describe 'class methods' do
+    it '.unique_items' do
+      merchant = create(:merchant, :with_items, item_count: 12)
+      create(:item_order, item: merchant.items[2])
+      create(:item_order, item: merchant.items[1])
+      create(:item_order, item: merchant.items[3])
+      create(:item_order, item: merchant.items[3])
+
+      expect(ItemOrder.unique_items).to eq(3)
+    end 
+  end
+
   describe 'instance methods' do
-    it 'subtotal' do
+    it '#subtotal' do
       meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
       tire = meg.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
       user = create(:user)
