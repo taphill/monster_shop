@@ -1,4 +1,4 @@
-class Profile::OrdersController < Profile::BaseController
+class Profile::OrdersController < ApplicationController
 
   def index
     @user = User.find(session[:user_id])
