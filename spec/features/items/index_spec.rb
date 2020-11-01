@@ -128,7 +128,7 @@ RSpec.describe "Items Index Page" do
 
       visit items_path
 
-      expect(page).to_not have_css('.item-statistics') 
+      expect(page).to_not have_css('.item-statistics')
     end
   end
 end

@@ -16,12 +16,12 @@ FactoryBot.define do
     city { Faker::Address.city }
     state { Faker::Address.state_abbr }
     zip { Faker::Address.zip }
-    
+
     trait :with_items do
-      transient do 
+      transient do
         item_count { 3 }
       end
-      
+
       after(:create) do |merchant, evaluator|
         merchant.items << create_list(:item, evaluator.item_count)
       end
@@ -44,6 +44,7 @@ FactoryBot.define do
     city { Faker::Address.city }
     state { Faker::Address.state_abbr }
     zip { Faker::Address.zip }
+    user 
   end
 
   factory :item_order do
