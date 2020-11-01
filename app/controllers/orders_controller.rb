@@ -1,7 +1,6 @@
 class OrdersController <ApplicationController
 
   def index
-    @order = Order.find(session[:order_id])
     @user = User.find(session[:user_id])
   end
 
