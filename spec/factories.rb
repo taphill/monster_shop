@@ -39,12 +39,12 @@ FactoryBot.define do
   end
 
   factory :order do
-    user
     name { Faker::Name.name }
     address { Faker::Address.street_address }
     city { Faker::Address.city }
     state { Faker::Address.state_abbr }
     zip { Faker::Address.zip }
+    user
   end
 
   factory :item_order do

@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2020_11_01_171250) do
     t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "fulfill_status", default: "unfulfilled"
     t.index ["item_id"], name: "index_item_orders_on_item_id"
     t.index ["order_id"], name: "index_item_orders_on_order_id"
   end

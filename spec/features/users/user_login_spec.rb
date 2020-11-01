@@ -98,7 +98,7 @@ describe 'As a visitor' do
       visit "/items"
       click_on "Ogre"
       click_on "Add To Cart"
-      
+
       within ".topnav" do
         expect(page).to have_content("Cart: 1")
       end

@@ -1,7 +1,6 @@
 class OrdersController <ApplicationController
 
   def index
-    @order = Order.find(session[:order_id])
     @user = User.find(session[:user_id])
   end
 
@@ -15,7 +14,7 @@ class OrdersController <ApplicationController
 
   def create
     user = User.find(session[:user_id])
-    order = user.orders.create!(order_params)
+    order = user.orders.new(order_params)
     if order.save
       cart.items.each do |item,quantity|
         order.item_orders.create({
