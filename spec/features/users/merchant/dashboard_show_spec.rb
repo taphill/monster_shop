@@ -24,13 +24,16 @@ describe 'As a merchant employee' do
     end
 
     it "I see a list of pending orders" do
-      item_orders = create_list(:item_order, 3)
-      # item_order_4 = create(:item_order, status: "packaged")
-      merchant = item_orders.second.item.merchant
+      item_order = create(:item_order)
+
+      merchant = item_order.item.merchant
       merchant_user = create(:user, role:1, merchant_id: merchant.id)
-      order_1 = item_orders.first.order
-      # order_4 = item_order_4.order
-      require "pry"; binding.pry
+      order_1 = item_order.order
+
+      user = create(:user)
+      item_2 = create(:item, merchant: merchant)
+      order_2 = create(:order, user: user, status: "packaged")
+      item_order_2 = create(:item_order, item: item_2, order: order_2)
 
       visit login_path
 
@@ -39,11 +42,11 @@ describe 'As a merchant employee' do
       click_button 'Login'
 
       within ".pending-orders" do
-        expect(page).to have_css(".order", count:3)
-        expect(page).to_not have_css("#order-#{order_4.id}")
-        expect(page).to_not have_content(format_date(order_4.created_at))
-        expect(page).to_not have_content(order_4.total_quantity)
-        expect(page).to_not have_content(order_4.total_value)
+        expect(page).to have_css(".order", count:1)
+        expect(page).to_not have_css("#order-#{order_2.id}")
+        expect(page).to_not have_content(format_date(order_2.created_at))
+        expect(page).to_not have_content(order_2.total_quantity)
+        expect(page).to_not have_content(order_2.total_value)
       end
 
       within "#order-#{order_1.id}" do
