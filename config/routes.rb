@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get "/users", to: "users#index"
+    get "/orders/:order_id", to: "orders#update"
   end
 
   get "/merchants", to: "merchants#index"
@@ -42,24 +43,19 @@ Rails.application.routes.draw do
   delete "/cart", to: "cart#empty"
   delete "/cart/:item_id", to: "cart#remove_item"
 
-  get "/orders/new", to: "orders#new"
-  post "/orders", to: "orders#create"
-  get "/orders/:id", to: "orders#show"
-  get "/profile/orders", to: "orders#index"
-
-  get "/register", to: "users#new"
-  post "/users", to: "users#create"
-  get "/profile", to: "users#show"
-  get "/profile/edit", to: "users#edit"
-  patch "/profile", to: "users#update"
-
   namespace :profile do
     get "/orders", to: "orders#index"
     get "/orders/:order_id", to: "orders#show"
     patch "/orders/:id", to: "orders#update"
   end
 
-  namespace :admin do
-    get "/orders/:order_id", to: "orders#update"
-  end
+  get "/orders/new", to: "orders#new"
+  post "/orders", to: "orders#create"
+  get "/orders/:id", to: "orders#show"
+
+  get "/register", to: "users#new"
+  post "/users", to: "users#create"
+  get "/profile", to: "users#show"
+  get "/profile/edit", to: "users#edit"
+  patch "/profile", to: "users#update"
 end
