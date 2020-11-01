@@ -30,11 +30,12 @@ RSpec.describe "Create Merchant Items" do
 
       expect(page).to have_link(@brian.name)
       expect(current_path).to eq("/merchants/#{@brian.id}/items/new")
-      fill_in :name, with: name
-      fill_in :price, with: price
-      fill_in :description, with: description
-      fill_in :image, with: image_url
-      fill_in :inventory, with: inventory
+
+      fill_in :item_name, with: name
+      fill_in :item_price, with: price
+      fill_in :item_description, with: description
+      fill_in :item_image, with: image_url
+      fill_in :item_inventory, with: inventory
 
       click_button "Create Item"
 
@@ -69,10 +70,10 @@ RSpec.describe "Create Merchant Items" do
 
       expect(page).to have_link(@brian.name)
       expect(current_path).to eq("/merchants/#{@brian.id}/items/new")
-      fill_in :name, with: name
-      fill_in :price, with: price
-      fill_in :description, with: description
-      fill_in :inventory, with: inventory
+      fill_in :item_name, with: name
+      fill_in :item_price, with: price
+      fill_in :item_description, with: description
+      fill_in :item_inventory, with: inventory
 
       click_button "Create Item"
 
@@ -90,16 +91,22 @@ RSpec.describe "Create Merchant Items" do
 
       click_on "Add New Item"
 
-      fill_in :name, with: name
-      fill_in :price, with: price
-      fill_in :description, with: description
-      fill_in :image, with: image_url
-      fill_in :inventory, with: inventory
+      fill_in :item_name, with: name
+      fill_in :item_price, with: price
+      fill_in :item_description, with: description
+      fill_in :item_image, with: image_url
+      fill_in :item_inventory, with: inventory
 
       click_button "Create Item"
 
       expect(page).to have_content("Name can't be blank and Inventory can't be blank")
+      save_and_open_page
       expect(page).to have_button("Create Item")
+
+      expect(find_field(:item_name).value).to eq(nil)
+      expect(find_field(:item_price).value).to eq(price)
+      expect(find_field(:item_description).value).to eq(description)
+      expect(find_field(:item_inventory).value).to eq(nil)
     end
   end
 end
