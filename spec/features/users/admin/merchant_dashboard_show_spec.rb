@@ -24,6 +24,12 @@ describe "As a user admin" do
       fill_in :password, with: 'password'
       click_button 'Login'
 
+      click_link "All Merchants"
+
+      click_on merchant.name
+
+      expect(current_path).to eq("/admin/merchants/#{merchant.id}")
+
       within ".pending-orders" do
         expect(page).to have_css(".order", count:3)
 
