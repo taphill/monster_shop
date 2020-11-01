@@ -15,9 +15,6 @@ describe User, type: :model do
   end
 
   describe 'relationships' do
-    describe 'is a merchant' do
-      before { allow(subject).to receive(:role).and_return('merchant')}
-      it { should belong_to :merchant}
-    end
+    it {should belong_to(:merchant).optional}
   end
 end

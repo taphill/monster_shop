@@ -2,5 +2,10 @@
 
 
 <section class="merchant-info">
-  <%= render '/shared/profile_data' %>
+  <p>Name: <%= current_user.merchant.name %></p>
+  <p>Street Address: <%= current_user.merchant.address %></p>
+  <p>City: <%= current_user.merchant.city %></p>
+  <p>State: <%= current_user.merchant.state %></p>
+  <p>Zip: <%= current_user.merchant.zip %></p>
+  <p>Registered Merchant Since: <%= format_date(current_user.merchant.created_at) %></p>
 </section>
