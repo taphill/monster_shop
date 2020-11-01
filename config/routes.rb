@@ -13,6 +13,10 @@ Rails.application.routes.draw do
     get "/orders/:order_id", to: "orders#update"
   end
 
+  namespace :merchant do
+    get '/orders/:order_id', to: "orders#show"
+  end
+
   get "/merchants", to: "merchants#index"
   get "/merchants/new", to: "merchants#new"
   get "/merchants/:id", to: "merchants#show"
