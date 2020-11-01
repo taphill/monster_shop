@@ -12,6 +12,7 @@ describe Merchant, type: :model do
   describe "relationships" do
     it {should have_many :items}
     it {should have_many :users}
+    it {should have_many(:orders).through(:items)}
   end
 
   describe 'instance methods' do
@@ -52,6 +53,67 @@ describe Merchant, type: :model do
 
       expect(@meg.distinct_cities).to include("Denver")
       expect(@meg.distinct_cities).to include("Hershey")
+    end
+
+    describe '#pending_orders' do
+      it 'returns pending orders for a merchant' do
+        merchant = create(:merchant)
+
+        item_1 = create(:item, merchant: merchant)
+        item_2 = create(:item, merchant: merchant)
+        item_3 = create(:item, merchant: merchant)
+
+        io_1 = create(:item_order, item: item_1)
+        io_2 = create(:item_order, item: item_2)
+        io_3 = create(:item_order, item: item_3)
+
+        order_1 = io_1.order
+        order_2 = io_2.order
+        order_3 = io_3.order
+
+        expected = [order_1, order_2, order_3]
+
+        expect(merchant.pending_orders).to eq(expected)
+      end
+
+      it 'does not return orders that are not pending for a merchant' do
+        merchant = create(:merchant)
+
+        item_1 = create(:item, merchant: merchant)
+        item_2 = create(:item, merchant: merchant)
+        item_3 = create(:item, merchant: merchant)
+        order_1 = create(:order, status: 'packaged')
+
+        io_1 = create(:item_order, item: item_1, order: order_1)
+        io_2 = create(:item_order, item: item_2)
+        io_3 = create(:item_order, item: item_3)
+
+        order_2 = io_2.order
+        order_3 = io_3.order
+
+        expected = [order_2, order_3]
+
+        expect(merchant.pending_orders).to eq(expected)
+      end
+
+      it 'does not return orders for other merchants' do
+        merchant = create(:merchant)
+        merchant_2 = create(:merchant)
+
+        item_1 = create(:item, merchant: merchant)
+        item_2 = create(:item, merchant: merchant)
+        item_3 = create(:item, merchant: merchant_2)
+
+        io_1 = create(:item_order, item: item_1)
+        io_2 = create(:item_order, item: item_2)
+        io_3 = create(:item_order, item: item_3)
+
+        order_1 = io_1.order
+        order_2 = io_2.order
+        order_3 = io_3.order
+
+        expected = [order_1, order_2]
+      end
     end
 
   end
