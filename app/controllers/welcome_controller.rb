@@ -9,6 +9,7 @@ class WelcomeController < ApplicationController
   end
 
   def admin
+    @orders = Order.all
     render file: "public/404" unless current_admin?
     render "admin_dashboard" if current_admin?
   end

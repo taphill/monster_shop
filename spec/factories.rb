@@ -9,4 +9,48 @@ FactoryBot.define do
     password { 'password' }
     password_confirmation { 'password' }
   end
+
+  factory :merchant do
+    name { Faker::TvShows::HeyArnold.location }
+    address { Faker::Address.street_address }
+    city { Faker::Address.city }
+    state { Faker::Address.state_abbr }
+    zip { Faker::Address.zip }
+
+    trait :with_items do
+      transient do
+        item_count { 3 }
+      end
+
+      after(:create) do |merchant, evaluator|
+        merchant.items << create_list(:item, evaluator.item_count)
+      end
+    end
+  end
+
+  factory :item do
+    sequence(:name) { |n| "Item ##{n}" }
+    description { Faker::Lorem.sentence }
+    price { Faker::Commerce.price }
+    image { 'https://semantic-ui.com/images/wireframe/image.png' }
+    inventory { Faker::Number.between(from: 12, to: 34) }
+
+    merchant
+  end
+
+  factory :order do
+    name { Faker::Name.name }
+    address { Faker::Address.street_address }
+    city { Faker::Address.city }
+    state { Faker::Address.state_abbr }
+    zip { Faker::Address.zip }
+    user 
+  end
+
+  factory :item_order do
+    item
+    order
+    price { Faker::Commerce.price }
+    quantity { 1 }
+  end
 end

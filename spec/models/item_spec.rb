@@ -17,6 +17,48 @@ describe Item, type: :model do
     it {should have_many(:orders).through(:item_orders)}
   end
 
+  describe 'class methods' do
+    it'.most_popular_five' do
+      merchant = create(:merchant, :with_items, item_count: 12)
+      create(:item_order, item: merchant.items[2], quantity: 6)
+      create(:item_order, item: merchant.items[2], quantity: 6)
+      create(:item_order, item: merchant.items[1], quantity: 8)
+      create(:item_order, item: merchant.items[1], quantity: 8)
+      create(:item_order, item: merchant.items[3], quantity: 4)
+      create(:item_order, item: merchant.items[0], quantity: 10)
+      create(:item_order, item: merchant.items[4], quantity: 3)
+
+      create(:item_order, item: merchant.items[5], quantity: 2)
+      create(:item_order, item: merchant.items[6], quantity: 1)
+      create(:item_order, item: merchant.items[7], quantity: 1)
+
+      expected = [merchant.items[1], merchant.items[2], merchant.items[0], merchant.items[3], merchant.items[4]]
+
+      expect(Item.most_popular_five).to eq(expected)
+    end
+
+    it'.least_popular_five' do
+      merchant = create(:merchant, :with_items, item_count: 12)
+      create(:item_order, item: merchant.items[2], quantity: 20)
+      create(:item_order, item: merchant.items[1], quantity: 18)
+      create(:item_order, item: merchant.items[3], quantity: 16)
+      create(:item_order, item: merchant.items[0], quantity: 10)
+      create(:item_order, item: merchant.items[4], quantity: 9)
+
+      create(:item_order, item: merchant.items[6], quantity: 7)
+      create(:item_order, item: merchant.items[5], quantity: 8)
+      create(:item_order, item: merchant.items[8], quantity: 2)
+      create(:item_order, item: merchant.items[8], quantity: 2)
+      create(:item_order, item: merchant.items[7], quantity: 3)
+      create(:item_order, item: merchant.items[9], quantity: 1)
+      create(:item_order, item: merchant.items[9], quantity: 1)
+
+      expected = [merchant.items[9], merchant.items[7], merchant.items[8], merchant.items[6], merchant.items[5]]
+
+      expect(Item.least_popular_five).to eq(expected)
+    end
+  end
+
   describe "instance methods" do
     before(:each) do
       @bike_shop = Merchant.create(name: "Brian's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
@@ -29,11 +71,11 @@ describe Item, type: :model do
       @review_5 = @chain.reviews.create(title: "Okay place :/", content: "Brian's cool and all but just an okay selection of items", rating: 3)
     end
 
-    it "calculate average review" do
+    it "#calculate average review" do
       expect(@chain.average_review).to eq(3.0)
     end
 
-    it "sorts reviews" do
+    it "#sorts reviews" do
       top_three = @chain.sorted_reviews(3,:desc)
       bottom_three = @chain.sorted_reviews(3,:asc)
 
@@ -41,11 +83,21 @@ describe Item, type: :model do
       expect(bottom_three).to eq([@review_3,@review_4,@review_5])
     end
 
-    it 'no orders' do
+    it '#no orders' do
       expect(@chain.no_orders?).to eq(true)
-      order = Order.create(name: 'Meg', address: '123 Stang Ave', city: 'Hershey', state: 'PA', zip: 17033)
+      user = create(:user)
+      order = Order.create(name: 'Meg', address: '123 Stang Ave', city: 'Hershey', state: 'PA', zip: 17033, user_id: user.id)
       order.item_orders.create(item: @chain, price: @chain.price, quantity: 2)
       expect(@chain.no_orders?).to eq(false)
+    end
+
+    it '#amount_purchased' do
+      merchant = create(:merchant, :with_items, item_count: 1)
+      create(:item_order, item: merchant.items[0], quantity: 6)
+      create(:item_order, item: merchant.items[0], quantity: 4)
+      create(:item_order, item: merchant.items[0], quantity: 2)
+
+      expect(merchant.items[0].quantity_purchased).to eq(12)
     end
   end
 end

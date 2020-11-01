@@ -1,1 +1,9 @@
 <h1>Hello, <%= current_user.name %></h1>
+
+<section class="user-profile">
+  <h3>User Profile</h3>
+  <%= link_to "My Orders", profile_orders_path %>
+  <%= link_to "Edit Password", profile_edit_path %>
+  <%= link_to "Edit Profile Data", "/profile/edit?request=profile" %>
+  <%= render 'profile_data' %>
+</section>

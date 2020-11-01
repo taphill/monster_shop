@@ -23,8 +23,27 @@ RSpec.describe "Items Index Page" do
       expect(page).to have_link(@dog_bone.merchant.name)
     end
 
-    it "I can see a list of all of the items "do
+    it 'all images are links' do
+      visit '/items'
+      within "#item-#{@tire.id}" do
+        click_link(href: "items/#{@tire.id}")
+        expect(page).to have_current_path("/items/#{@tire.id}")
+      end
 
+      visit '/items'
+      within "#item-#{@pull_toy.id}" do
+        click_link(href: "items/#{@pull_toy.id}")
+        expect(page).to have_current_path("/items/#{@pull_toy.id}")
+      end
+
+      visit '/items'
+      within "#item-#{@dog_bone.id}" do
+        click_link(href: "items/#{@dog_bone.id}")
+        expect(page).to have_current_path("/items/#{@dog_bone.id}")
+      end
+    end
+
+    it "I can see a list of all of the items "do
       visit '/items'
 
       within "#item-#{@tire.id}" do
@@ -56,6 +75,60 @@ RSpec.describe "Items Index Page" do
         expect(page).to have_link(@brian.name)
         expect(page).to have_css("img[src*='#{@dog_bone.image}']")
       end
+    end
+
+    it 'has statistics when there are enough unique item_orders' do
+      merchant = create(:merchant, :with_items, item_count: 12)
+      create(:item_order, item: merchant.items[2], quantity: 6)
+      create(:item_order, item: merchant.items[1], quantity: 8)
+      create(:item_order, item: merchant.items[3], quantity: 4)
+      create(:item_order, item: merchant.items[0], quantity: 10)
+      create(:item_order, item: merchant.items[4], quantity: 3)
+
+      create(:item_order, item: merchant.items[5], quantity: 2)
+      create(:item_order, item: merchant.items[6], quantity: 1)
+      create(:item_order, item: merchant.items[7], quantity: 1)
+      create(:item_order, item: merchant.items[8], quantity: 1)
+      create(:item_order, item: merchant.items[9], quantity: 1)
+
+      visit items_path
+
+      within ".item-statistics" do
+        within "#most-popular" do
+          expect(page).to have_content(merchant.items[0].name)
+          expect(page).to have_content(merchant.items[1].name)
+          expect(page).to have_content(merchant.items[2].name)
+          expect(page).to have_content(merchant.items[3].name)
+          expect(page).to have_content(merchant.items[4].name)
+        end
+
+        within "#least-popular" do
+          expect(page).to have_content(merchant.items[5].name)
+          expect(page).to have_content(merchant.items[6].name)
+          expect(page).to have_content(merchant.items[7].name)
+          expect(page).to have_content(merchant.items[8].name)
+          expect(page).to have_content(merchant.items[9].name)
+        end
+      end
+    end
+
+    it 'does not have statistics when there are not enough unique item_orders' do
+      merchant = create(:merchant, :with_items, item_count: 12)
+      create(:item_order, item: merchant.items[2])
+      create(:item_order, item: merchant.items[2])
+      create(:item_order, item: merchant.items[2])
+      create(:item_order, item: merchant.items[2])
+      create(:item_order, item: merchant.items[2])
+      create(:item_order, item: merchant.items[2])
+      create(:item_order, item: merchant.items[2])
+      create(:item_order, item: merchant.items[2])
+      create(:item_order, item: merchant.items[2])
+      create(:item_order, item: merchant.items[2])
+      create(:item_order, item: merchant.items[2])
+
+      visit items_path
+
+      expect(page).to_not have_css('.item-statistics')
     end
   end
 end
