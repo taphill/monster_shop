@@ -58,7 +58,7 @@ describe 'As a merchant employee' do
       expect(current_path).to eq("/merchant/orders/#{order_1.id}")
     end
 
-    xit "I can click a link to merchant items" do
+    it "I can click a link to merchant items" do
       merchant = create(:merchant)
       merchant_user = create(:user, role:1, merchant_id: merchant.id)
 
@@ -68,7 +68,7 @@ describe 'As a merchant employee' do
       fill_in :password, with: 'password'
       click_button 'Login'
 
-      click_link "Items"
+      click_link "My Items"
 
       expect(current_path).to eq("/merchant/items")
     end
