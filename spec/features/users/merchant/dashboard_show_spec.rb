@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe 'As a merchant employee' do
   describe 'when I log in and visit the merchant dashboard' do
+
     it "I see the name and full address of the merchant I work for" do
       merchant = create(:merchant)
       merchant_user = create(:user, role:1, merchant_id: merchant.id)
@@ -34,7 +35,7 @@ describe 'As a merchant employee' do
       item_2 = create(:item, merchant: merchant)
       order_2 = create(:order, user: user, status: "packaged")
       item_order_2 = create(:item_order, item: item_2, order: order_2)
-
+      order_1_date = order_1.created_at.strftime("%m/%d/%Y")
       visit login_path
 
       fill_in :email, with: merchant_user.email
@@ -44,12 +45,11 @@ describe 'As a merchant employee' do
       within ".pending-orders" do
         expect(page).to have_css(".order", count:1)
         expect(page).to_not have_css("#order-#{order_2.id}")
-        # expect(page).to_not have_content(format_date(order_2.created_at))
       end
 
       within "#order-#{order_1.id}" do
         expect(page).to have_link(order_1.id)
-        # expect(page).to have_content(format_date(order_1.created_at))
+        expect(page).to have_content(order_1_date)
         expect(page).to have_content(order_1.total_quantity)
         expect(page).to have_content(order_1.grandtotal)
         click_link (order_1.id)
