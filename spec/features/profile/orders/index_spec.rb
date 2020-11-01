@@ -23,7 +23,7 @@ describe 'as a default user' do
       click_link "My Orders"
 
       within "#order-#{@order_1.id}" do
-        expect(page).to have_link(@order_1.id)
+        expect(page).to have_link("#{@order_1.id}")
         expect(page).to have_content(@order_1.created_at)
         expect(page).to have_content(@order_1.updated_at)
         expect(page).to have_content(@order_1.status)
@@ -32,7 +32,7 @@ describe 'as a default user' do
       end
 
       within "#order-#{@order_2.id}" do
-        expect(page).to have_link(@order_2.id)
+        expect(page).to have_link("#{@order_2.id}")
         expect(page).to have_content(@order_2.created_at)
         expect(page).to have_content(@order_2.updated_at)
         expect(page).to have_content(@order_2.status)
@@ -51,7 +51,7 @@ describe 'as a default user' do
       click_link "My Orders"
 
       within "#order-#{@order_1.id}" do
-        click_link(@order_1.id)
+        click_link("#{@order_1.id}")
       end
 
       expect(current_path).to eq("/profile/orders/#{@order_1.id}")

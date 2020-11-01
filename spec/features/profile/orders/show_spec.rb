@@ -28,7 +28,7 @@ describe 'as a registered user' do
   describe 'visiting an orders show page to delete that order' do
     before :each do
       within "#order-#{@order_1.id}" do
-        click_link(@order_1.id)
+        click_link("#{@order_1.id}")
       end
 
       within ".order-info" do
@@ -42,7 +42,7 @@ describe 'as a registered user' do
     end
 
     it 'i can click to cancel and the order has a cancelled status' do
-      click_link("My Orders")
+      visit "/profile/orders"
       within "#order-#{@order_1.id}" do
         expect(page).to have_content("cancelled")
       end
@@ -54,7 +54,7 @@ describe 'as a registered user' do
     end
 
     it 'i can click to cancel and i am returned to my profile page with a flash message' do
-      expect(current_path).to eq(profile_path)
+      expect(current_path).to eq("/profile")
       expect(page).to have_content("Order #{@order_1.id} has been cancelled.")
     end
   end
@@ -67,7 +67,7 @@ describe 'as a registered user' do
       @item_order_2.save
 
       within "#order-#{@order_1.id}" do
-        click_link(@order_1.id)
+        click_link("#{@order_1.id}")
       end
 
       within ".order-info" do
@@ -80,7 +80,7 @@ describe 'as a registered user' do
     it 'the user can no longer cancel it' do
       @order_1.status = "shipped"
       @order_1.save
-      click_link(@order_1.id)
+      click_link("#{@order_1.id}")
 
       within ".order-info" do
         expect(page).to_not have_button("Cancel Order")

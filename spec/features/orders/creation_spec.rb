@@ -51,7 +51,8 @@ RSpec.describe("Order Creation") do
 
       new_order = Order.last
 
-      expect(current_path).to eq("/orders/#{new_order.id}")
+      expect(current_path).to eq(profile_orders_path)
+      visit "/orders/#{new_order.id}"
 
       within '.shipping-address' do
         expect(page).to have_content(name)
@@ -108,7 +109,6 @@ RSpec.describe("Order Creation") do
       fill_in :zip, with: zip
 
       click_button "Create Order"
-
       expect(page).to have_content("Please complete address form to create an order.")
       expect(page).to have_button("Create Order")
     end
