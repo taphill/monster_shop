@@ -6,11 +6,12 @@ Rails.application.routes.draw do
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
   get "/merchant", to: "welcome#merchant"
-  get "/admin", to: "welcome#admin"
+
 
   namespace :admin do
+    root "dashboard#index"
     get "/users", to: "users#index"
-    get "/orders/:order_id", to: "orders#update"
+    resources :orders, only: [:update]
     resources :merchants, only: [:index, :show, :update]
     namespace :merchants do
       scope '/:merchant_id/' do
