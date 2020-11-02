@@ -100,13 +100,12 @@ RSpec.describe "Create Merchant Items" do
       click_button "Create Item"
 
       expect(page).to have_content("Name can't be blank and Inventory can't be blank")
-      save_and_open_page
       expect(page).to have_button("Create Item")
 
-      expect(find_field(:item_name).value).to eq(nil)
-      expect(find_field(:item_price).value).to eq(price)
+      expect(find_field(:item_name).value).to eq(name)
+      expect(find_field(:item_price).value).to eq(price.to_s)
       expect(find_field(:item_description).value).to eq(description)
-      expect(find_field(:item_inventory).value).to eq(nil)
+      expect(find_field(:item_inventory).value).to eq(inventory)
     end
   end
 end
