@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'item delete', type: :feature do
+RSpec.describe 'As a merchant', type: :feature do
   describe 'when I visit an item show page' do
     before(:each) do
       @user = create(:user, role: 1)
