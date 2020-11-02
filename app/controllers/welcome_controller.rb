@@ -4,6 +4,7 @@ class WelcomeController < ApplicationController
 
   def merchant
     # render status: 404 if !current_user
+    @merchant = current_user.merchant if current_merchant?
     render file: "public/404" unless current_merchant?
     render "merchant_dashboard" if current_merchant?
   end

@@ -11,6 +11,12 @@ Rails.application.routes.draw do
   namespace :admin do
     get "/users", to: "users#index"
     get "/orders/:order_id", to: "orders#update"
+    get "/merchants/:merchant_id", to: "merchants#show"
+  end
+
+  namespace :merchant do
+    get '/orders/:order_id', to: "orders#show"
+    get '/items', to: 'items#index'
   end
 
   get "/merchants", to: "merchants#index"
