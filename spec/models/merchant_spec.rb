@@ -14,58 +14,84 @@ describe Merchant, type: :model do
   end
 
   describe 'instance methods' do
-    before(:each) do
-      @meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
-      @tire = @meg.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
-    end
-    it 'no_orders' do
-      expect(@meg.no_orders?).to eq(true)
+    describe '#no_orders?' do
+      context 'when a merchant has no orders' do
+        it 'returns false' do
+          merchant = create(:merchant, :with_item_orders)
+          expect(merchant.no_orders?).to eq(false)
+        end
+      end
 
-      order_1 = Order.create!(name: 'Meg', address: '123 Stang Ave', city: 'Hershey', state: 'PA', zip: 17033)
-      item_order_1 = order_1.item_orders.create!(item: @tire, price: @tire.price, quantity: 2)
-
-      expect(@meg.no_orders?).to eq(false)
-    end
-
-    it 'item_count' do
-      chain = @meg.items.create(name: "Chain", description: "It'll never break!", price: 30, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 22)
-
-      expect(@meg.item_count).to eq(2)
+      context 'when a merchant has orders' do
+        it 'returns true' do
+          merchant = build(:merchant)
+          expect(merchant.no_orders?).to eq(true)
+        end
+      end
     end
 
-    it 'average_item_price' do
-      chain = @meg.items.create(name: "Chain", description: "It'll never break!", price: 40, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 22)
-
-      expect(@meg.average_item_price).to eq(70)
+    describe '#item_count' do
+      it 'returns the total number of a merchants unqiue items' do
+        merchant = create(:merchant, :with_items, item_count: 3) 
+        expect(merchant.item_count).to eq(3)
+      end
     end
 
-    it 'distinct_cities' do
-      chain = @meg.items.create(name: "Chain", description: "It'll never break!", price: 40, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 22)
-      order_1 = Order.create!(name: 'Meg', address: '123 Stang Ave', city: 'Hershey', state: 'PA', zip: 17033)
-      order_2 = Order.create!(name: 'Brian', address: '123 Brian Ave', city: 'Denver', state: 'CO', zip: 17033)
-      order_3 = Order.create!(name: 'Dao', address: '123 Mike Ave', city: 'Denver', state: 'CO', zip: 17033)
-      order_1.item_orders.create!(item: @tire, price: @tire.price, quantity: 2)
-      order_2.item_orders.create!(item: chain, price: chain.price, quantity: 2)
-      order_3.item_orders.create!(item: @tire, price: @tire.price, quantity: 2)
+    describe '#average_item_price' do
+      it 'returns the average item price a merchants items' do
+        merchant = create(:merchant)
+        create(:item, price: 4, merchant: merchant)
+        create(:item, price: 2, merchant: merchant)
+        create(:item, price: 6, merchant: merchant)
 
-      expect(@meg.distinct_cities).to include("Denver")
-      expect(@meg.distinct_cities).to include("Hershey")
+        expect(merchant.average_item_price).to eq(4)
+      end
+    end
+
+    describe '#distinct_cities' do
+      it 'returns array of unique city names from items ordered' do
+        merchant = create(:merchant, :with_items)
+        order1 = create(:order, city: 'Hershey')
+        order2 = create(:order, city: 'Denver')
+        order3 = create(:order, city: 'Denver')
+        create(:item_order, item: merchant.items[0], order: order1)
+        create(:item_order, item: merchant.items[0], order: order2)
+        create(:item_order, item: merchant.items[0], order: order3)
+
+        expect(merchant.distinct_cities).to eq(['Denver', 'Hershey'])
+      end
     end
     
-    it '#enabled?' do
-      merchant1 = create(:merchant)
-      merchant2 = create(:merchant, enabled: false)
-      
-      expect(merchant1.enabled?).to eq(true)
-      expect(merchant2.enabled?).to eq(false)
+    describe '#enabled?' do
+      context 'when merchant is enabled' do
+        it 'returns true' do
+          merchant = build(:merchant, enabled: true)
+          expect(merchant.enabled?).to eq(true)
+        end
+      end
+
+      context 'when merchant is disabled' do
+        it 'returns false' do
+          merchant = build(:merchant, enabled: false)
+          expect(merchant.enabled?).to eq(false)
+        end
+      end
     end
 
-    it '#status' do
-      merchant1 = create(:merchant)
-      merchant2 = create(:merchant, enabled: false)
-      
-      expect(merchant1.status).to eq('Enabled')
-      expect(merchant2.status).to eq('Disabled')
+    describe '#status' do
+      context 'when merchant is enabled' do
+        it "returns 'Enabled'" do
+          merchant = build(:merchant, enabled: true)
+          expect(merchant.status).to eq('Enabled')
+        end
+      end
+
+      context 'when merchant is disabled' do
+        it "returns 'Disabled'" do
+          merchant = build(:merchant, enabled: false)
+          expect(merchant.status).to eq('Disabled')
+        end
+      end
     end
   end
 end
