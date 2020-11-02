@@ -2,17 +2,12 @@ class ItemsController<ApplicationController
 
   def index
     @items = Item.all
-    # @merchant = Merchant.find(params[:merchant_id])
   end
 
   def show
     @item = Item.find(params[:id])
   end
 
-  # def new
-  #   @merchant = Merchant.find(params[:merchant_id])
-  #   @item = Item.new
-  # end
 
   def edit
     @item = Item.find(params[:id])
@@ -20,11 +15,13 @@ class ItemsController<ApplicationController
 
   def update
     @item = Item.find(params[:id])
+    check_default_image(@item)
     @item.update(item_params)
     if params[:status]
       update_status
     elsif @item.save
-      redirect_to "/items/#{@item.id}"
+      flash[:alert] = "Item #{@item.id} has been successfully updated!"
+      redirect_to "/merchants/#{@item.merchant_id}/items"
     else
       flash[:error] = @item.errors.full_messages.to_sentence
       render :edit
@@ -35,13 +32,8 @@ class ItemsController<ApplicationController
     item = Item.find(params[:id])
     Review.where(item_id: item.id).destroy_all
     item.destroy
-    if params[:merchant_id]
-      merchant = Merchant.find(params[:merchant_id])
-      flash[:alert] = 'This item is now deleted.'
-      redirect_to "/merchants/#{merchant.id}/items"
-    else
-      redirect_to "/items"
-    end
+    flash[:alert] = 'This item is now deleted.'
+    redirect_to "/merchants/#{item.merchant_id}/items"
   end
 
   def update_status
@@ -60,6 +52,12 @@ class ItemsController<ApplicationController
 
   def item_params
     params.permit(:name,:description,:price,:inventory,:image)
+  end
+
+  def check_default_image(item)
+    if params[:image] == ''
+      params[:image] = '/images/image.png'
+    end
   end
 
 end
