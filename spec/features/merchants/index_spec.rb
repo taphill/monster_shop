@@ -59,5 +59,32 @@ RSpec.describe 'merchant index page', type: :feature do
         expect(page).to have_content("#{merchant1.name}'s account is now disabled")
       end
     end
+
+    context 'when a merchant is disabled' do
+      it 'has an enable button' do
+        within "#merchant-#{merchant2.id}" do
+          expect(page).to have_button('Enable')
+        end
+      end
+
+      it ' can enable an account' do
+        within "#merchant-#{merchant2.id}" do
+          click_button 'Enable'
+        end
+
+        expect(page).to have_current_path(admin_merchants_path)
+        within "#merchant-#{merchant2.id}" do
+          expect(page).to have_content('Enabled')
+        end
+      end
+
+      it 'can see a flash message' do
+        within "#merchant-#{merchant2.id}" do
+          click_button 'Enable'
+        end
+
+        expect(page).to have_content("#{merchant2.name}'s account is now enabled")
+      end
+    end
   end
 end
