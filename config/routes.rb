@@ -11,15 +11,16 @@ Rails.application.routes.draw do
   namespace :admin do
     get "/users", to: "users#index"
     get "/orders/:order_id", to: "orders#update"
+    namespace :merchants do
+      scope '/:merchant_id/' do
+        get "/items", to: "items#index"
+        get "/items/new", to: "items#new"
+        post "/items", to: "items#create", as: "create_item"
+      end
+    end
   end
 
-  get "/merchants", to: "merchants#index"
-  get "/merchants/new", to: "merchants#new"
-  get "/merchants/:id", to: "merchants#show"
-  post "/merchants", to: "merchants#create"
-  get "/merchants/:id/edit", to: "merchants#edit"
-  patch "/merchants/:id", to: "merchants#update"
-  delete "/merchants/:id", to: "merchants#destroy"
+  resources :merchants
 
   namespace :merchants do
     scope '/:merchant_id/' do
