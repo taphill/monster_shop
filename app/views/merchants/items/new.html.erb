@@ -1,7 +1,6 @@
 <h1>Create New Item For <%=link_to @merchant.name, "/merchants/#{@merchant.id}" %></h1>
 
 <center>
-  <% require "pry"; binding.pry  %>
   <%= form_for @item, url: merchants_create_item_path(@merchant) do |f| %>
     <%= f.label :name %>
     <%= f.text_field :name%>
