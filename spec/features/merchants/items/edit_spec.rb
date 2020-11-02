@@ -105,7 +105,11 @@ RSpec.describe "As a merchant employee" do
       click_button "Update Item"
 
       expect(page).to have_content("Name can't be blank")
-      expect(page).to have_button("Update Item")
+      expect(find_field(:name).value).to eq("")
+      expect(find_field(:price).value).to eq("110")
+      expect(find_field(:description).value).to eq("They're a bit more expensive, and they kinda do pop sometimes, but whatevs.. this is retail.")
+      expect(find_field(:image).value).to eq('/images/image.png')
+      expect(find_field(:inventory).value).to eq("11")
     end
   end
 end
