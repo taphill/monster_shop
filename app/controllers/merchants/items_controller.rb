@@ -32,7 +32,6 @@ class Merchants::ItemsController < ApplicationController
   def check_default_image(item)
     if params[:item][:image] == ''
       item.update(image: '/images/image.png')
-      item.save
     end
   end
 end
