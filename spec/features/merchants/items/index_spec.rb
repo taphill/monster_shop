@@ -7,6 +7,12 @@ RSpec.describe "Merchant Items Index Page" do
       @tire = @meg.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
       @chain = @meg.items.create(name: "Chain", description: "It'll never break!", price: 50, image: "https://www.rei.com/media/b61d1379-ec0e-4760-9247-57ef971af0ad?size=784x588", inventory: 5)
       @shifter = @meg.items.create(name: "Shimano Shifters", description: "It'll always shift!", active?: false, price: 180, image: "https://images-na.ssl-images-amazon.com/images/I/4142WWbN64L._SX466_.jpg", inventory: 2)
+
+      @user = create(:user, role: 1)
+      visit login_path
+      fill_in :email, with: @user.email
+      fill_in :password, with: 'password'
+      click_button "Login"
     end
 
     it 'shows me a list of that merchants items' do
@@ -85,18 +91,13 @@ RSpec.describe "Merchant Items Index Page" do
     end
 
     it 'gives me the ability to delete an item never ordered' do
-      user = create(:user, role: 1)
-      visit login_path
-      fill_in :email, with: user.email
-      fill_in :password, with: 'password'
-      click_button "Login"
 
-      order = user.orders.create(
-        name: user.name,
-        address: user.street_address,
-        city: user.city,
-        state: user.state,
-        zip: user.zip
+      order = @user.orders.create(
+        name: @user.name,
+        address: @user.street_address,
+        city: @user.city,
+        state: @user.state,
+        zip: @user.zip
       )
       ItemOrder.create!(
         order_id: order.id,
