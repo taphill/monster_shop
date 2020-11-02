@@ -9,7 +9,9 @@
       <h2>Account Status: <%= merchant.status %></h2>
 
       <% if merchant.enabled? %>
-        <%= button_to('Disable', admin_merchant_path(merchant), method: :patch) %>
+        <%= button_to('Disable', admin_merchant_path(merchant), params: { enable: false }, method: :patch) %>
+      <% else %>
+        <%= button_to('Enable', admin_merchant_path(merchant), params: { enable: true }, method: :patch) %>
       <% end %>
     </section>
   <% end %>
