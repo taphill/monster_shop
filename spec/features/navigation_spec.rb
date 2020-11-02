@@ -168,6 +168,12 @@ RSpec.describe 'Site Navigation' do
 
       visit '/admin'
       expect(page).to have_content(no_pass)
+
+      visit '/admin/users'
+      expect(page).to have_content(no_pass)
+
+      visit '/admin/merchants'
+      expect(page).to have_content(no_pass)
     end
   end
 
