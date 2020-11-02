@@ -14,15 +14,15 @@
       <p> <%= item.description unless @merchant%> </p>
       <p>Price: <%=number_to_currency(item.price) %> </p>
       <p>Inventory: <%= item.inventory %> </p>
-      <% if !@merchant %>
-      <% end %>
       <% if item.active? %>
-        <p>Active | <%= link_to 'Deactivate', "/items/#{item.id}?status=deactivate", method: :patch %></p>
+        <p>Active <%= link_to '| Deactivate', "/items/#{item.id}?status=deactivate", method: :patch if @merchant %></p>
       <% else %>
-        <p>Inactive | <%= link_to 'Activate', "/items/#{item.id}?status=activate", method: :patch %></p>
+        <p>Inactive <%= link_to '| Activate', "/items/#{item.id}?status=activate", method: :patch if @merchant %></p>
       <% end %>
-      <% if item.no_orders? %>
-        <p><%= button_to 'Delete', "/items/#{item.id}", params: { merchant_id: @merchant.id }, method: :delete %></p>
+      <% if @merchant %>
+        <% if item.no_orders? %>
+          <p><%= button_to 'Delete', "/items/#{item.id}", params: { merchant_id: @merchant.id }, method: :delete %></p>
+        <% end %>
       <% end %>
     </section>
     <% end %>

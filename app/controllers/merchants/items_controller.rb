@@ -12,13 +12,13 @@ class Merchants::ItemsController < ApplicationController
 
   def create
     @merchant = Merchant.find(params[:merchant_id])
-    item = @merchant.items.new(item_params)
-    check_default_image(item)
-    if item.save
+    @item = @merchant.items.new(item_params)
+    check_default_image(@item)
+    if @item.save
       flash[:alert] = 'New item saved successfully!'
       redirect_to "/merchants/#{@merchant.id}/items"
     else
-      flash[:error] = item.errors.full_messages.to_sentence
+      flash[:error] = @item.errors.full_messages.to_sentence
       render :new
     end
   end

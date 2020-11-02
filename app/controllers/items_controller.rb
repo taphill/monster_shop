@@ -2,6 +2,7 @@ class ItemsController<ApplicationController
 
   def index
     @items = Item.all
+    # @merchant = Merchant.find(params[:merchant_id])
   end
 
   def show
@@ -53,6 +54,12 @@ class ItemsController<ApplicationController
       flash[:alert] = 'This item is available for sale.'
     end
     redirect_to "/merchants/#{@item.merchant_id}/items"
+  end
+
+  private
+
+  def item_params
+    params.permit(:name,:description,:price,:inventory,:image)
   end
 
 end
