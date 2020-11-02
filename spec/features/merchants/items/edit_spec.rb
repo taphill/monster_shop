@@ -44,6 +44,7 @@ RSpec.describe "As a merchant employee" do
     end
 
     it "is pre-populated with all the item's information" do
+      expect(current_path).to eq("/items/#{@tire.id}/edit")
       expect(find_field(:name).value).to eq(@tire.name)
       expect(find_field(:price).value).to eq(@tire.price.to_s)
       expect(find_field(:description).value).to eq(@tire.description)
@@ -65,10 +66,13 @@ RSpec.describe "As a merchant employee" do
         expect(page).to have_content(@tire.name)
         expect(page).to have_button("Edit")
         expect(page).to have_content("Price: $120.00")
+        expect(page).to_not have_content("Price: $100.00")
         expect(page).to have_css("img[src*='#{@tire.image}']")
         expect(page).to have_content("Active")
         expect(page).to_not have_content("They'll never pop! Now with pop guarantee!")
         expect(page).to have_content("Inventory: 13")
+        expect(page).to_not have_content("Inventory: 12")
+
       end
     end
 
@@ -89,6 +93,19 @@ RSpec.describe "As a merchant employee" do
         expect(page).to_not have_content(@tire.description)
         expect(page).to have_content("Inventory: #{@tire.inventory}")
       end
+    end
+
+    it 'I get a flash message if entire form is not filled out' do
+      fill_in 'Name', with: ""
+      fill_in 'Price', with: 110
+      fill_in 'Description', with: "They're a bit more expensive, and they kinda do pop sometimes, but whatevs.. this is retail."
+      fill_in 'Image', with: ""
+      fill_in 'Inventory', with: 11
+
+      click_button "Update Item"
+
+      expect(page).to have_content("Name can't be blank")
+      expect(page).to have_button("Update Item")
     end
   end
 end
