@@ -22,8 +22,8 @@
       <p><%= link_to "Delete Item", "/merchant/items/#{@item.id}", method: :delete if @item.no_orders? %></p>
       <% end %>
       <% if current_admin? %>
-      <p><%= link_to "Edit Item", "/admin/merchants/items/#{@item.id}/edit" %></p>
-      <p><%= link_to "Delete Item", "/admin/merchants/items/#{@item.id}", method: :delete if @item.no_orders? %></p>
+      <p><%= link_to "Edit Item", "/admin/merchants/#{@item.merchant_id}/items/#{@item.id}/edit" %></p>
+      <p><%= link_to "Delete Item", "/admin/merchants/#{@item.merchant_id}/items/#{@item.id}", method: :delete if @item.no_orders? %></p>
       <% end %>
       <%= link_to "Add Review", "/items/#{@item.id}/reviews/new" %>
       <%= button_to "Add To Cart", "/cart/#{@item.id}", method: :post %>
