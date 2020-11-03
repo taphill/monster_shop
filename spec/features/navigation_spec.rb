@@ -222,11 +222,17 @@ RSpec.describe 'Site Navigation' do
       end
     end
 
-    it "I can't access paths for not for admins" do
+    it "I can't access paths not for admins" do
       no_pass = "The page you were looking for doesn't exist."
 
       visit '/cart'
       expect(page).to have_content(no_pass)
+    end
+
+    it "The link to 'All Merchants' takes me to 'admin/merchants' path" do
+      click_link "All Merchants"
+
+      expect(current_path).to eq(admin_merchants_path)
     end
   end
 end
