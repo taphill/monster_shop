@@ -96,6 +96,29 @@ describe Merchant, type: :model do
       end
     end
 
+    describe '#disable_items' do
+      it 'disables all merchant items' do
+        merchant = create(:merchant, :with_items, item_count: 3)
+        
+        merchant.disable_items
+        expect(merchant.items[0].active?).to eq(false) 
+        expect(merchant.items[1].active?).to eq(false) 
+        expect(merchant.items[2].active?).to eq(false) 
+      end
+    end
+
+    describe '#enable_items' do
+      it 'enables all merchant items' do
+        merchant = create(:merchant)
+        create_list(:item, 3, active?: false, merchant: merchant)
+        
+        merchant.enable_items
+        expect(merchant.items[0].active?).to eq(true) 
+        expect(merchant.items[1].active?).to eq(true) 
+        expect(merchant.items[2].active?).to eq(true) 
+      end
+    end
+
     describe '#pending_orders' do
       it 'returns pending orders for a merchant' do
         merchant = create(:merchant)
