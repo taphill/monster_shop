@@ -1,7 +1,9 @@
-class Admin::MerchantsController < ApplicationController
+class Admin::MerchantsController < Admin::BaseController
+  def index
 
-  def show
-    @merchant = Merchant.find_by_id(params[:merchant_id])
   end
 
+  def show
+    @merchant = Merchant.find_by_id(params[:id])
+  end
 end

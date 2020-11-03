@@ -5,36 +5,30 @@ Rails.application.routes.draw do
   get "/login", to: "sessions#new"
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
-  get "/merchant", to: "welcome#merchant"
-  get "/admin", to: "welcome#admin"
 
   namespace :admin do
+    root "dashboard#index"
     get "/users", to: "users#index"
-    get "/orders/:order_id", to: "orders#update"
-    get "/merchants/:merchant_id", to: "merchants#show"
+    resources :orders, only: [:update]
+    resources :merchants, only: [:index, :show, :update]
+    namespace :merchants do
+      scope '/:merchant_id/' do
+        resources :items, except: [:show]
+      end
+    end
   end
 
   namespace :merchant do
+    root 'dashboard#index'
+    resources :items, except: [:show]
     get '/orders/:order_id', to: "orders#show"
-    get '/items', to: 'items#index'
   end
 
-  get "/merchants", to: "merchants#index"
-  get "/merchants/new", to: "merchants#new"
-  get "/merchants/:id", to: "merchants#show"
-  post "/merchants", to: "merchants#create"
-  get "/merchants/:id/edit", to: "merchants#edit"
-  patch "/merchants/:id", to: "merchants#update"
-  delete "/merchants/:id", to: "merchants#destroy"
+  resources :merchants
+  get "/merchants/:merchant_id/items", to: 'items#index'
 
   get "/items", to: "items#index"
   get "/items/:id", to: "items#show", as: 'item'
-  get "/items/:id/edit", to: "items#edit"
-  patch "/items/:id", to: "items#update"
-  get "/merchants/:merchant_id/items", to: "items#index"
-  get "/merchants/:merchant_id/items/new", to: "items#new"
-  post "/merchants/:merchant_id/items", to: "items#create"
-  delete "/items/:id", to: "items#destroy"
 
   get "/items/:item_id/reviews/new", to: "reviews#new"
   post "/items/:item_id/reviews", to: "reviews#create"

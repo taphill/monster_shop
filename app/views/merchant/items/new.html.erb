@@ -1,0 +1,6 @@
+<h1>Create New Item For <%=link_to @merchant.name, "/merchants/#{@merchant.id}" %></h1>
+<% if current_merchant? %>
+  <%= render partial: 'merchant/items/item_form', locals: { url_path: "/merchant/items", method: "post" } %>
+<% elsif current_admin? %>
+  <%= render partial: 'merchant/items/item_form', locals: { url_path: "/admin/merchants/#{@merchant.id}/items", method: "post" } %>
+<% end %>
