@@ -1,7 +1,9 @@
 <% if @merchant %>
   <h1><%= link_to @merchant.name, "/merchants/#{@merchant.id}"%><span> Items</span></h1>
-  <% if current_merchant? || current_admin? %>
+  <% if current_merchant? %>
     <p align="center"><%= link_to "Add New Item", "/merchant/items/new" %></p>
+  <% elsif current_admin? %>
+    <p align="center"><%= link_to "Add New Item", "/admin/merchants/#{@merchant.id}/items/new" %></p>
   <% end %>
 <% else %>
   <h1>All Items</h1>

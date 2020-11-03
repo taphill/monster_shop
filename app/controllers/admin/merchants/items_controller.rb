@@ -6,22 +6,21 @@ class Admin::Merchants::ItemsController < Admin::BaseController
   end
 
   def new
-    require "pry"; binding.pry
     @merchant = Merchant.find(params[:merchant_id])
     @item = Item.new
+    render 'merchant/items/new'
   end
 
   def create
-    require "pry"; binding.pry
     @merchant = Merchant.find(params[:merchant_id])
     @item = @merchant.items.new(item_params)
     check_default_image(@item)
     if @item.save
       flash[:alert] = 'New item saved successfully!'
-      redirect_to "/merchant/items"
+      redirect_to "/admin/merchants/#{@merchant.id}/items"
     else
       flash[:error] = @item.errors.full_messages.to_sentence
-      render :new
+      render 'merchant/items/new'
     end
   end
 
@@ -71,12 +70,10 @@ class Admin::Merchants::ItemsController < Admin::BaseController
   private
 
   def item_params
-    require "pry"; binding.pry
     params.require(:item).permit(:name,:description,:price,:inventory,:image)
   end
 
   def check_default_image(item)
-    require "pry"; binding.pry
     if params[:item][:image] == ''
       item.update(image: '/images/image.png')
       item.save

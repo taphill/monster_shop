@@ -1,2 +1,6 @@
 <h1>Edit <%=link_to @item.name, "/items/#{@item.id}" %></h1>
-<%= render partial: 'item_form', locals: { url_path: "/merchant/items/#{@item.id}", method: "patch" } %>
+<% if current_merchant? %>
+  <%= render partial: 'merchant/items/item_form', locals: { url_path: "/merchant/items/#{@item.id}", method: "patch" } %>
+<% elsif current_admin? %>
+  <%= render partial: 'merchant/items/item_form', locals: { url_path: "/admin/merchants/#{@item.merchant_id}/items/#{@item.id}", method: "patch" } %>
+<% end %>
