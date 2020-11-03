@@ -27,6 +27,10 @@ class Merchant < ApplicationRecord
     item_orders.distinct.joins(:order).pluck(:city)
   end
 
+  def pending_orders
+    self.orders.where(status: 'pending')
+  end
+
   def enabled?
     enabled
   end
@@ -36,7 +40,12 @@ class Merchant < ApplicationRecord
 
     'Enabled'
   end
-  def pending_orders
-    self.orders.where(status: 'pending')
+
+  def disable_items
+    items.update_all(active?: false)
+  end
+
+  def enable_items
+    items.update_all(active?: true)
   end
 end
