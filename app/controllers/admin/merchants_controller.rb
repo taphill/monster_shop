@@ -4,8 +4,6 @@ class Admin::MerchantsController < Admin::BaseController
   end
 
   def show
-    require "pry"; binding.pry
     @merchant = Merchant.find_by_id(params[:merchant_id])
-    render
   end
 end
