@@ -5,8 +5,6 @@ Rails.application.routes.draw do
   get "/login", to: "sessions#new"
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
-  get "/merchant", to: "welcome#merchant"
-
 
   namespace :admin do
     root "dashboard#index"
@@ -22,21 +20,17 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :merchants
-
-  namespace :merchants do
+  namespace :merchant do
+    root 'dashboard#index'
     scope '/:merchant_id/' do
-      get "/items", to: "items#index"
-      get "/items/new", to: "items#new"
-      post "/items", to: "items#create", as: "create_item"
+      resources :items, except: [:show]
     end
   end
 
+  resources :merchants
+
   get "/items", to: "items#index"
   get "/items/:id", to: "items#show", as: 'item'
-  get "/items/:id/edit", to: "items#edit"
-  patch "/items/:id", to: "items#update"
-  delete "/items/:id", to: "items#destroy"
 
   get "/items/:item_id/reviews/new", to: "reviews#new"
   post "/items/:item_id/reviews", to: "reviews#create"

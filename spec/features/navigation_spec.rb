@@ -100,6 +100,7 @@ RSpec.describe 'Site Navigation' do
 
     it "I can't access paths for admins or merchants" do
       user = create(:user)
+      merchant = create(:merchant)
 
       visit root_path
 
@@ -116,7 +117,16 @@ RSpec.describe 'Site Navigation' do
       visit '/merchant'
       expect(page).to have_content(no_pass)
 
+      visit "/merchant/#{merchant.id}/items/new"
+      expect(page).to have_content(no_pass)
+
       visit '/admin'
+      expect(page).to have_content(no_pass)
+
+      visit '/admin/users'
+      expect(page).to have_content(no_pass)
+
+      visit '/admin/merchants'
       expect(page).to have_content(no_pass)
     end
   end
@@ -178,7 +188,7 @@ RSpec.describe 'Site Navigation' do
   end
 
   describe 'As an admin' do
-    it "I see the normal links plus dashboard and all users, not cart" do
+    before(:each) do
       admin = create(:user, role: 2)
 
       visit root_path
@@ -190,7 +200,8 @@ RSpec.describe 'Site Navigation' do
       fill_in :email, with: admin.email
       fill_in :password, with: 'password'
       click_button 'Login'
-
+    end
+    it "I see the normal links plus dashboard and all users, not cart" do
       expect(current_path).to eq('/admin')
 
       within 'nav' do
@@ -210,23 +221,18 @@ RSpec.describe 'Site Navigation' do
       end
     end
 
-    it "I can't access paths for admins" do
-      admin = create(:user, role: 2)
-
-      visit root_path
-
-      within 'nav' do
-        click_link 'Login'
-      end
-
-      fill_in :email, with: admin.email
-      fill_in :password, with: 'password'
-      click_button 'Login'
-
-      no_pass = "The page you were looking for doesn't exist."
-
+    it "I can see paths meant for merchants" do
       visit '/merchant'
-      expect(page).to have_content(no_pass)
+      expect(page).to have_content("Merchant Dashboard")
+
+      merchant = create(:merchant)
+
+      visit "/merchant/#{merchant.id}/items/new"
+      expect(page).to have_content("Create New Item")
+    end
+
+    it "I can't access paths for not for admins" do
+      no_pass = "The page you were looking for doesn't exist."
 
       visit '/cart'
       expect(page).to have_content(no_pass)
