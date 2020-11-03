@@ -1,6 +1,6 @@
-<% if current_merchant? %>
+<% if current_merchant? || current_admin? %>
   <h1><%= link_to @merchant.name, "/merchants/#{@merchant.id}"%><span> Items</span></h1>
-  <p align="center"><%= link_to "Add New Item", "/merchants/#{@merchant.id}/items/new" %></p>
+  <p align="center"><%= link_to "Add New Item", "/merchant/#{@merchant.id}/items/new" %></p>
 <% else %>
   <h1>All Items</h1>
 <% end %>
@@ -15,14 +15,14 @@
       <p>Price: <%=number_to_currency(item.price) %> </p>
       <p>Inventory: <%= item.inventory %> </p>
       <% if item.active? %>
-        <p>Active <%= link_to '| Deactivate', "/items/#{item.id}?status=deactivate", method: :patch if current_merchant? %></p>
+        <p>Active <%= link_to '| Deactivate', "/merchant/#{item.merchant_id}/items/#{item.id}?status=deactivate", method: :patch if current_merchant? || current_admin? %></p>
       <% else %>
-        <p>Inactive <%= link_to '| Activate', "/items/#{item.id}?status=activate", method: :patch if current_merchant? %></p>
+        <p>Inactive <%= link_to '| Activate', "/merchant/#{item.merchant_id}/items/#{item.id}?status=activate", method: :patch if current_merchant? || current_admin? %></p>
       <% end %>
-      <% if current_merchant? %>
-        <p><%= button_to 'Edit', "/items/#{item.id}/edit", method: :get %></p>
+      <% if current_merchant? || current_admin? %>
+        <p><%= button_to 'Edit', "/merchant/#{item.merchant_id}/items/#{item.id}/edit", method: :get %></p>
         <% if item.no_orders? %>
-          <p><%= button_to 'Delete', "/items/#{item.id}", params: { merchant_id: @merchant.id }, method: :delete %></p>
+          <p><%= button_to 'Delete', "/merchant/#{item.merchant_id}/items/#{item.id}", params: { merchant_id: @merchant.id }, method: :delete %></p>
         <% end %>
       <% end %>
     </section>
