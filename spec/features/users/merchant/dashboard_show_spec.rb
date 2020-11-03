@@ -5,7 +5,7 @@ describe 'As a merchant employee' do
 
     it "I see the name and full address of the merchant I work for" do
       merchant = create(:merchant)
-      merchant_user = create(:user, role:1, merchant_id: merchant.id)
+      merchant_user = create(:user, role: 1, merchant_id: merchant.id)
 
       visit login_path
 
@@ -13,7 +13,7 @@ describe 'As a merchant employee' do
       fill_in :password, with: 'password'
       click_button 'Login'
 
-      expect(current_path).to eq(merchant_path)
+      expect(current_path).to eq('/merchant')
 
       within ".merchant-info" do
         expect(page).to have_content(merchant.name)
@@ -28,7 +28,7 @@ describe 'As a merchant employee' do
       item_order = create(:item_order)
 
       merchant = item_order.item.merchant
-      merchant_user = create(:user, role:1, merchant_id: merchant.id)
+      merchant_user = create(:user, role: 1, merchant_id: merchant.id)
       order_1 = item_order.order
 
       user = create(:user)
@@ -48,11 +48,11 @@ describe 'As a merchant employee' do
       end
 
       within "#order-#{order_1.id}" do
-        expect(page).to have_link(order_1.id)
+        expect(page).to have_link("#{order_1.id}")
         expect(page).to have_content(order_1_date)
         expect(page).to have_content(order_1.total_quantity)
         expect(page).to have_content(order_1.grandtotal)
-        click_link (order_1.id)
+        click_link "#{order_1.id}"
       end
 
       expect(current_path).to eq("/merchant/orders/#{order_1.id}")

@@ -1,7 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe 'item delete', type: :feature do
+RSpec.describe 'As an admin', type: :feature do
   describe 'when I visit an item show page' do
+    before(:each) do
+      @user = create(:user, role: 2)
+      visit login_path
+      fill_in :email, with: @user.email
+      fill_in :password, with: 'password'
+      click_button "Login"
+    end
     it 'I can delete an item' do
       bike_shop = Merchant.create(name: "Brian's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
       chain = bike_shop.items.create(name: "Chain", description: "It'll never break!", price: 50, image: "https://www.rei.com/media/b61d1379-ec0e-4760-9247-57ef971af0ad?size=784x588", inventory: 5)
@@ -12,7 +19,7 @@ RSpec.describe 'item delete', type: :feature do
 
       click_on "Delete Item"
 
-      expect(current_path).to eq("/items")
+      expect(current_path).to eq("/admin/merchants/#{bike_shop.id}/items")
       expect("item-#{chain.id}").to be_present
     end
 
