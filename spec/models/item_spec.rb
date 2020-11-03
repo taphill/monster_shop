@@ -109,5 +109,17 @@ describe Item, type: :model do
 
       expect(@chain.quantity_ordered(@chain.id)).to eq(7)
     end
+
+    it '#fulfilled?(order_id)' do
+      user = create(:user)
+      order_1 = Order.create!(name: 'Meg', address: '123 Stang Ave', city: 'Hershey', state: 'PA', zip: 17033, user_id: user.id)
+      order_2 = Order.create!(name: 'Yo', address: 'Whatever', city: 'Place', state: 'PA', zip: 17033, user_id: user.id)
+      order_1.item_orders.create!(item: @chain, price: @chain.price, quantity: 4, fulfill_status: 'fulfilled')
+      order_2.item_orders.create!(item: @chain, price: @chain.price, quantity: 3, fulfill_status: 'unfulfilled')
+
+      expect(@chain.fulfilled?(order_1)).to eq(true)
+      expect(@chain.fulfilled?(order_2)).to eq(false)
+
+    end
   end
 end
