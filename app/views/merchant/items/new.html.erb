@@ -1,2 +1,2 @@
 <h1>Create New Item For <%=link_to @merchant.name, "/merchants/#{@merchant.id}" %></h1>
-<%= render partial: 'item_form', locals: { url_path: "/merchant/#{@merchant.id}/items", method: "post" } %>
+<%= render partial: 'item_form', locals: { url_path: "/merchant/items", method: "post" } %>

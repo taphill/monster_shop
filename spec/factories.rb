@@ -44,7 +44,7 @@ FactoryBot.define do
     city { Faker::Address.city }
     state { Faker::Address.state_abbr }
     zip { Faker::Address.zip }
-    user 
+    user
   end
 
   factory :item_order do

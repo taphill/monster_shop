@@ -17,15 +17,15 @@ describe 'As a visitor' do
 
     it 'as a merchant I am redirected to dashboard & see a flash message' do
       visit login_path
+      merchant = create(:merchant)
+      merchant_employee = create(:user, role: 1, merchant: merchant)
 
-      merchant = create(:user, role: 1)
-
-      fill_in :email, with: merchant.email
+      fill_in :email, with: merchant_employee.email
       fill_in :password, with: 'password'
       click_button 'Login'
 
       expect(current_path).to eq("/merchant")
-      expect(page).to have_content("Welcome, #{merchant.name}")
+      expect(page).to have_content("Welcome, #{merchant_employee.name}")
     end
 
     it 'as an admin I am redirected to dashboard & see a flash message' do
@@ -71,8 +71,9 @@ describe 'As a visitor' do
       visit login_path
       expect(current_path).to eq("/profile")
 
-      merchant = create(:user, role: 1)
-      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant)
+      merchant = create(:merchant)
+      merchant_employee = create(:user, role: 1, merchant: merchant)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant_employee)
       visit login_path
       expect(current_path).to eq("/merchant")
 

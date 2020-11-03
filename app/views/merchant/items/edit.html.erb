@@ -1,2 +1,2 @@
 <h1>Edit <%=link_to @item.name, "/items/#{@item.id}" %></h1>
-<%= render partial: 'item_form', locals: { url_path: "/merchant/#{@item.merchant_id}/items/#{@item.id}", method: "patch" } %>
+<%= render partial: 'item_form', locals: { url_path: "/merchant/items/#{@item.id}", method: "patch" } %>

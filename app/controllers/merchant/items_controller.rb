@@ -16,7 +16,7 @@ class Merchant::ItemsController < Merchant::BaseController
     check_default_image(@item)
     if @item.save
       flash[:alert] = 'New item saved successfully!'
-      redirect_to "/merchant/#{@merchant.id}/items"
+      redirect_to "/merchant/items"
     else
       flash[:error] = @item.errors.full_messages.to_sentence
       render :new
@@ -35,7 +35,7 @@ class Merchant::ItemsController < Merchant::BaseController
     elsif @item.save
       check_default_image(@item)
       flash[:alert] = "Item #{@item.id} has been successfully updated!"
-      redirect_to "/merchant/#{@item.merchant_id}/items"
+      redirect_to "/merchant/items"
     else
       flash[:error] = @item.errors.full_messages.to_sentence
       render :edit
@@ -47,7 +47,7 @@ class Merchant::ItemsController < Merchant::BaseController
     Review.where(item_id: item.id).destroy_all
     item.destroy
     flash[:alert] = 'This item is now deleted.'
-    redirect_to "/merchant/#{item.merchant_id}/items"
+    redirect_to "/merchant/items"
   end
 
   def update_status
@@ -59,7 +59,7 @@ class Merchant::ItemsController < Merchant::BaseController
       @item.update(:active? => true)
       flash[:alert] = 'This item is available for sale.'
     end
-    redirect_to "/merchant/#{@item.merchant_id}/items"
+    redirect_to "/merchant/items"
   end
 
   private

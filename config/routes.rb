@@ -22,9 +22,8 @@ Rails.application.routes.draw do
 
   namespace :merchant do
     root 'dashboard#index'
-    scope '/:merchant_id/' do
-      resources :items, except: [:show]
-    end
+    resources :items, except: [:show]
+    get '/orders/:order_id', to: "orders#show"
   end
 
   resources :merchants

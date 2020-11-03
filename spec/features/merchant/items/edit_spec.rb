@@ -12,7 +12,7 @@ RSpec.describe "As a merchant employee" do
       fill_in :password, with: 'password'
       click_button "Login"
 
-      visit "/merchant/#{meg.id}/items"
+      visit "/merchant/items"
 
       within "#item-#{tire.id}" do
         expect(page).to have_content(tire.name)
@@ -37,14 +37,14 @@ RSpec.describe "As a merchant employee" do
       fill_in :password, with: 'password'
       click_button "Login"
 
-      visit "/merchant/#{@meg.id}/items"
+      visit "/merchant/items"
       within "#item-#{@tire.id}" do
         click_on "Edit"
       end
     end
 
     it "is pre-populated with all the item's information" do
-      expect(current_path).to eq("/merchant/#{@meg.id}/items/#{@tire.id}/edit")
+      expect(current_path).to eq("/merchant/items/#{@tire.id}/edit")
       expect(find_field(:item_name).value).to eq(@tire.name)
       expect(find_field(:item_price).value).to eq(@tire.price.to_s)
       expect(find_field(:item_description).value).to eq(@tire.description)
@@ -59,7 +59,7 @@ RSpec.describe "As a merchant employee" do
 
       click_on "Update Item"
 
-      expect(current_path).to eq("/merchant/#{@meg.id}/items")
+      expect(current_path).to eq("/merchant/items")
       expect(page).to have_content("Item #{@tire.id} has been successfully updated!")
 
       within "#item-#{@tire.id}" do
@@ -81,7 +81,7 @@ RSpec.describe "As a merchant employee" do
 
       click_on "Update Item"
 
-      expect(current_path).to eq("/merchant/#{@meg.id}/items")
+      expect(current_path).to eq("/merchant/items")
       expect(page).to have_content("Item #{@tire.id} has been successfully updated!")
 
       within "#item-#{@tire.id}" do

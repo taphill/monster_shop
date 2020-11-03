@@ -100,7 +100,6 @@ RSpec.describe 'Site Navigation' do
 
     it "I can't access paths for admins or merchants" do
       user = create(:user)
-      merchant = create(:merchant)
 
       visit root_path
 
@@ -117,7 +116,7 @@ RSpec.describe 'Site Navigation' do
       visit '/merchant'
       expect(page).to have_content(no_pass)
 
-      visit "/merchant/#{merchant.id}/items/new"
+      visit "/merchant/items/new"
       expect(page).to have_content(no_pass)
 
       visit '/admin'
@@ -133,7 +132,8 @@ RSpec.describe 'Site Navigation' do
 
   describe 'As a merchant employee' do
     it "I see link to merchant dashboard among main nav links" do
-      merchant = create(:user, role: 1)
+      merchant = create(:merchant)
+      merchant_employee = create(:user, role: 1, merchant: merchant)
 
       visit root_path
 
@@ -141,7 +141,7 @@ RSpec.describe 'Site Navigation' do
         click_link 'Login'
       end
 
-      fill_in :email, with: merchant.email
+      fill_in :email, with: merchant_employee.email
       fill_in :password, with: 'password'
       click_button 'Login'
 
@@ -155,14 +155,15 @@ RSpec.describe 'Site Navigation' do
         expect(page).to have_link('Logout')
         expect(page).to_not have_link('Login')
         expect(page).to_not have_link('Register')
-        expect(page).to have_content("Logged in as #{merchant.name}")
+        expect(page).to have_content("Logged in as #{merchant_employee.name}")
         click_link('Dashboard')
         expect(current_path).to eq('/merchant')
       end
     end
 
     it "I can't access paths for admins" do
-      merchant = create(:user, role: 1)
+      merchant = create(:merchant)
+      merchant_employee = create(:user, role: 1, merchant: merchant)
 
       visit root_path
 
@@ -170,7 +171,7 @@ RSpec.describe 'Site Navigation' do
         click_link 'Login'
       end
 
-      fill_in :email, with: merchant.email
+      fill_in :email, with: merchant_employee.email
       fill_in :password, with: 'password'
       click_button 'Login'
 
@@ -219,16 +220,6 @@ RSpec.describe 'Site Navigation' do
         click_link('All Users')
         expect(current_path).to eq('/admin/users')
       end
-    end
-
-    it "I can see paths meant for merchants" do
-      visit '/merchant'
-      expect(page).to have_content("Merchant Dashboard")
-
-      merchant = create(:merchant)
-
-      visit "/merchant/#{merchant.id}/items/new"
-      expect(page).to have_content("Create New Item")
     end
 
     it "I can't access paths for not for admins" do

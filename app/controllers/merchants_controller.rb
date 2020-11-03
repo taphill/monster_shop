@@ -5,7 +5,11 @@ class MerchantsController <ApplicationController
   end
 
   def show
-    @merchant = Merchant.find(params[:id])
+    if current_admin?
+      redirect_to "/admin/merchants/#{params[:id]}"
+    else
+      @merchant = Merchant.find(params[:id])
+    end
   end
 
   def new
