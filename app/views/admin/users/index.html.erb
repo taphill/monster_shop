@@ -1,0 +1,13 @@
+<h1>Users Index</h1>
+
+<section class="users">
+  <ol>
+    <% @users.each do |user| %>
+    <div class="user" id="user-<%= user.id %>">
+      <li><b><i>User: </i></b><%= link_to user.name, admin_user_path(user) %></li>
+      <i>Member since: </i><%= format_date(user.created_at) %><br>
+      <i>Role: </i><%= user.role %><br>
+    </div><br>
+    <% end %>
+  </ol>
+</section>
