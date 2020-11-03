@@ -37,4 +37,8 @@ class Item < ApplicationRecord
   def quantity_purchased
     item_orders.sum(:quantity)
   end
+
+  def quantity_ordered(item_id)
+    ItemOrder.where("item_id = ?", "#{item_id}").sum(:quantity)
+  end
 end
