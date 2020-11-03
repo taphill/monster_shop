@@ -43,12 +43,10 @@ class Item < ApplicationRecord
   end
 
   def fulfilled?(order_id)
-    return false if item_orders.where(order_id: order_id).first.fulfill_status == 'unfulfilled'
-    true
+    item_orders.where(order_id: order_id).first.fulfill_status == 'unfulfilled'
   end
 
   def insufficient_inventory?(order_id)
-    return true if item_orders.where(order_id: order_id).first.quantity > self.inventory
-    false
+    item_orders.where(order_id: order_id).first.quantity > self.inventory
   end
 end
