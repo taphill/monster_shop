@@ -25,8 +25,8 @@ class Admin::Merchants::ItemsController < Admin::BaseController
   end
 
   def edit
-    require "pry"; binding.pry
     @item = Item.find(params[:id])
+    render 'merchant/items/edit'
   end
 
   def update
@@ -41,7 +41,7 @@ class Admin::Merchants::ItemsController < Admin::BaseController
       redirect_to "/admin/merchants/#{@merchant.id}/items"
     else
       flash[:error] = @item.errors.full_messages.to_sentence
-      render :edit
+      render 'merchant/items/edit'
     end
   end
 

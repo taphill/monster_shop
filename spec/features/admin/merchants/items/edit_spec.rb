@@ -44,18 +44,18 @@ RSpec.describe "As a admin" do
     end
 
     it "is pre-populated with all the item's information" do
-      expect(current_path).to eq("/items/#{@tire.id}/edit")
-      expect(find_field(:name).value).to eq(@tire.name)
-      expect(find_field(:price).value).to eq(@tire.price.to_s)
-      expect(find_field(:description).value).to eq(@tire.description)
-      expect(find_field(:image).value).to eq(@tire.image)
-      expect(find_field(:inventory).value).to eq(@tire.inventory.to_s)
+      expect(current_path).to eq("/admin/merchants/#{@meg.id}/items/#{@tire.id}/edit")
+      expect(find_field(:item_name).value).to eq(@tire.name)
+      expect(find_field(:item_price).value).to eq(@tire.price.to_s)
+      expect(find_field(:item_description).value).to eq(@tire.description)
+      expect(find_field(:item_image).value).to eq(@tire.image)
+      expect(find_field(:item_inventory).value).to eq(@tire.inventory.to_s)
     end
 
     it "and I can change the data about the item" do
-      fill_in :price, with: 120
-      fill_in :description, with: "They'll never pop! Now with pop guarantee!"
-      fill_in :inventory, with: 13
+      fill_in :item_price, with: 120
+      fill_in :item_description, with: "They'll never pop! Now with pop guarantee!"
+      fill_in :item_inventory, with: 13
 
       click_on "Update Item"
 
@@ -77,7 +77,7 @@ RSpec.describe "As a admin" do
     end
 
     it "and if I edit the image out, a placeholder takes its place" do
-      fill_in :image, with: ""
+      fill_in :item_image, with: ""
 
       click_on "Update Item"
 
@@ -105,11 +105,11 @@ RSpec.describe "As a admin" do
       click_button "Update Item"
 
       expect(page).to have_content("Name can't be blank")
-      expect(find_field(:name).value).to eq("")
-      expect(find_field(:price).value).to eq("110")
-      expect(find_field(:description).value).to eq("They're a bit more expensive, and they kinda do pop sometimes, but whatevs.. this is retail.")
-      expect(find_field(:image).value).to eq('/images/image.png')
-      expect(find_field(:inventory).value).to eq("11")
+      expect(find_field(:item_name).value).to eq("")
+      expect(find_field(:item_price).value).to eq("110")
+      expect(find_field(:item_description).value).to eq("They're a bit more expensive, and they kinda do pop sometimes, but whatevs.. this is retail.")
+      expect(find_field(:item_image).value).to eq('/images/image.png')
+      expect(find_field(:item_inventory).value).to eq("11")
     end
   end
 end
