@@ -26,6 +26,19 @@ FactoryBot.define do
         merchant.items << create_list(:item, evaluator.item_count)
       end
     end
+
+    trait :with_item_orders do
+      transient do 
+        item_count { 3 }
+      end
+      
+      after(:create) do |merchant, evaluator|
+        merchant.items << create_list(:item, evaluator.item_count)
+        create(:item_order, item: merchant.items[0]) 
+        create(:item_order, item: merchant.items[1]) 
+        create(:item_order, item: merchant.items[2]) 
+      end
+    end
   end
 
   factory :item do

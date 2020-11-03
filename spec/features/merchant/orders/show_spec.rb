@@ -14,7 +14,7 @@ describe 'as a merchant employee' do
     @m2_item3 = @merchant_2.items[2]
     @order = create(:order, user: @user)
     @io1 = create(:item_order, order: @order, item: @m1_item1, quantity: 2)
-    @io1 = create(:item_order, order: @order, item: @m1_item2, quantity: 2)
+    @io1 = create(:item_order, order: @order, item: @m1_item2, quantity: 35)
     @io1 = create(:item_order, order: @order, item: @m1_item3)
     @io1 = create(:item_order, order: @order, item: @m2_item1)
     @io1 = create(:item_order, order: @order, item: @m2_item2)
@@ -60,6 +60,57 @@ describe 'as a merchant employee' do
         expect(page).to have_xpath("//img[contains(@src,'#{@m1_item1.image}')]")
         expect(page).to have_content(@m1_item1.price)
         expect(page).to have_content(@m1_item1.quantity_ordered(@m1_item1.id))
+      end
+    end
+
+    it 'shows a button to fulfill items not already fulfilled' do
+      within "#item-#{@m1_item1.id}" do
+        expect(page).to have_button("Fulfill Item")
+      end
+    end
+
+    it 'shows a button to fulfill items if desired quantity is equal to/less than inventory' do
+      within "#item-#{@m1_item1.id}" do
+        expect(page).to have_button("Fulfill Item")
+      end
+
+      within "#item-#{@m1_item2.id}" do
+        expect(page).to_not have_button("Fulfill Item")
+      end
+    end
+
+    it 'returns me to the order show page when I click the fulfill button & shows item is fulfilled' do
+      within "#item-#{@m1_item1.id}" do
+        click_button("Fulfill")
+      end
+
+      expect(current_path).to eq("/merchant/orders")
+
+      within "#item-#{@m1_item1.id}" do
+        expect(page).to have_content("Item already fulfilled.")
+      end
+    end
+
+    it 'has a flash message indicating I have fulfilled that item' do
+      within "#item-#{@m1_item1.id}" do
+        click_button("Fulfill")
+      end
+
+      expect(page).to have_content("Item has been fulfilled")
+    end
+
+    it 'permanently reduces inventory quantity by users desired quantity' do
+      within "#item-#{@m1_item1.id}" do
+        click_button("Fulfill")
+      end
+
+      reloaded = @m1_item1.reload
+      expect(reloaded.inventory).to eq(@m1_item1.inventory - 2)
+    end
+
+    it 'has notice text next to item that I cannot fulfill item if users desired qty is greater than current inventory' do
+      within "#item-#{@m1_item2.id}" do
+        expect(page).to have_content("Cannot fulfill item: insufficient inventory")
       end
     end
   end
