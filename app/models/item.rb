@@ -46,4 +46,9 @@ class Item < ApplicationRecord
     return false if item_orders.where(order_id: order_id).first.fulfill_status == 'unfulfilled'
     true
   end
+
+  def insufficient_inventory?(order_id)
+    return true if item_orders.where(order_id: order_id).first.quantity > self.inventory
+    false
+  end
 end
