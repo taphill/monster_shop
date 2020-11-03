@@ -13,9 +13,7 @@ Rails.application.routes.draw do
     resources :merchants, only: [:index, :show, :update]
     namespace :merchants do
       scope '/:merchant_id/' do
-        get "/items", to: "items#index"
-        get "/items/new", to: "items#new"
-        post "/items", to: "items#create", as: "create_item"
+        resources :items, except: [:show]
       end
     end
   end
