@@ -2,41 +2,44 @@ require 'rails_helper'
 
 describe 'As an admin' do
   describe 'when I visit the merchant index page' do
-    xit 'I see all merchants in the system with thier city, state, name (as link to their dashboard), and enable/disable button' do
-      admin = create(:use, role:2)
-      merchant_1 = create(:merchant, status: 'enabled')
-      merchant_2 = create(:merchant, status: 'enabled')
-      merchant_3 = create(:merchant, status: 'disabled')
-      merchant_4 = create(:merchant, status: 'enabled')
-      merchant_5 = create(:merchant, status: 'disabled')
+    it 'I see all merchants in the system with thier city, state, name (as link to their dashboard), and enable/disable button' do
+      admin = create(:user, role:2)
+      merchant_1 = create(:merchant, enabled: true)
+      merchant_2 = create(:merchant, enabled: true)
+      merchant_3 = create(:merchant, enabled: false)
+      merchant_4 = create(:merchant, enabled: true)
+      merchant_5 = create(:merchant, enabled: false)
+
+      visit login_path
 
       fill_in :email, with: admin.email
       fill_in :password, with: 'password'
       click_button 'Login'
 
+      #Refactor - add link to admin/merchant index
       visit admin_merchants_path
 
-      within ".merchants" do
-        expect(page).to have_css(".merchant", count:5)
+      within ".grid-container" do
+        expect(page).to have_css(".admin-grid-item", count:5)
       end
 
       within "#merchant-#{merchant_1.id}" do
         expect(page).to have_link(merchant_1.name)
         expect(page).to have_content(merchant_1.city)
         expect(page).to have_content(merchant_1.state)
-        expect(page).to have_button('disable')
+        expect(page).to have_button('Disable')
         expect(page).to_not have_link(merchant_2.name)
         expect(page).to_not have_content(merchant_2.city)
         expect(page).to_not have_content(merchant_2.state)
-        expect(page).to_not have_button('enable')
+        expect(page).to_not have_button('Enable')
       end
 
       within "#merchant-#{merchant_3.id}" do
         expect(page).to have_link(merchant_3.name)
         expect(page).to have_content(merchant_3.city)
         expect(page).to have_content(merchant_3.state)
-        expect(page).to have_button('enable')
-        expect(page).to_not have_button('disable')
+        expect(page).to have_button('Enable')
+        expect(page).to_not have_button('Disable')
         click_link(merchant_3.name)
       end
 
