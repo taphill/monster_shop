@@ -4,6 +4,6 @@ class Admin::MerchantsController < Admin::BaseController
   end
 
   def show
-    @merchant = Merchant.find_by_id(params[:merchant_id])
+    @merchant = Merchant.find_by_id(params[:id])
   end
 end

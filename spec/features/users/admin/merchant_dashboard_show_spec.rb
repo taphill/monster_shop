@@ -38,17 +38,17 @@ describe "As a user admin" do
       within ".pending-orders" do
         expect(page).to have_css(".order", count:3)
 
-        expect(page).to have_link(order_1.id)
+        expect(page).to have_link("#{order_1.id}")
         expect(page).to have_content(order_1_date)
         expect(page).to have_content(order_1.total_quantity)
         expect(page).to have_content(order_1.grandtotal)
 
-        expect(page).to have_link(order_2.id)
+        expect(page).to have_link("#{order_2.id}")
         expect(page).to have_content(order_2_date)
         expect(page).to have_content(order_2.total_quantity)
         expect(page).to have_content(order_2.grandtotal)
 
-        expect(page).to have_link(order_3.id)
+        expect(page).to have_link("#{order_3.id}")
         expect(page).to have_content(order_3_date)
         expect(page).to have_content(order_3.total_quantity)
         expect(page).to have_content(order_3.grandtotal)
