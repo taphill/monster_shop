@@ -63,6 +63,16 @@ section[id*='review'] {
   border-color: #002244;
  	text-align: center
  }
+
+.admin-grid-item{
+ 	background-color: #17BEBB;
+ 	padding: 20px;
+  border: solid;
+ 	border-radius: 12px;
+  border-color: #002244;
+ 	text-align: center
+ }
+
  .item-show-grid{
   width: 60%;
  	display: grid;

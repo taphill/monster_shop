@@ -1,4 +1,4 @@
-class Merchant <ApplicationRecord
+class Merchant < ApplicationRecord
   has_many :items, dependent: :destroy
   has_many :item_orders, through: :items
   has_many :orders, through: :items
@@ -10,7 +10,6 @@ class Merchant <ApplicationRecord
                         :city,
                         :state,
                         :zip
-
 
   def no_orders?
     item_orders.empty?
@@ -32,5 +31,21 @@ class Merchant <ApplicationRecord
     self.orders.where(status: 'pending')
   end
 
+  def enabled?
+    enabled
+  end
 
+  def status
+    return 'Disabled' unless enabled?
+
+    'Enabled'
+  end
+
+  def disable_items
+    items.update_all(active?: false)
+  end
+
+  def enable_items
+    items.update_all(active?: true)
+  end
 end

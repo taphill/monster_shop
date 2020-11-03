@@ -1,1 +1,3 @@
 <%= render 'shared/merchant_dashboard' %>
+
+<%= link_to "Items at #{@merchant.name}", admin_merchants_items_path(@merchant) %>
