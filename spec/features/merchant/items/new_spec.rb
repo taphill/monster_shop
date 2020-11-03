@@ -12,13 +12,13 @@ RSpec.describe "As a merchant" do
     end
 
     it 'I see a link to add a new item for that merchant' do
-      visit "/merchants/#{@brian.id}/items"
+      visit "/merchant/#{@brian.id}/items"
 
       expect(page).to have_link "Add New Item"
     end
 
     it 'I can add a new item by filling out a form' do
-      visit "/merchants/#{@brian.id}/items"
+      visit "/merchant/#{@brian.id}/items"
 
       name = "Chamois Buttr"
       price = 18
@@ -29,7 +29,7 @@ RSpec.describe "As a merchant" do
       click_on "Add New Item"
 
       expect(page).to have_link(@brian.name)
-      expect(current_path).to eq("/merchants/#{@brian.id}/items/new")
+      expect(current_path).to eq("/merchant/#{@brian.id}/items/new")
 
       fill_in :item_name, with: name
       fill_in :item_price, with: price
@@ -41,7 +41,7 @@ RSpec.describe "As a merchant" do
 
       new_item = Item.last
 
-      expect(current_path).to eq("/merchants/#{@brian.id}/items")
+      expect(current_path).to eq("/merchant/#{@brian.id}/items")
       expect(new_item.name).to eq(name)
       expect(new_item.price).to eq(price)
       expect(new_item.description).to eq(description)
@@ -59,7 +59,7 @@ RSpec.describe "As a merchant" do
     end
 
     it 'I can add an item without an image and get a placeholder' do
-      visit "/merchants/#{@brian.id}/items"
+      visit "/merchant/#{@brian.id}/items"
 
       name = "Chamois Buttr"
       price = 18
@@ -69,7 +69,7 @@ RSpec.describe "As a merchant" do
       click_on "Add New Item"
 
       expect(page).to have_link(@brian.name)
-      expect(current_path).to eq("/merchants/#{@brian.id}/items/new")
+      expect(current_path).to eq("/merchant/#{@brian.id}/items/new")
       fill_in :item_name, with: name
       fill_in :item_price, with: price
       fill_in :item_description, with: description
@@ -81,7 +81,7 @@ RSpec.describe "As a merchant" do
     end
 
     it 'I get an alert if I dont fully fill out the form' do
-      visit "/merchants/#{@brian.id}/items"
+      visit "/merchant/#{@brian.id}/items"
 
       name = ""
       price = 18

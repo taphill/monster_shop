@@ -19,7 +19,7 @@ RSpec.describe 'As a merchant', type: :feature do
 
       click_on "Delete Item"
 
-      expect(current_path).to eq("/merchants/#{bike_shop.id}/items")
+      expect(current_path).to eq("/merchant/#{bike_shop.id}/items")
       expect("item-#{chain.id}").to be_present
     end
 

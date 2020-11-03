@@ -16,7 +16,7 @@ RSpec.describe "Merchant Items Index Page" do
     end
 
     it 'shows me a list of that merchants items' do
-      visit "merchants/#{@meg.id}/items"
+      visit "/merchant/#{@meg.id}/items"
 
       within "#item-#{@tire.id}" do
         expect(page).to have_content(@tire.name)
@@ -47,7 +47,7 @@ RSpec.describe "Merchant Items Index Page" do
     end
 
     it 'gives me a link to deactivate active items' do
-      visit "merchants/#{@meg.id}/items"
+      visit "/merchant/#{@meg.id}/items"
 
       within "#item-#{@shifter.id}" do
         expect(page).to have_content("Inactive")
@@ -59,7 +59,7 @@ RSpec.describe "Merchant Items Index Page" do
         click_on 'Deactivate'
       end
 
-      expect(current_path).to eq("/merchants/#{@meg.id}/items")
+      expect(current_path).to eq("/merchant/#{@meg.id}/items")
       expect(page).to have_content('This item is no longer for sale.')
 
       within "#item-#{@chain.id}" do
@@ -69,7 +69,7 @@ RSpec.describe "Merchant Items Index Page" do
     end
 
     it 'gives me a link to activate inactive items' do
-      visit "merchants/#{@meg.id}/items"
+      visit "/merchant/#{@meg.id}/items"
 
       within "#item-#{@chain.id}" do
         expect(page).to have_content("Active")
@@ -81,7 +81,7 @@ RSpec.describe "Merchant Items Index Page" do
         click_on 'Activate'
       end
 
-      expect(current_path).to eq("/merchants/#{@meg.id}/items")
+      expect(current_path).to eq("/merchant/#{@meg.id}/items")
       expect(page).to have_content('This item is available for sale.')
 
       within "#item-#{@shifter.id}" do
@@ -106,7 +106,7 @@ RSpec.describe "Merchant Items Index Page" do
         quantity: 1
       )
 
-      visit "merchants/#{@meg.id}/items"
+      visit "/merchant/#{@meg.id}/items"
 
       within "#item-#{@tire.id}" do
         expect(page).to_not have_button("Delete")
@@ -122,7 +122,7 @@ RSpec.describe "Merchant Items Index Page" do
         click_on 'Delete'
       end
 
-      expect(current_path).to eq("/merchants/#{@meg.id}/items")
+      expect(current_path).to eq("/merchant/#{@meg.id}/items")
       expect(page).to have_content('This item is now deleted.')
       expect(page).to_not have_content(@chain.name)
     end
