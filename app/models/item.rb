@@ -41,4 +41,9 @@ class Item < ApplicationRecord
   def quantity_ordered(item_id)
     ItemOrder.where("item_id = ?", "#{item_id}").sum(:quantity)
   end
+
+  def fulfilled?(order_id)
+    return false if item_orders.where(order_id: order_id).first.fulfill_status == 'unfulfilled'
+    true
+  end
 end
