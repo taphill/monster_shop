@@ -98,17 +98,17 @@ describe 'As an admin' do
         expect(page).to have_content(user_5.name)
         visit admin_users_path
 
-        #not sure if admin should be able to view other admin dashboards
-        # within "#user-#{user_9.id}" do
-        #   expect(page).to have_content(user_9.role)
-        #   expect(page).to have_content(user_9.created_at.strftime("%m/%d/%Y"))
-        #   expect(page).to_not have_content(user_2.role)
-        #   expect(page).to_not have_content(user_6.role)
-        #   click_link(user_9.name)
-        # end
-        #
-        # expect(current_path).to eq(admin_admin_path(user_9))
-        # expect(page).to have_content(user_5.name)
+        # not sure if admin should be able to view other admin dashboards
+        within "#user-#{user_9.id}" do
+          expect(page).to have_content(user_9.role)
+          expect(page).to have_content(user_9.created_at.strftime("%m/%d/%Y"))
+          expect(page).to_not have_content(user_2.role)
+          expect(page).to_not have_content(user_6.role)
+          click_link(user_9.name)
+        end
+
+        expect(current_path).to eq(admin_user_path(user_9))
+        expect(page).to have_content(user_9.name)
       end
 
       describe 'when I visit a users show page' do
@@ -120,6 +120,8 @@ describe 'As an admin' do
           fill_in :email, with: admin.email
           fill_in :password, with: 'password'
           click_button 'Login'
+
+          click_link "Users"
 
           within "#user-#{user.id}" do
             click_link(user.name)
