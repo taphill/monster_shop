@@ -30,7 +30,7 @@ describe 'as a merchant employee' do
     end
 
     it 'has the recipients name and address for this order' do
-      within ".order-recipient" do
+      within ".order-info" do
         expect(page).to have_content(@order.name)
         expect(page).to have_content(@order.address)
         expect(page).to have_content(@order.city)
@@ -57,9 +57,9 @@ describe 'as a merchant employee' do
     it 'shows linked name, image, price and quantity for each item' do
       within "#item-#{@m1_item1.id}" do
         expect(page).to have_content(@m1_item1.name)
-        expect(page).to have_content(@m1_item1.image)
+        expect(page).to have_xpath("//img[contains(@src,'#{@m1_item1.image}')]")
         expect(page).to have_content(@m1_item1.price)
-        expect(page).to have_content(@m1_item1.quantity)
+        expect(page).to have_content(@m1_item1.quantity_ordered(@m1_item1.id))
       end
     end
   end
