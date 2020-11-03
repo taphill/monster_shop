@@ -26,10 +26,15 @@ RSpec.describe 'merchant index page', type: :feature do
   end
 
   describe 'As an Admin' do
+    let!(:admin) { create(:user, role: 2) }
     let!(:merchant1) { create(:merchant) }
     let!(:merchant2) { create(:merchant, enabled: false) }
 
     before do
+      visit login_path
+      fill_in :email, with: admin.email
+      fill_in :password, with: 'password'
+      click_button "Login"
       visit admin_merchants_path
     end
 
