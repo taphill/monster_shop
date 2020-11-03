@@ -6,7 +6,7 @@ RSpec.describe "As a merchant employee" do
       meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
       tire = meg.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
 
-      user = create(:user, role: 1)
+      user = create(:user, role: 1, merchant_id: meg.id)
       visit login_path
       fill_in :email, with: user.email
       fill_in :password, with: 'password'
@@ -31,9 +31,9 @@ RSpec.describe "As a merchant employee" do
       @meg = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
       @tire = @meg.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
 
-      user = create(:user, role: 1)
+      @user = create(:user, role: 1, merchant_id: @meg.id)
       visit login_path
-      fill_in :email, with: user.email
+      fill_in :email, with: @user.email
       fill_in :password, with: 'password'
       click_button "Login"
 

@@ -4,7 +4,7 @@ RSpec.describe "As a merchant" do
   describe "When I visit the merchant items index page" do
     before(:each) do
       @brian = Merchant.create(name: "Brian's Dog Shop", address: '125 Doggo St.', city: 'Denver', state: 'CO', zip: 80210)
-      user = create(:user, role: 1)
+      user = create(:user, role: 1, merchant_id: @brian.id)
       visit login_path
       fill_in :email, with: user.email
       fill_in :password, with: 'password'

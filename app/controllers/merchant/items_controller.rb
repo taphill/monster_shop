@@ -1,17 +1,17 @@
 class Merchant::ItemsController < Merchant::BaseController
   def index
-    @merchant = Merchant.find(params[:merchant_id])
+    @merchant = Merchant.find(current_user.merchant_id)
     @items = @merchant.items
     render 'items/index'
   end
 
   def new
-    @merchant = Merchant.find(params[:merchant_id])
+    @merchant = Merchant.find(current_user.merchant_id)
     @item = Item.new
   end
 
   def create
-    @merchant = Merchant.find(params[:merchant_id])
+    @merchant = Merchant.find(current_user.merchant_id)
     @item = @merchant.items.new(item_params)
     check_default_image(@item)
     if @item.save
@@ -30,10 +30,10 @@ class Merchant::ItemsController < Merchant::BaseController
   def update
     @item = Item.find(params[:id])
     @item.update(item_params) if params[:item]
+    check_default_image(@item) unless params[:status]
     if params[:status]
       update_status
     elsif @item.save
-      check_default_image(@item)
       flash[:alert] = "Item #{@item.id} has been successfully updated!"
       redirect_to "/merchant/items"
     else
@@ -67,7 +67,7 @@ class Merchant::ItemsController < Merchant::BaseController
   def item_params
     params.require(:item).permit(:name,:description,:price,:inventory,:image)
   end
-
+  
   def check_default_image(item)
     if params[:item][:image] == ''
       item.update(image: '/images/image.png')
