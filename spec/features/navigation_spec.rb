@@ -116,14 +116,24 @@ RSpec.describe 'Site Navigation' do
       visit '/merchant'
       expect(page).to have_content(no_pass)
 
+      visit "/merchant/items/new"
+      expect(page).to have_content(no_pass)
+
       visit '/admin'
+      expect(page).to have_content(no_pass)
+
+      visit '/admin/users'
+      expect(page).to have_content(no_pass)
+
+      visit '/admin/merchants'
       expect(page).to have_content(no_pass)
     end
   end
 
   describe 'As a merchant employee' do
     it "I see link to merchant dashboard among main nav links" do
-      merchant = create(:user, role: 1)
+      merchant = create(:merchant)
+      merchant_employee = create(:user, role: 1, merchant: merchant)
 
       visit root_path
 
@@ -131,7 +141,7 @@ RSpec.describe 'Site Navigation' do
         click_link 'Login'
       end
 
-      fill_in :email, with: merchant.email
+      fill_in :email, with: merchant_employee.email
       fill_in :password, with: 'password'
       click_button 'Login'
 
@@ -145,14 +155,15 @@ RSpec.describe 'Site Navigation' do
         expect(page).to have_link('Logout')
         expect(page).to_not have_link('Login')
         expect(page).to_not have_link('Register')
-        expect(page).to have_content("Logged in as #{merchant.name}")
+        expect(page).to have_content("Logged in as #{merchant_employee.name}")
         click_link('Dashboard')
         expect(current_path).to eq('/merchant')
       end
     end
 
     it "I can't access paths for admins" do
-      merchant = create(:user, role: 1)
+      merchant = create(:merchant)
+      merchant_employee = create(:user, role: 1, merchant: merchant)
 
       visit root_path
 
@@ -160,7 +171,7 @@ RSpec.describe 'Site Navigation' do
         click_link 'Login'
       end
 
-      fill_in :email, with: merchant.email
+      fill_in :email, with: merchant_employee.email
       fill_in :password, with: 'password'
       click_button 'Login'
 
@@ -168,11 +179,17 @@ RSpec.describe 'Site Navigation' do
 
       visit '/admin'
       expect(page).to have_content(no_pass)
+
+      visit '/admin/users'
+      expect(page).to have_content(no_pass)
+
+      visit '/admin/merchants'
+      expect(page).to have_content(no_pass)
     end
   end
 
   describe 'As an admin' do
-    it "I see the normal links plus dashboard and all users, not cart" do
+    before(:each) do
       admin = create(:user, role: 2)
 
       visit root_path
@@ -184,7 +201,8 @@ RSpec.describe 'Site Navigation' do
       fill_in :email, with: admin.email
       fill_in :password, with: 'password'
       click_button 'Login'
-
+    end
+    it "I see the normal links plus dashboard and all users, not cart" do
       expect(current_path).to eq('/admin')
 
       within 'nav' do
@@ -204,23 +222,8 @@ RSpec.describe 'Site Navigation' do
       end
     end
 
-    it "I can't access paths for admins" do
-      admin = create(:user, role: 2)
-
-      visit root_path
-
-      within 'nav' do
-        click_link 'Login'
-      end
-
-      fill_in :email, with: admin.email
-      fill_in :password, with: 'password'
-      click_button 'Login'
-
+    it "I can't access paths for not for admins" do
       no_pass = "The page you were looking for doesn't exist."
-
-      visit '/merchant'
-      expect(page).to have_content(no_pass)
 
       visit '/cart'
       expect(page).to have_content(no_pass)

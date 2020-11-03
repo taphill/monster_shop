@@ -4,6 +4,7 @@ class User < ApplicationRecord
   validates_presence_of :name, :street_address, :city, :state, :zip, :email
   validates_presence_of :password, if: :password
   validates :email, uniqueness: true, presence: true
+  belongs_to :merchant, optional: true 
 
   enum role: ['default', 'merchant', 'admin']
 end

@@ -6,7 +6,7 @@ RSpec.describe "As a registered user", type: :feature do
       user = create(:user)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
 
-      visit profile_path(user)
+      visit "/profile"
 
       within ".user-profile" do
         expect(page).to have_content(user.name)
@@ -30,7 +30,7 @@ RSpec.describe "As a registered user", type: :feature do
       fill_in :password, with: 'password'
       click_button 'Login'
 
-      visit profile_path(user)
+      # visit profile_path(user)
 
       click_link("Edit Profile Data")
 

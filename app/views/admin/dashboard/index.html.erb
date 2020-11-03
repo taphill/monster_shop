@@ -1,0 +1,56 @@
+<h1>Admin Dashboard</h1>
+
+<section class="all-orders">
+  <section class="packaged-orders">
+    <h2>All Packaged Orders:</h2>
+    <% @orders.each do |order| %>
+      <% if order.status == "packaged"%>
+        <section id="order-<%= order.id %>">
+          <%= link_to "#{order.name}", "/admin/users/#{order.user_id}" %>
+          <p>Order Id: <%= order.id %></p>
+          <p>Order Created: <%= order.created_at %></p>
+          <%= link_to "Ship Order", "/admin/orders/#{order.id}", method: :patch %>
+        </section>
+      <% end %>
+    <% end %>
+  </section>
+
+  <section class="pending-orders">
+    <h2>All Pending Orders:</h2>
+    <% @orders.each do |order| %>
+      <% if order.status == "pending"%>
+        <section id="order-<%= order.id %>">
+          <%= link_to "#{order.name}", "/admin/users/#{order.user_id}" %>
+          <p>Order Id: <%= order.id %></p>
+          <p>Order Created: <%= order.created_at %></p>
+        </section>
+      <% end %>
+    <% end %>
+  </section>
+
+  <section class="shipped-orders">
+    <h2>All Shipped Orders:</h2>
+    <% @orders.each do |order| %>
+      <% if order.status == "shipped"%>
+        <section id="order-<%= order.id %>">
+          <%= link_to "#{order.name}", "/admin/users/#{order.user_id}" %>
+          <p>Order Id: <%= order.id %></p>
+          <p>Order Created: <%= order.created_at %></p>
+        </section>
+      <% end %>
+    <% end %>
+  </section>
+
+  <section class="cancelled-orders">
+    <h2>All Cancelled Orders:</h2>
+    <% @orders.each do |order| %>
+      <% if order.status == "cancelled"%>
+        <section id="order-<%= order.id %>">
+          <%= link_to "#{order.name}", "/admin/users/#{order.user_id}" %>
+          <p>Order Id: <%= order.id %></p>
+          <p>Order Created: <%= order.created_at %></p>
+        </section>
+      <% end %>
+    <% end %>
+  </section>
+</section>
