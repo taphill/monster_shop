@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     root "dashboard#index"
-    get "/users", to: "users#index"
+    resources :users, only: [:index, :show]
     resources :orders, only: [:update]
     resources :merchants, only: [:index, :show, :update]
     namespace :merchants do

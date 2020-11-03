@@ -5,14 +5,14 @@
 <section class = "grid-container">
   <% @merchants.each do |merchant|%>
     <section class = "admin-grid-item" id="merchant-<%= merchant.id %>">
-      <h2><%=link_to merchant.name, "/merchants/#{merchant.id}"%></h2>
-      <h2>Account Status: <%= merchant.status %></h2>
+      <b><%=link_to merchant.name, "/merchants/#{merchant.id}"%></b><i> <%= merchant.city + ", " + merchant.state %></i><br>
+      <b>Account Status: </b><i><%= merchant.status %></i><br>
 
       <% if merchant.enabled? %>
         <%= button_to('Disable', admin_merchant_path(merchant), params: { enable: false }, method: :patch) %>
       <% else %>
         <%= button_to('Enable', admin_merchant_path(merchant), params: { enable: true }, method: :patch) %>
       <% end %>
-    </section>
+    </section><br>
   <% end %>
 </section>

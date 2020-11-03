@@ -29,7 +29,7 @@ describe "As a user admin" do
 
       click_link "All Merchants"
 
-      expect(current_path).to eq("/merchants")
+      expect(current_path).to eq(admin_merchants_path)
 
       click_on merchant.name
 
