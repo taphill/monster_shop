@@ -99,5 +99,15 @@ describe Item, type: :model do
 
       expect(merchant.items[0].quantity_purchased).to eq(12)
     end
+
+    it '#quantity_ordered(id)' do
+      user = create(:user)
+      order_1 = Order.create!(name: 'Meg', address: '123 Stang Ave', city: 'Hershey', state: 'PA', zip: 17033, user_id: user.id)
+      order_2 = Order.create!(name: 'Yo', address: 'Whatever', city: 'Place', state: 'PA', zip: 17033, user_id: user.id)
+      order_1.item_orders.create!(item: @chain, price: @chain.price, quantity: 4)
+      order_2.item_orders.create!(item: @chain, price: @chain.price, quantity: 3)
+
+      expect(@chain.quantity_ordered(@chain.id)).to eq(7)
+    end
   end
 end
