@@ -28,4 +28,4 @@ tennis_balls = dog_shop.items.create(name: "Tennis Balls", description: "Dogs lo
 rope_ball = dog_shop.items.create(name: "Rope Ball", description: "Long lasting!", price: 6, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTwfiN0gFv8L9fNBhqq-gJck51PZqIlTOifLw&usqp=CAU", inventory: 12)
 
 #order
-order = Order.create(name: "Ralph", address: '824 Lawndale Rd.', city: 'Denver', state: 'CO', zip: 80210)
+# order = Order.create(name: "Ralph", address: '824 Lawndale Rd.', city: 'Denver', state: 'CO', zip: 80210)
