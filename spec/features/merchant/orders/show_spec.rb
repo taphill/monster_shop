@@ -6,7 +6,11 @@ describe 'as a merchant employee' do
     @merchant_2 = create(:merchant, :with_items, item_count: 3)
     @user = create(:user)
     @merchant_employee = create(:user, role: 1, merchant_id: @merchant_1.id)
+
     @m1_item1 = @merchant_1.items[0]
+    @m1_item1.inventory = 5
+    @m1_item1.save
+
     @m1_item2 = @merchant_1.items[1]
     @m1_item3 = @merchant_1.items[2]
     @m2_item1 = @merchant_2.items[0]
@@ -81,10 +85,10 @@ describe 'as a merchant employee' do
 
     it 'returns me to the order show page when I click the fulfill button & shows item is fulfilled' do
       within "#item-#{@m1_item1.id}" do
-        click_button("Fulfill")
+        click_button("Fulfill Item")
       end
 
-      expect(current_path).to eq("/merchant/orders")
+      expect(current_path).to eq("/merchant/orders/#{@order.id}")
 
       within "#item-#{@m1_item1.id}" do
         expect(page).to have_content("Item already fulfilled.")
@@ -93,7 +97,7 @@ describe 'as a merchant employee' do
 
     it 'has a flash message indicating I have fulfilled that item' do
       within "#item-#{@m1_item1.id}" do
-        click_button("Fulfill")
+        click_button("Fulfill Item")
       end
 
       expect(page).to have_content("Item has been fulfilled")
@@ -101,11 +105,11 @@ describe 'as a merchant employee' do
 
     it 'permanently reduces inventory quantity by users desired quantity' do
       within "#item-#{@m1_item1.id}" do
-        click_button("Fulfill")
+        click_button("Fulfill Item")
       end
 
-      reloaded = @m1_item1.reload
-      expect(reloaded.inventory).to eq(@m1_item1.inventory - 2)
+      @m1_item1.reload
+      expect(@m1_item1.inventory).to eq(3)
     end
 
     it 'has notice text next to item that I cannot fulfill item if users desired qty is greater than current inventory' do
