@@ -29,4 +29,8 @@ class Order < ApplicationRecord
       io.fulfill_status == "fulfilled"
     end
   end
+
+  def merchant_items(merchant_id)
+    items.where('merchant_id = ?', merchant_id)
+  end
 end

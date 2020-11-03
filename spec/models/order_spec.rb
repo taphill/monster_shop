@@ -56,5 +56,9 @@ describe Order, type: :model do
       expect(@order_1.all_fulfilled?).to eq(true)
 
     end
+
+    it "#merchant_items" do
+      expect(@order_1.merchant_items(@meg.id)).to eq([@tire])
+    end
   end
 end
