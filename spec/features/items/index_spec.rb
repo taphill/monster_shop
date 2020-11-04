@@ -78,6 +78,18 @@ RSpec.describe "Items Index Page" do
       end
     end
 
+    it 'does not see inactive items' do
+      item1 = create(:item, active?: true)
+      item2 = create(:item, active?: false)
+      visit '/items'
+
+      expect(page).to have_link(item1.name)
+      expect(page).to have_content(item1.description)
+
+      expect(page).to_not have_link(item2.name)
+      expect(page).to_not have_content(item2.description)
+    end
+
     it 'has statistics when there are enough unique item_orders' do
       merchant = create(:merchant, :with_items, item_count: 12)
       create(:item_order, item: merchant.items[2], quantity: 6)
