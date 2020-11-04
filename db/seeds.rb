@@ -22,7 +22,7 @@ bike_shop = Merchant.create(name: "Meg's Bike Shop", address: '123 Bike Rd.', ci
 dog_shop = Merchant.create(name: "Brian's Dog Shop", address: '125 Doggo St.', city: 'Denver', state: 'CO', zip: 80210)
 bagel_and_deli = Merchant.create(name: "Bagel and Deli", address: '125 High st.', city: 'Oxford', state: 'OH', zip: 45506)
 
-user_4 = User.create!(name: "Molly Merchant", street_address: "123 downer's grove", city: "Aurora", state: "CO", zip: 80017, email: "merchant@example.com", password: "merchant", password_confirmation: "merchant", role: 1, merchant_id: @bike_shop.id)
+user_4 = User.create!(name: "Molly Merchant", street_address: "123 downer's grove", city: "Aurora", state: "CO", zip: 80017, email: "merchant@example.com", password: "merchant", password_confirmation: "merchant", role: 1, merchant_id: bike_shop.id)
 
 #bike_shop items
 tire = bike_shop.items.create(name: "Gatorskins", description: "They'll never pop!", price: 100, image: "https://www.rei.com/media/4e1f5b05-27ef-4267-bb9a-14e35935f218?size=784x588", inventory: 12)
