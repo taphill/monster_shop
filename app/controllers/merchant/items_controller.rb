@@ -70,7 +70,7 @@ class Merchant::ItemsController < Merchant::BaseController
 
   def check_default_image(item)
     if params[:item][:image] == ''
-      item.update(image: '/images/image.png')
+      item.update(image: 'image.png')
       item.save
     end
   end
