@@ -77,7 +77,7 @@ RSpec.describe "As a merchant" do
 
       click_button "Create Item"
 
-      expect(page).to have_css("img[src*='/images/image.png']")
+      expect(page).to have_css("img[src*='https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg']")
     end
 
     it 'I get an alert if I dont fully fill out the form' do
@@ -99,13 +99,41 @@ RSpec.describe "As a merchant" do
 
       click_button "Create Item"
 
-      expect(page).to have_content("Name can't be blank and Inventory can't be blank")
+      expect(page).to have_content("Name can't be blank, Inventory can't be blank, and Inventory is not a number")
       expect(page).to have_button("Create Item")
 
       expect(find_field(:item_name).value).to eq(name)
       expect(find_field(:item_price).value).to eq(price.to_s)
       expect(find_field(:item_description).value).to eq(description)
       expect(find_field(:item_inventory).value).to eq(inventory)
+    end
+
+    it "I can't add a negative number to inventory" do
+      visit "/merchant/items"
+
+      name = "Chamois Buttr"
+      price = -18
+      description = "No more chaffin'!"
+      image_url = "https://images-na.ssl-images-amazon.com/images/I/51HMpDXItgL._SX569_.jpg"
+      inventory = -18
+
+      click_on "Add New Item"
+
+      fill_in :item_name, with: name
+      fill_in :item_price, with: price
+      fill_in :item_description, with: description
+      fill_in :item_image, with: image_url
+      fill_in :item_inventory, with: inventory
+
+      click_button "Create Item"
+
+      expect(page).to have_content("Price must be greater than 0 and Inventory must be greater than or equal to 0")
+      expect(page).to have_button("Create Item")
+
+      expect(find_field(:item_name).value).to eq(name)
+      expect(find_field(:item_price).value).to eq(price.to_s)
+      expect(find_field(:item_description).value).to eq(description)
+      expect(find_field(:item_inventory).value).to eq(inventory.to_s)
     end
   end
 end

@@ -48,7 +48,6 @@ class Admin::Merchants::ItemsController < Admin::BaseController
   def destroy
     item = Item.find(params[:id])
     merchant = Merchant.find(params[:merchant_id])
-    Review.where(item_id: item.id).destroy_all
     item.destroy
     flash[:notice] = 'This item is now deleted.'
     redirect_to "/admin/merchants/#{merchant.id}/items"
@@ -75,7 +74,7 @@ class Admin::Merchants::ItemsController < Admin::BaseController
 
   def check_default_image(item)
     if params[:item][:image] == ''
-      item.update(image: '/images/image.png')
+      item.update(image: 'https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg')
       item.save
     end
   end

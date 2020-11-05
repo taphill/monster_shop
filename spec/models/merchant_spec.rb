@@ -60,7 +60,8 @@ describe Merchant, type: :model do
         create(:item_order, item: merchant.items[0], order: order2)
         create(:item_order, item: merchant.items[0], order: order3)
 
-        expect(merchant.distinct_cities).to eq(['Denver', 'Hershey'])
+        expected = ['Denver', 'Hershey']
+        expect(merchant.distinct_cities.sort).to eq(expected.sort)
       end
     end
 
