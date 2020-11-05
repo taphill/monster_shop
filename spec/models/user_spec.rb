@@ -18,4 +18,24 @@ describe User, type: :model do
     it {should belong_to(:merchant).optional}
     it {should have_many :orders}
   end
+
+  describe 'instance methods' do
+    describe '#enum' do
+      it 'returns default for created user' do
+        user = create(:user)
+
+        expect(user.role).to eq('default')
+      end
+
+      it 'returns merchant for role 1' do
+        user = create(:user, role:1)
+        expect(user.role).to eq('merchant')
+      end
+
+      it 'returns admin for role 2' do
+        user = create(:user, role:2)
+        expect(user.role).to eq('admin')
+      end
+    end
+  end
 end
