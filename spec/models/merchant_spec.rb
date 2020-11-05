@@ -34,7 +34,7 @@ describe Merchant, type: :model do
 
     describe '#item_count' do
       it 'returns the total number of a merchants unqiue items' do
-        merchant = create(:merchant, :with_items, item_count: 3) 
+        merchant = create(:merchant, :with_items, item_count: 3)
         expect(merchant.item_count).to eq(3)
       end
     end
@@ -63,7 +63,7 @@ describe Merchant, type: :model do
         expect(merchant.distinct_cities).to eq(['Denver', 'Hershey'])
       end
     end
-    
+
     describe '#enabled?' do
       context 'when merchant is enabled' do
         it 'returns true' do
@@ -99,11 +99,11 @@ describe Merchant, type: :model do
     describe '#disable_items' do
       it 'disables all merchant items' do
         merchant = create(:merchant, :with_items, item_count: 3)
-        
+
         merchant.disable_items
-        expect(merchant.items[0].active?).to eq(false) 
-        expect(merchant.items[1].active?).to eq(false) 
-        expect(merchant.items[2].active?).to eq(false) 
+        expect(merchant.items[0].active?).to eq(false)
+        expect(merchant.items[1].active?).to eq(false)
+        expect(merchant.items[2].active?).to eq(false)
       end
     end
 
@@ -111,11 +111,11 @@ describe Merchant, type: :model do
       it 'enables all merchant items' do
         merchant = create(:merchant)
         create_list(:item, 3, active?: false, merchant: merchant)
-        
+
         merchant.enable_items
-        expect(merchant.items[0].active?).to eq(true) 
-        expect(merchant.items[1].active?).to eq(true) 
-        expect(merchant.items[2].active?).to eq(true) 
+        expect(merchant.items[0].active?).to eq(true)
+        expect(merchant.items[1].active?).to eq(true)
+        expect(merchant.items[2].active?).to eq(true)
       end
     end
 
@@ -179,5 +179,73 @@ describe Merchant, type: :model do
         expected = [order_1, order_2]
       end
     end
+
+    describe "#order_item_quantity" do
+      it "returns number of items in a merchant order" do
+
+        admin = create(:user, role:2)
+        merchant = create(:merchant, name: "Once Upon a Time")
+        merchant_2 = create(:merchant)
+
+        item_1 = create(:item, merchant: merchant)
+        item_2 = create(:item, merchant: merchant)
+        item_3 = create(:item, merchant: merchant_2)
+        item_4 = create(:item, merchant: merchant_2)
+        item_5 = create(:item, merchant: merchant_2)
+
+        order_1 = create(:order)
+        order_2 = create(:order)
+
+        item_order_1 = create(:item_order, order: order_1, item: merchant.items[0])
+        item_order_2 = create(:item_order, order: order_1, item: merchant.items[1])
+        item_order_3 = create(:item_order, order: order_1, item: merchant_2.items[0])
+        item_order_4 = create(:item_order, order: order_1, item: merchant_2.items[1])
+        item_order_5 = create(:item_order, order: order_1, item: merchant_2.items[2])
+
+        item_order_7 = create(:item_order, order: order_2, item: merchant.items[1])
+        item_order_8 = create(:item_order, order: order_2, item: merchant_2.items[1])
+        item_order_9 = create(:item_order, order: order_2, item: merchant_2.items[2])
+
+        expect(merchant.order_item_quantity(order_1)).to eq(2)
+        expect(merchant_2.order_item_quantity(order_1)).to eq(3)
+        expect(merchant.order_item_quantity(order_2)).to eq(1)
+        expect(merchant_2.order_item_quantity(order_2)).to eq(2)
+      end
+    end
+
+    describe "#order_total" do
+      it "returns the total price of a merchant's order" do
+        admin = create(:user, role:2)
+        merchant = create(:merchant, name: "Once Upon a Time")
+        merchant_2 = create(:merchant)
+
+        item_1 = create(:item, merchant: merchant)
+        item_2 = create(:item, merchant: merchant)
+        item_3 = create(:item, merchant: merchant_2)
+        item_4 = create(:item, merchant: merchant_2)
+        item_5 = create(:item, merchant: merchant_2)
+
+        order_1 = create(:order)
+        order_2 = create(:order)
+
+        item_order_1 = create(:item_order, order: order_1, item: merchant.items[0])
+        item_order_2 = create(:item_order, order: order_1, item: merchant.items[1])
+        item_order_3 = create(:item_order, order: order_1, item: merchant_2.items[0])
+        item_order_4 = create(:item_order, order: order_1, item: merchant_2.items[1])
+        item_order_5 = create(:item_order, order: order_1, item: merchant_2.items[2])
+
+        item_order_7 = create(:item_order, order: order_2, item: merchant.items[1])
+        item_order_8 = create(:item_order, order: order_2, item: merchant_2.items[1])
+        item_order_9 = create(:item_order, order: order_2, item: merchant_2.items[2])
+
+        sum_1 = item_order_1.price + item_order_2.price
+        sum_2 = item_order_3.price + item_order_4.price + item_order_5.price
+        sum_3 = sum_1 + sum_2
+
+        expect(merchant.order_total(order_1)).to eq(sum_1)
+        expect(merchant_2.order_total(order_1)).to eq(sum_2)
+      end
+    end
+
   end
 end
