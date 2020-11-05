@@ -45,6 +45,13 @@ describe Order, type: :model do
       expect(@order_1.status_check).to eq("packaged")
     end
 
+    it '#status_check without all item orders fulfilled does not change to packaged' do
+      @item_order_1.fulfill_status = "fulfilled"
+      @item_order_1.save
+
+      expect(@order_1.status_check).to eq("pending")
+    end
+
     it '#all_fulfilled?' do
       expect(@order_1.all_fulfilled?).to eq(false)
 
