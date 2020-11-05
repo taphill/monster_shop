@@ -21,7 +21,7 @@ describe 'As an admin' do
       click_link "All Merchants"
 
       within ".grid-container" do
-        expect(page).to have_css(".admin-grid-item", count:3)
+        expect(page).to have_css(".admin-grid-item", count:5)
       end
 
       within "#merchant-#{merchant_1.id}" do
