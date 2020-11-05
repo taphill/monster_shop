@@ -37,6 +37,12 @@ describe Merchant, type: :model do
         merchant = create(:merchant, :with_items, item_count: 3)
         expect(merchant.item_count).to eq(3)
       end
+
+      it 'only counts a single merchants items' do
+        merchant = create(:merchant, :with_items, item_count: 3)
+        merchant_2 = create(:merchant, :with_items, item_count: 6)
+        expect(merchant_2.item_count).to eq(6)
+      end
     end
 
     describe '#average_item_price' do
@@ -47,6 +53,26 @@ describe Merchant, type: :model do
         create(:item, price: 6, merchant: merchant)
 
         expect(merchant.average_item_price).to eq(4)
+      end
+
+      it "returns the average price for only one merchant's items" do
+        merchant = create(:merchant)
+        merchant_2 = create(:merchant)
+        create(:item, price: 4, merchant: merchant)
+        create(:item, price: 2, merchant: merchant)
+        create(:item, price: 6, merchant: merchant)
+        create(:item, price: 6, merchant: merchant_2)
+        create(:item, price: 6, merchant: merchant_2)
+
+        expect(merchant_2.average_item_price).to eq(6)
+      end
+
+      it "calculates float averages" do
+        merchant = create(:merchant)
+        create(:item, price: 6, merchant: merchant)
+        create(:item, price: 7, merchant: merchant)
+
+        expect(merchant.average_item_price).to eq(6.5)
       end
     end
 
