@@ -17,10 +17,8 @@ class Order < ApplicationRecord
   def status_check
     if all_fulfilled? && self.status != "packaged"
       update(:status => "packaged")
-      self.status
-    else
-      self.status
     end
+    self.status
   end
 
   def all_fulfilled?
