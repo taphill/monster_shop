@@ -1,5 +1,4 @@
 <% if @merchant %>
-  <% require "pry"; binding.pry %>
   <h1><%= link_to @merchant.name, "/merchants/#{@merchant.id}"%><span> Items</span></h1>
   <% if current_merchant? %>
     <p align="center"><%= link_to "Add New Item", "/merchant/items/new" %></p>

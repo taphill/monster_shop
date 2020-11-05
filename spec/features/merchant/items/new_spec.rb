@@ -77,7 +77,7 @@ RSpec.describe "As a merchant" do
 
       click_button "Create Item"
 
-      expect(page).to have_css("img[src*='/images/image.png']")
+      expect(page).to have_css("img[src*='https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg']")
     end
 
     it 'I get an alert if I dont fully fill out the form' do

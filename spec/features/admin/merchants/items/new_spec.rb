@@ -77,7 +77,7 @@ RSpec.describe "As an admin" do
 
       click_button "Create Item"
 
-      expect(page).to have_css("img[src*='/images/image.png']")
+      expect(page).to have_css("img[src*='https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg']")
     end
 
     it 'I get an alert if I dont fully fill out the form' do
@@ -99,7 +99,7 @@ RSpec.describe "As an admin" do
 
       click_button "Create Item"
 
-      expect(page).to have_content("Name can't be blank and Inventory can't be blank")
+      expect(page).to have_content("Name can't be blank, Inventory can't be blank, and Inventory is not a number")
       expect(page).to have_button("Create Item")
 
       expect(find_field(:item_name).value).to eq(name)
