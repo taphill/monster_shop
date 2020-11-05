@@ -127,7 +127,7 @@ RSpec.describe "As a merchant" do
 
       click_button "Create Item"
 
-      expect(page).to have_content("Price must be greater than 0 and Inventory must be greater than 0")
+      expect(page).to have_content("Price must be greater than 0 and Inventory must be greater than or equal to 0")
       expect(page).to have_button("Create Item")
 
       expect(find_field(:item_name).value).to eq(name)
