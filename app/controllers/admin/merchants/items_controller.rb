@@ -48,7 +48,6 @@ class Admin::Merchants::ItemsController < Admin::BaseController
   def destroy
     item = Item.find(params[:id])
     merchant = Merchant.find(params[:merchant_id])
-    Review.where(item_id: item.id).destroy_all
     item.destroy
     flash[:alert] = 'This item is now deleted.'
     redirect_to "/admin/merchants/#{merchant.id}/items"
