@@ -44,7 +44,6 @@ class Merchant::ItemsController < Merchant::BaseController
 
   def destroy
     item = Item.find(params[:id])
-    Review.where(item_id: item.id).destroy_all
     item.destroy
     flash[:alert] = 'This item is now deleted.'
     redirect_to "/merchant/items"
@@ -70,7 +69,7 @@ class Merchant::ItemsController < Merchant::BaseController
 
   def check_default_image(item)
     if params[:item][:image] == ''
-      item.update(image: '/images/image.png')
+      item.update(image: 'https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg')
       item.save
     end
   end

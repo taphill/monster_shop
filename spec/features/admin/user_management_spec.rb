@@ -4,11 +4,12 @@ describe 'As an admin' do
   describe 'when I visit the merchant index page' do
     it 'I see all merchants in the system with thier city, state, name (as link to their dashboard), and enable/disable button' do
       admin = create(:user, role:2)
-      merchant_1 = create(:merchant, enabled: true)
-      merchant_2 = create(:merchant, enabled: true)
-      merchant_3 = create(:merchant, enabled: false)
-      merchant_4 = create(:merchant, enabled: true)
-      merchant_5 = create(:merchant, enabled: false)
+
+      merchant_1 = create(:merchant, name: "Bob", state: "CO", city: "Colorado Springs", enabled: true)
+      merchant_2 = create(:merchant, name: "Snarfs", state: "CA", city: "Laredo", enabled: true)
+      merchant_3 = create(:merchant, name: "Whiteboard", state: "ID", city: "America", enabled: false)
+      merchant_4 = create(:merchant, name: "Snowy", state: "DE", city: "Monk", enabled: true)
+      merchant_5 = create(:merchant, name: "Namely", state: "TX", city: "Austin", enabled: false)
 
       visit login_path
 
@@ -16,11 +17,11 @@ describe 'As an admin' do
       fill_in :password, with: 'password'
       click_button 'Login'
 
-      #Refactor - add link to admin/merchant index
-      visit admin_merchants_path
+
+      click_link "All Merchants"
 
       within ".grid-container" do
-        expect(page).to have_css(".admin-grid-item", count:5)
+        expect(page).to have_css(".admin-grid-item", count:3)
       end
 
       within "#merchant-#{merchant_1.id}" do
@@ -101,7 +102,6 @@ describe 'As an admin' do
         expect(page).to have_content(user_5.name)
         visit admin_users_path
 
-        # not sure if admin should be able to view other admin dashboards
         within "#user-#{user_9.id}" do
           expect(page).to have_content(user_9.role)
           expect(page).to have_content(user_9.created_at.strftime("%m/%d/%Y"))

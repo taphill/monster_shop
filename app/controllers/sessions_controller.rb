@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   def new
+    flash[:notice] = "You are already logged in." if current_user
     user_redirects
   end
 
@@ -7,7 +8,7 @@ class SessionsController < ApplicationController
     @user = User.find_by(login_params)
     if @user && @user.authenticate(params[:password])
       session[:user_id] = @user.id
-      flash[:notice] = "Welcome, #{@user.name}" if current_user
+      flash[:success] = "Welcome, #{@user.name}" if current_user
       user_redirects
     else
       flash[:error] = "Your login credentials were incorrect."

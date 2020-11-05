@@ -11,6 +11,7 @@ class Item < ApplicationRecord
                         :inventory
   validates_inclusion_of :active?, :in => [true, false]
   validates_numericality_of :price, greater_than: 0
+  validates_numericality_of :inventory, greater_than_or_equal_to: 0
 
   def self.most_popular_five
     Item.joins(:item_orders).select('items.*, sum(quantity) as total_quantity')
@@ -43,7 +44,7 @@ class Item < ApplicationRecord
   end
 
   def fulfilled?(order_id)
-    item_orders.where(order_id: order_id).first.fulfill_status == 'unfulfilled'
+    item_orders.where(order_id: order_id).first.fulfill_status == 'fulfilled'
   end
 
   def insufficient_inventory?(order_id)

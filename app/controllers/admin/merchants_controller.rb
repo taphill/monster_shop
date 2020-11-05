@@ -1,6 +1,6 @@
 class Admin::MerchantsController < Admin::BaseController
   def index
-    @merchants = Merchant.all
+    @merchants = Merchant.all.distinct
   end
 
   def show
@@ -26,7 +26,7 @@ class Admin::MerchantsController < Admin::BaseController
   end
 
   private
-  
+
   def enable
     ActiveModel::Type::Boolean.new.cast(params[:enable])
   end

@@ -109,7 +109,7 @@ section[id*='review'] {
    text-align: center;
  }
 
- input[type=text], select {
+ input[type=text], input[type=password], select {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -148,6 +148,11 @@ form {
 .success-flash {
   padding: 10px;
   background-color: green;
+  color: white;
+}
+.notice-flash {
+  padding: 10px;
+  background-color: gray;
   color: white;
 }
 

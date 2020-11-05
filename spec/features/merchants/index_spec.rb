@@ -14,14 +14,16 @@ RSpec.describe 'merchant index page', type: :feature do
       expect(page).to have_link("Meg's Dog Shop")
     end
 
-    it 'I can see a link to create a new merchant' do
+    it 'I cannot see a link to create a new merchant' do
       visit '/merchants'
 
-      expect(page).to have_link("New Merchant")
+      expect(page).to_not have_link("New Merchant")
+    end
 
-      click_on "New Merchant"
-
-      expect(current_path).to eq("/merchants/new")
+    it 'I cannot see a link to edit a new merchant' do
+      visit '/merchants'
+      click_on "Brian's Bike Shop"
+      expect(page).to_not have_link("Update Merchant")
     end
   end
 
