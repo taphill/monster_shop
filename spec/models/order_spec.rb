@@ -28,12 +28,23 @@ describe Order, type: :model do
       @item_order_1 = @order_1.item_orders.create!(item: @tire, price: @tire.price, quantity: 2)
       @item_order_2 = @order_1.item_orders.create!(item: @pull_toy, price: @pull_toy.price, quantity: 3)
     end
-    it 'grandtotal' do
+
+    it '#grandtotal' do
       expect(@order_1.grandtotal).to eq(230)
+
+      @chew_toy = @meg.items.create(name: "Chew Toy", description: "Great chew toy!", price: 20, image: "http://lovencaretoys.com/image/cache/dog/tug-toy-dog-pull-9010_2-800x800.jpg", inventory: 15)
+      @item_order_3 = @order_1.item_orders.create!(item: @chew_toy, price: @chew_toy.price, quantity: 4)
+
+      expect(@order_1.grandtotal).to eq(310)
     end
 
-    it 'total_quantity' do
+    it '#total_quantity' do
       expect(@order_1.total_quantity).to eq(5)
+
+      @chew_toy = @meg.items.create(name: "Chew Toy", description: "Great chew toy!", price: 20, image: "http://lovencaretoys.com/image/cache/dog/tug-toy-dog-pull-9010_2-800x800.jpg", inventory: 15)
+      @item_order_3 = @order_1.item_orders.create!(item: @chew_toy, price: @chew_toy.price, quantity: 4)
+
+      expect(@order_1.total_quantity).to eq(9)
     end
 
     describe '#status_check' do
