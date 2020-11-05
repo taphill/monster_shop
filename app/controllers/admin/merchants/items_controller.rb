@@ -16,7 +16,7 @@ class Admin::Merchants::ItemsController < Admin::BaseController
     @item = @merchant.items.new(item_params)
     check_default_image(@item)
     if @item.save
-      flash[:alert] = 'New item saved successfully!'
+      flash[:success] = 'New item saved successfully!'
       redirect_to "/admin/merchants/#{@merchant.id}/items"
     else
       flash[:error] = @item.errors.full_messages.to_sentence
@@ -37,7 +37,7 @@ class Admin::Merchants::ItemsController < Admin::BaseController
     if params[:status]
       update_status
     elsif @item.save
-      flash[:alert] = "Item #{@item.id} has been successfully updated!"
+      flash[:success] = "Item #{@item.id} has been successfully updated!"
       redirect_to "/admin/merchants/#{@merchant.id}/items"
     else
       flash[:error] = @item.errors.full_messages.to_sentence
@@ -49,7 +49,7 @@ class Admin::Merchants::ItemsController < Admin::BaseController
     item = Item.find(params[:id])
     merchant = Merchant.find(params[:merchant_id])
     item.destroy
-    flash[:alert] = 'This item is now deleted.'
+    flash[:notice] = 'This item is now deleted.'
     redirect_to "/admin/merchants/#{merchant.id}/items"
   end
 
@@ -58,10 +58,10 @@ class Admin::Merchants::ItemsController < Admin::BaseController
     @merchant = Merchant.find(params[:merchant_id])
     if params[:status] == 'deactivate'
       @item.update(:active? => false)
-      flash[:alert] = 'This item is no longer for sale.'
+      flash[:notice] = 'This item is no longer for sale.'
     elsif params[:status] == 'activate'
       @item.update(:active? => true)
-      flash[:alert] = 'This item is available for sale.'
+      flash[:notice] = 'This item is available for sale.'
     end
     redirect_to "/admin/merchants/#{@merchant.id}/items"
   end
