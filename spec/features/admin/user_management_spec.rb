@@ -17,7 +17,6 @@ describe 'As an admin' do
 
       click_link "All Merchants"
 
-      save_and_open_page
       within ".grid-container" do
         expect(page).to have_css(".admin-grid-item", count:3)
       end
