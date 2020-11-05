@@ -25,7 +25,7 @@ Rails.application.routes.draw do
     patch '/orders/:order_id', to: "orders#update"
   end
 
-  resources :merchants
+  resources :merchants, except: [:delete]
   get "/merchants/:merchant_id/items", to: 'items#index'
 
   get "/items", to: "items#index"

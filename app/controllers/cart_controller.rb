@@ -31,10 +31,4 @@ class CartController < ApplicationController
       redirect_to '/cart'
     end
   end
-
-  # def remove_item
-  #
-  # end
-
-
 end
