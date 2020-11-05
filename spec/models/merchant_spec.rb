@@ -141,6 +141,7 @@ describe Merchant, type: :model do
         create_list(:item, 3, active?: false, merchant: merchant)
 
         merchant.enable_items
+        merchant.reload
         expect(merchant.items[0].active?).to eq(true)
         expect(merchant.items[1].active?).to eq(true)
         expect(merchant.items[2].active?).to eq(true)
@@ -205,11 +206,13 @@ describe Merchant, type: :model do
         order_3 = io_3.order
 
         expected = [order_1, order_2]
+
+        expect(merchant.pending_orders).to eq(expected)
       end
     end
 
     describe "#order_item_quantity" do
-      it "returns number of items in a merchant order" do
+      it "returns number of items in a merchant order for only identified merchant" do
 
         admin = create(:user, role:2)
         merchant = create(:merchant, name: "Once Upon a Time")
@@ -235,14 +238,15 @@ describe Merchant, type: :model do
         item_order_9 = create(:item_order, order: order_2, item: merchant_2.items[2])
 
         expect(merchant.order_item_quantity(order_1)).to eq(2)
-        expect(merchant_2.order_item_quantity(order_1)).to eq(3)
         expect(merchant.order_item_quantity(order_2)).to eq(1)
+
+        expect(merchant_2.order_item_quantity(order_1)).to eq(3)
         expect(merchant_2.order_item_quantity(order_2)).to eq(2)
       end
     end
 
     describe "#order_total" do
-      it "returns the total price of a merchant's order" do
+      it "returns the total price of a merchant's order for only selected merchant" do
         admin = create(:user, role:2)
         merchant = create(:merchant, name: "Once Upon a Time")
         merchant_2 = create(:merchant)
