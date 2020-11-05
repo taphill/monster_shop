@@ -8,9 +8,9 @@
 
 ItemOrder.destroy_all
 Order.destroy_all
+User.destroy_all
 Merchant.destroy_all
 Item.destroy_all
-User.destroy_all
 
 #users
 user_1 = User.create!(name: "James Purfield", street_address: "123 fake st", city: "Aurora", state: "CO", zip: 80017, email: "jamesp@gmail.com", password: "password", password_confirmation: "password")

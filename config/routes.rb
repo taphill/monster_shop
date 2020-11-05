@@ -25,7 +25,7 @@ Rails.application.routes.draw do
     patch '/orders/:order_id', to: "orders#update"
   end
 
-  resources :merchants
+  resources :merchants, except: [:delete]
   get "/merchants/:merchant_id/items", to: 'items#index'
 
   get "/items", to: "items#index"
@@ -38,11 +38,11 @@ Rails.application.routes.draw do
   patch "/reviews/:id", to: "reviews#update"
   delete "/reviews/:id", to: "reviews#destroy"
 
-  post "/cart/:item_id", to: "cart#add_item"
-  patch "/cart/:item_id", to: "cart#change_quantity"
+  post "/cart/:item_id", to: "cart#create"
+  patch "/cart/:item_id", to: "cart#update"
   get "/cart", to: "cart#show"
-  delete "/cart", to: "cart#empty"
-  delete "/cart/:item_id", to: "cart#remove_item"
+  delete "/cart", to: "cart#destroy"
+  delete "/cart/:item_id", to: "cart#destroy"
 
   namespace :profile do
     get "/orders", to: "orders#index"

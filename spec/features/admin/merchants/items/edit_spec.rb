@@ -88,7 +88,7 @@ RSpec.describe "As a admin" do
         expect(page).to have_content(@tire.name)
         expect(page).to have_button("Edit")
         expect(page).to have_content("Price: $#{@tire.price}")
-        expect(page).to have_css("img[src*='/images/image.png']")
+        expect(page).to have_css("img[src*='https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg']")
         expect(page).to have_content("Active")
         expect(page).to_not have_content(@tire.description)
         expect(page).to have_content("Inventory: #{@tire.inventory}")
@@ -108,7 +108,7 @@ RSpec.describe "As a admin" do
       expect(find_field(:item_name).value).to eq("")
       expect(find_field(:item_price).value).to eq("110")
       expect(find_field(:item_description).value).to eq("They're a bit more expensive, and they kinda do pop sometimes, but whatevs.. this is retail.")
-      expect(find_field(:item_image).value).to eq('/images/image.png')
+      expect(find_field(:item_image).value).to eq('https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg')
       expect(find_field(:item_inventory).value).to eq("11")
     end
   end
