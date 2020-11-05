@@ -2,12 +2,12 @@
 <section class="orders">
   <% @user.orders.each do |order| %>
     <section id="order-<%= order.id %>">
-      <p>Order ID: <%= link_to order.id, "/profile/orders/#{order.id}" %></p>
-      <p>Order Created On: <%= order.created_at %></p>
-      <p>Order Updated On: <%= order.updated_at %></p>
-      <p>Order Status: <%= order.status %></p>
-      <p>Total Quantity of Items: <%= order.total_quantity %></p>
-      <p>Grand Total: <%= order.grandtotal %></p>
+      <h3>Order ID: <%= link_to order.id, "/profile/orders/#{order.id}" %></h3>
+      <p>Order Created On: <%= order.created_at %><br>
+      Order Updated On: <%= order.updated_at %><br>
+      Order Status: <%= order.status %><br>
+      Total Quantity of Items: <%= order.total_quantity %><br>
+      Grand Total: <%= order.grandtotal %></p>
     </section>
   <% end %>
 </section>

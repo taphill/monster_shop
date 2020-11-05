@@ -7,12 +7,13 @@
     <section class = "admin-grid-item" id="merchant-<%= merchant.id %>">
       <b><%=link_to merchant.name, "/merchants/#{merchant.id}"%></b><i> <%= merchant.city + ", " + merchant.state %></i><br>
       <b>Account Status: </b><i><%= merchant.status %></i><br>
-
+      <center>
       <% if merchant.enabled? %>
         <%= button_to('Disable', admin_merchant_path(merchant), params: { enable: false }, method: :patch) %>
       <% else %>
         <%= button_to('Enable', admin_merchant_path(merchant), params: { enable: true }, method: :patch) %>
       <% end %>
+      </center>
     </section><br>
   <% end %>
 </section>

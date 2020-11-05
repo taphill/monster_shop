@@ -24,7 +24,7 @@ RSpec.describe 'Cart show' do
 
       visit "/cart"
 
-      expect(page).to have_link("Checkout")
+      expect(page).to have_button("Checkout")
 
       click_on "Checkout"
 
