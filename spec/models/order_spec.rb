@@ -36,26 +36,49 @@ describe Order, type: :model do
       expect(@order_1.total_quantity).to eq(5)
     end
 
-    it '#status_check' do
-      @item_order_1.fulfill_status = "fulfilled"
-      @item_order_1.save
-      @item_order_2.fulfill_status = "fulfilled"
-      @item_order_2.save
+    describe '#status_check' do
 
-      expect(@order_1.status_check).to eq("packaged")
+      it 'will return packaged if all statuses are fulfilled for order' do
+        @item_order_1.fulfill_status = "fulfilled"
+        @item_order_1.save
+        @item_order_2.fulfill_status = "fulfilled"
+        @item_order_2.save
+        @item_order_3.fulfill_status = "nonfulfilled"
+        @item_order_3.save
+        expect(@order_1.status_check).to eq("packaged")
+      end
+
+      it 'will return pending if all statuses are not fulfilled' do
+        @item_order_1.fulfill_status = "nonfulfilled"
+        @item_order_1.save
+        @item_order_2.fulfill_status = "fulfilled"
+        @item_order_2.save
+        expect(@order_1.status_check).to eq("pending")
+      end
     end
 
-    it '#all_fulfilled?' do
-      expect(@order_1.all_fulfilled?).to eq(false)
 
-      @item_order_1.fulfill_status = "fulfilled"
-      @item_order_1.save
-      @item_order_2.fulfill_status = "fulfilled"
-      @item_order_2.save
 
-      expect(@order_1.all_fulfilled?).to eq(true)
-
-    end
+    # it '#status_check' do
+    #   @item_order_1.fulfill_status = "fulfilled"
+    #   @item_order_1.save
+    #   @item_order_2.fulfill_status = "fulfilled"
+    #   @item_order_2.save
+    #
+    #   expect(@order_1.status_check).to eq("packaged")
+    # end
+    #
+    # it '#all_fulfilled?' do
+    #   expect(@order_1.all_fulfilled?).to eq(false)
+    #
+    #   @item_order_1.fulfill_status = "fulfilled"
+    #   @item_order_1.save
+    #   @item_order_2.fulfill_status = "fulfilled"
+    #   @item_order_2.save
+    #
+    #   expect(@order_1.all_fulfilled?).to eq(true)
+    #
+    # end
 
     it "#merchant_items" do
       expect(@order_1.merchant_items(@meg.id)).to eq([@tire])
