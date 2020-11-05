@@ -11,7 +11,7 @@
 
 <section class="grid-container">
   <% @items.each do |item| %>
-    <%# <% next unless item.active? && !(current_admin? || current_merchant?)%>%>
+    <% next if !item.active? && !(current_admin? || current_merchant?)%>
 
     <section class = "grid-item" id= 'item-<%=item.id%>'>
       <h2> <%=link_to item.name, "/items/#{item.id}" %> </h2>
