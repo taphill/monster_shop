@@ -3,7 +3,7 @@ class Merchant < ApplicationRecord
   has_many :item_orders, through: :items
   has_many :orders, through: :items
   has_many :users, -> { where(role: 1)}
-  
+
   validates_presence_of :name,
                         :address,
                         :city,
@@ -46,4 +46,13 @@ class Merchant < ApplicationRecord
   def enable_items
     items.update_all(active?: true)
   end
+
+  def order_item_quantity(order)
+    self.items.joins(:item_orders).where('item_orders.order_id = ?', order).count
+  end
+
+  def order_total(order)
+    self.items.joins(:item_orders).where('item_orders.order_id = ?', order).sum('item_orders.price')
+  end
+
 end

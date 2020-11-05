@@ -43,7 +43,7 @@ class Item < ApplicationRecord
   end
 
   def fulfilled?(order_id)
-    item_orders.where(order_id: order_id).first.fulfill_status == 'unfulfilled'
+    item_orders.where(order_id: order_id).first.fulfill_status == 'fulfilled'
   end
 
   def insufficient_inventory?(order_id)

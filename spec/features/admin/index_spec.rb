@@ -46,13 +46,13 @@ describe 'as an admin user' do
     it 'has information for each order' do
 
       within "#order-#{@order_1.id}" do
-        expect(page).to have_link(@order_1.name)
+        expect(page).to have_link(@user.name)
         expect(page).to have_content(@order_1.id)
         expect(page).to have_content(@order_1.created_at)
       end
 
       within "#order-#{@order_4.id}" do
-        expect(page).to have_link(@order_4.name)
+        expect(page).to have_link(@user.name)
         expect(page).to have_content(@order_4.id)
         expect(page).to have_content(@order_4.created_at)
       end
@@ -61,28 +61,28 @@ describe 'as an admin user' do
     it 'sorts the orders by status' do
 
       within ".packaged-orders" do
-        expect(page).to have_link(@order_3.name)
+        expect(page).to have_link(@user.name)
         expect(page).to have_content(@order_3.id)
         expect(page).to have_content(@order_3.created_at)
       end
 
       within ".pending-orders" do
-        expect(page).to have_link(@order_1.name)
+        expect(page).to have_link(@user.name)
         expect(page).to have_content(@order_1.id)
         expect(page).to have_content(@order_1.created_at)
-        expect(page).to have_link(@order_2.name)
+        expect(page).to have_link(@user.name)
         expect(page).to have_content(@order_2.id)
         expect(page).to have_content(@order_2.created_at)
       end
 
       within ".shipped-orders" do
-        expect(page).to have_link(@order_4.name)
+        expect(page).to have_link(@user.name)
         expect(page).to have_content(@order_4.id)
         expect(page).to have_content(@order_4.created_at)
       end
 
       within ".cancelled-orders" do
-        expect(page).to have_link(@order_5.name)
+        expect(page).to have_link(@user.name)
         expect(page).to have_content(@order_5.id)
         expect(page).to have_content(@order_5.created_at)
       end
@@ -96,7 +96,7 @@ describe 'as an admin user' do
       expect(current_path).to eq("/admin")
 
       within ".shipped-orders" do
-        expect(page).to have_content(@order_3.name)
+        expect(page).to have_content(@user.name)
       end
     end
   end
