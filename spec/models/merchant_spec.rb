@@ -101,6 +101,7 @@ describe Merchant, type: :model do
         merchant = create(:merchant, :with_items, item_count: 3)
 
         merchant.disable_items
+        merchant.reload
         expect(merchant.items[0].active?).to eq(false)
         expect(merchant.items[1].active?).to eq(false)
         expect(merchant.items[2].active?).to eq(false)
