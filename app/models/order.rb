@@ -16,8 +16,7 @@ class Order < ApplicationRecord
 
   def status_check
     if all_fulfilled? && self.status != "packaged"
-      self.status = "packaged"
-      self.save
+      update(:status => "packaged")
       self.status
     else
       self.status
@@ -25,9 +24,7 @@ class Order < ApplicationRecord
   end
 
   def all_fulfilled?
-    item_orders.all? do |io|
-      io.fulfill_status == "fulfilled"
-    end
+    item_orders.fulfilled.count == item_orders.count
   end
 
   def merchant_items(merchant_id)
