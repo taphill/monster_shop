@@ -9,7 +9,7 @@ RSpec.describe 'As an admin', type: :feature do
       fill_in :password, with: 'password'
       click_button "Login"
     end
-    it 'I can delete an item' do
+    it 'I can delete an item without orders' do
       bike_shop = Merchant.create(name: "Brian's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
       chain = bike_shop.items.create(name: "Chain", description: "It'll never break!", price: 50, image: "https://www.rei.com/media/b61d1379-ec0e-4760-9247-57ef971af0ad?size=784x588", inventory: 5)
 
@@ -41,6 +41,34 @@ RSpec.describe 'As an admin', type: :feature do
       user = create(:user)
       order_1 = Order.create!(name: 'Meg', address: '123 Stang St', city: 'Hershey', state: 'PA', zip: 80218, user_id: user.id)
       order_1.item_orders.create!(item: chain, price: chain.price, quantity: 2)
+
+      visit "/items/#{chain.id}"
+
+      expect(page).to_not have_link("Delete Item")
+    end
+  end
+end
+
+RSpec.describe 'As other users', type: :feature do
+  describe 'when I visit an item show page' do
+    it 'Default User: I cannot delete an item' do
+      bike_shop = Merchant.create(name: "Brian's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
+      chain = bike_shop.items.create(name: "Chain", description: "It'll never break!", price: 50, image: "https://www.rei.com/media/b61d1379-ec0e-4760-9247-57ef971af0ad?size=784x588", inventory: 5)
+
+      user = create(:user)
+      visit login_path
+      fill_in :email, with: user.email
+      fill_in :password, with: 'password'
+      click_button "Login"
+
+      visit "/items/#{chain.id}"
+
+      expect(page).to_not have_link("Delete Item")
+    end
+
+    it 'Visitor: I cannot delete an item' do
+      bike_shop = Merchant.create(name: "Brian's Bike Shop", address: '123 Bike Rd.', city: 'Denver', state: 'CO', zip: 80203)
+      chain = bike_shop.items.create(name: "Chain", description: "It'll never break!", price: 50, image: "https://www.rei.com/media/b61d1379-ec0e-4760-9247-57ef971af0ad?size=784x588", inventory: 5)
 
       visit "/items/#{chain.id}"
 
