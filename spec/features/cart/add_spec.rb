@@ -38,10 +38,6 @@ RSpec.describe 'Cart creation' do
 
       visit "/items/#{broken_pencil.id}"
       expect(page).to_not have_button("Add To Cart")
-
-      # expect(page).to_not have_content("#{@paper.name} was successfully added to your cart")
-      # expect(current_path).to eq("/items")
-
     end
   end
 end
