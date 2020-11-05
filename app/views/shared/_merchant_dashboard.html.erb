@@ -14,7 +14,7 @@
   <% @merchant.pending_orders.each do |order| %>
     <ul>
       <div class="order" id="order-<%= order.id %>">
-        <li>Order: <%= link_to "#{order.id}", "/merchant/orders/#{order.id}" %></li>
+        <li>Order: <%= link_to order.id, "/merchant/orders/#{order.id}" %></li>
         <li>Date of order: <%= format_date(order.created_at) %></li>
         <li>Order quantity: <%= order.total_quantity %></li>
         <li>Order total: <%= order.grandtotal %></li>

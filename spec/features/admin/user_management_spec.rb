@@ -4,11 +4,11 @@ describe 'As an admin' do
   describe 'when I visit the merchant index page' do
     it 'I see all merchants in the system with thier city, state, name (as link to their dashboard), and enable/disable button' do
       admin = create(:user, role:2)
-      merchant_1 = create(:merchant, enabled: true)
-      merchant_2 = create(:merchant, enabled: true)
-      merchant_3 = create(:merchant, enabled: false)
-      merchant_4 = create(:merchant, enabled: true)
-      merchant_5 = create(:merchant, enabled: false)
+      merchant_1 = create(:merchant, name: "Bob", state: "CO", city: "Colorado Springs", enabled: true)
+      merchant_2 = create(:merchant, name: "Snarfs", state: "CA", city: "Laredo", enabled: true)
+      merchant_3 = create(:merchant, name: "Whiteboard", state: "ID", city: "America", enabled: false)
+      merchant_4 = create(:merchant, name: "Snowy", state: "DE", city: "Monk", enabled: true)
+      merchant_5 = create(:merchant, name: "Namely", state: "TX", city: "Austin", enabled: false)
 
       visit login_path
 

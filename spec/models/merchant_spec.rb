@@ -34,7 +34,7 @@ describe Merchant, type: :model do
 
     describe '#item_count' do
       it 'returns the total number of a merchants unqiue items' do
-        merchant = create(:merchant, :with_items, item_count: 3) 
+        merchant = create(:merchant, :with_items, item_count: 3)
         expect(merchant.item_count).to eq(3)
       end
     end
@@ -60,10 +60,11 @@ describe Merchant, type: :model do
         create(:item_order, item: merchant.items[0], order: order2)
         create(:item_order, item: merchant.items[0], order: order3)
 
-        expect(merchant.distinct_cities).to eq(['Denver', 'Hershey'])
+        expected = ['Denver', 'Hershey']
+        expect(merchant.distinct_cities.sort).to eq(expected.sort)
       end
     end
-    
+
     describe '#enabled?' do
       context 'when merchant is enabled' do
         it 'returns true' do
@@ -99,11 +100,11 @@ describe Merchant, type: :model do
     describe '#disable_items' do
       it 'disables all merchant items' do
         merchant = create(:merchant, :with_items, item_count: 3)
-        
+
         merchant.disable_items
-        expect(merchant.items[0].active?).to eq(false) 
-        expect(merchant.items[1].active?).to eq(false) 
-        expect(merchant.items[2].active?).to eq(false) 
+        expect(merchant.items[0].active?).to eq(false)
+        expect(merchant.items[1].active?).to eq(false)
+        expect(merchant.items[2].active?).to eq(false)
       end
     end
 
@@ -111,11 +112,11 @@ describe Merchant, type: :model do
       it 'enables all merchant items' do
         merchant = create(:merchant)
         create_list(:item, 3, active?: false, merchant: merchant)
-        
+
         merchant.enable_items
-        expect(merchant.items[0].active?).to eq(true) 
-        expect(merchant.items[1].active?).to eq(true) 
-        expect(merchant.items[2].active?).to eq(true) 
+        expect(merchant.items[0].active?).to eq(true)
+        expect(merchant.items[1].active?).to eq(true)
+        expect(merchant.items[2].active?).to eq(true)
       end
     end
 
