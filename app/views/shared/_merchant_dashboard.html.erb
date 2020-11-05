@@ -17,7 +17,7 @@
         <li>Order: <%= link_to order.id, "/merchant/orders/#{order.id}" %></li>
         <li>Date of order: <%= format_date(order.created_at) %></li>
         <li>Order quantity: <%= @merchant.order_item_quantity(order) %></li>
-        <li>Order total: <%= price_format(@merchant.order_total(order)) %></li>
+        <li>Order total: <%= format_price(@merchant.order_total(order)) %></li>
       </div>
     </ul>
   <% end %>

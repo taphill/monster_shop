@@ -4,7 +4,7 @@ module ApplicationHelper
     input.strftime("%m/%d/%Y")
   end
 
-  def price_format(input)
-    "$#{input.round(2)}"
+  def format_price(input)
+    '$' + '%.2f' % input.round(2)
   end
 end
