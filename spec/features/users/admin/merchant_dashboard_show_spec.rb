@@ -45,7 +45,6 @@ describe "As a user admin" do
 
       click_link merchant.name
 
-      save_and_open_page
       expect(current_path).to eq("/admin/merchants/#{merchant.id}")
 
       within ".pending-orders" do
@@ -56,14 +55,14 @@ describe "As a user admin" do
         expect(page).to have_link("#{order_1.id}")
         expect(page).to have_content(order_1_date)
         expect(page).to have_content(merchant.order_item_quantity(order_1))
-        expect(page).to have_content(merchant.order_total(order_1))
+        expect(page).to have_content(merchant.order_total(order_1).round(2))
       end
 
       within "#order-#{order_2.id}" do
         expect(page).to have_link("#{order_2.id}")
         expect(page).to have_content(order_2_date)
         expect(page).to have_content(merchant.order_item_quantity(order_2))
-        expect(page).to have_content(merchant.order_total(order_2))
+        expect(page).to have_content(merchant.order_total(order_2).round(2))
       end
 
     end
