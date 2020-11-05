@@ -15,16 +15,14 @@ class Order < ApplicationRecord
   end
 
   def status_check
-    if self.item_orders.fulfilled.count == self.item_orders.count && self.status != "packaged"
+    if all_fulfilled? && self.status != "packaged"
       update(:status => "packaged")
     end
     self.status
   end
 
   def all_fulfilled?
-    item_orders.all? do |io|
-      io.fulfill_status == "fulfilled"
-    end
+    self.item_orders.fulfilled.count == self.item_orders.count
   end
 
   def merchant_items(merchant_id)

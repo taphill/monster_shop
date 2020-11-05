@@ -54,8 +54,44 @@ describe Order, type: :model do
       end
     end
 
-    it "#merchant_items" do
-      expect(@order_1.merchant_items(@meg.id)).to eq([@tire])
+    describe "#all_fullfilled?" do
+      it "returns true if all item_orders within an order are fulfilled" do
+        @item_order_1.fulfill_status = "fulfilled"
+        @item_order_1.save
+        @item_order_2.fulfill_status = "fulfilled"
+        @item_order_2.save
+        expect(@order_1.all_fulfilled?).to eq(true)
+      end
+
+      it "returns false if one or more item_orders within an order are not fulfilled" do
+        @item_order_1.fulfill_status = "unfulfilled"
+        @item_order_1.save
+        @item_order_2.fulfill_status = "fulfilled"
+        @item_order_2.save
+        expect(@order_1.all_fulfilled?).to eq(false)
+
+        @item_order_2.fulfill_status = "unfulfilled"
+        expect(@order_1.all_fulfilled?).to eq(false)
+      end
     end
+
+    describe "#merchant_items" do
+      it "returns only an item belonging to the merchant" do
+        @chew_toy = @meg.items.create(name: "Chew Toy", description: "Great chew toy!", price: 20, image: "http://lovencaretoys.com/image/cache/dog/tug-toy-dog-pull-9010_2-800x800.jpg", inventory: 15)
+        @item_order_3 = @order_1.item_orders.create!(item: @chew_toy, price: @chew_toy.price, quantity: 4)
+
+        expect(@order_1.merchant_items(@meg.id)).to eq([@tire, @chew_toy])
+        expect(@order_1.merchant_items(@brian.id)).to eq([@pull_toy])
+      end
+
+      it "does not return items belonging to another merchant" do
+        @chew_toy = @meg.items.create(name: "Chew Toy", description: "Great chew toy!", price: 20, image: "http://lovencaretoys.com/image/cache/dog/tug-toy-dog-pull-9010_2-800x800.jpg", inventory: 15)
+        @item_order_3 = @order_1.item_orders.create!(item: @chew_toy, price: @chew_toy.price, quantity: 4)
+
+        expect(@order_1.merchant_items(@brian.id)).to_not eq([@tire, @chew_toy])
+        expect(@order_1.merchant_items(@meg.id)).to_not eq([@pull_toy])
+      end
+    end
+
   end
 end
