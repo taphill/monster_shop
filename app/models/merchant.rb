@@ -55,7 +55,4 @@ class Merchant < ApplicationRecord
     self.items.joins(:item_orders).where('item_orders.order_id = ?', order).sum('item_orders.price')
   end
 
-
-
-
 end
