@@ -13,6 +13,7 @@ RSpec.describe 'As a merchant', type: :feature do
       fill_in :password, with: 'password'
       click_button "Login"
     end
+
     it 'I can delete an item' do
       visit "/items/#{@chain.id}"
 
