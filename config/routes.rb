@@ -28,8 +28,7 @@ Rails.application.routes.draw do
   resources :merchants, except: [:delete]
   get "/merchants/:merchant_id/items", to: 'items#index'
 
-  get "/items", to: "items#index"
-  get "/items/:id", to: "items#show", as: 'item'
+  resources :items, only: [:index, :show]
 
   get "/items/:item_id/reviews/new", to: "reviews#new"
   post "/items/:item_id/reviews", to: "reviews#create"
