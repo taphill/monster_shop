@@ -82,6 +82,15 @@ RSpec.describe 'Site Navigation' do
 
       visit '/profile'
       expect(page).to have_content(no_pass)
+
+      visit '/admin/merchants'
+      expect(page).to have_content(no_pass)
+
+      visit '/admin/users'
+      expect(page).to have_content(no_pass)
+
+      visit '/merchant/items'
+      expect(page).to have_content(no_pass)
     end
   end
 
@@ -251,6 +260,11 @@ RSpec.describe 'Site Navigation' do
     it "The link to 'All Merchants' takes me to 'admin/merchants' path" do
       click_link "All Merchants"
 
+      expect(current_path).to eq(admin_merchants_path)
+    end
+
+    it "when I type visit '/merchants' I am redirected to 'admin/merchants'" do
+      visit merchants_path
       expect(current_path).to eq(admin_merchants_path)
     end
   end

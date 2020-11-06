@@ -1,6 +1,7 @@
 class MerchantsController <ApplicationController
 
   def index
+    return redirect_to admin_merchants_path if current_admin?
     @merchants = Merchant.all
   end
 
