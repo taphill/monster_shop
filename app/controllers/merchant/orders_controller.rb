@@ -15,10 +15,7 @@ class Merchant::OrdersController < Merchant::BaseController
     flash[:notice] = "Item has been fulfilled" if item.save
 
     order = Order.find(params[:order_id])
-    if order.all_fulfilled?
-      order.status = "packaged"
-      order.save
-    end
+    order.status_check
     redirect_to request.referrer
   end
 end
