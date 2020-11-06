@@ -21,14 +21,25 @@ RSpec.describe Cart do
         })
     end
 
-    it '.add_item()' do
-      @cart.add_item(@hippo.id.to_s)
+    describe "#add_item()" do
+      it '.it will add an item that doesnt exits' do
+        @cart.add_item(@hippo.id.to_s)
 
-      expect(@cart.contents).to eq({
-        @ogre.id.to_s => 1,
-        @giant.id.to_s => 2,
-        @hippo.id.to_s => 1
-        })
+        expect(@cart.contents).to eq({
+          @ogre.id.to_s => 1,
+          @giant.id.to_s => 2,
+          @hippo.id.to_s => 1
+          })
+      end
+
+      it '.it will add an item that doesnt exits' do
+        @cart.add_item(@ogre.id.to_s)
+
+        expect(@cart.contents).to eq({
+          @ogre.id.to_s => 2,
+          @giant.id.to_s => 2,
+          })
+      end
     end
 
     it ".remove_one()" do

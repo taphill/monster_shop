@@ -1,6 +1,7 @@
 class ItemOrder <ApplicationRecord
   validates_presence_of :item_id, :order_id, :price, :quantity
-
+  scope :fulfilled, -> { where('fulfill_status = ?', "fulfilled")}
+  
   belongs_to :item
   belongs_to :order
 

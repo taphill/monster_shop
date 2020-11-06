@@ -19,10 +19,10 @@ describe 'as a merchant employee' do
       @m2_item3 = @merchant_2.items[2]
       @order = create(:order, user: @user)
       @io1 = create(:item_order, order: @order, item: @m1_item1, quantity: 2)
-      @io1 = create(:item_order, order: @order, item: @m1_item2, quantity: 35)
-      @io1 = create(:item_order, order: @order, item: @m1_item3)
-      @io1 = create(:item_order, order: @order, item: @m2_item1)
-      @io1 = create(:item_order, order: @order, item: @m2_item2)
+      @io2 = create(:item_order, order: @order, item: @m1_item2, quantity: 35)
+      @io3 = create(:item_order, order: @order, item: @m1_item3)
+      @io4 = create(:item_order, order: @order, item: @m2_item1)
+      @io5 = create(:item_order, order: @order, item: @m2_item2)
 
       visit login_path
       fill_in :email, with: @merchant_employee.email

@@ -1,10 +1,9 @@
-
 require 'rails_helper'
 
 RSpec.describe 'Site Navigation' do
   describe 'As a Visitor' do
     it "I see a nav bar with links to all pages" do
-      visit '/merchants'
+      visit root_path
 
       within 'nav' do
         click_link 'All Items'
@@ -39,16 +38,36 @@ RSpec.describe 'Site Navigation' do
     end
 
     it "I can see a cart indicator on all pages" do
+      cart = Cart.new({})
+
       visit '/merchants'
 
       within 'nav' do
-        expect(page).to have_content("Cart: 0")
+        expect(page).to have_content("Cart: #{cart.total_items}")
       end
 
       visit '/items'
 
       within 'nav' do
-        expect(page).to have_content("Cart: 0")
+        expect(page).to have_content("Cart: #{cart.total_items}")
+      end
+
+      visit '/login'
+
+      within 'nav' do
+        expect(page).to have_content("Cart: #{cart.total_items}")
+      end
+
+      visit '/register'
+
+      within 'nav' do
+        expect(page).to have_content("Cart: #{cart.total_items}")
+      end
+
+      visit '/'
+
+      within 'nav' do
+        expect(page).to have_content("Cart: #{cart.total_items}")
       end
     end
 
@@ -62,6 +81,15 @@ RSpec.describe 'Site Navigation' do
       expect(page).to have_content(no_pass)
 
       visit '/profile'
+      expect(page).to have_content(no_pass)
+
+      visit '/admin/merchants'
+      expect(page).to have_content(no_pass)
+
+      visit '/admin/users'
+      expect(page).to have_content(no_pass)
+
+      visit '/merchant/items'
       expect(page).to have_content(no_pass)
     end
   end
@@ -232,6 +260,11 @@ RSpec.describe 'Site Navigation' do
     it "The link to 'All Merchants' takes me to 'admin/merchants' path" do
       click_link "All Merchants"
 
+      expect(current_path).to eq(admin_merchants_path)
+    end
+
+    it "when I type visit '/merchants' I am redirected to 'admin/merchants'" do
+      visit merchants_path
       expect(current_path).to eq(admin_merchants_path)
     end
   end

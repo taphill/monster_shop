@@ -20,7 +20,9 @@
       <% elsif item.insufficient_inventory?(@order.id) %>
         <%= "Cannot fulfill item: insufficient inventory" %>
       <% else %>
+      <div class="fulfill">
         <%= button_to "Fulfill Item", "/merchant/orders/#{@order.id}?item_id=#{item.id}", method: :patch %>
+      </div>
       <% end %>
     </section>
   <% end %>
