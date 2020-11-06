@@ -22,7 +22,7 @@ class Order < ApplicationRecord
   end
 
   def all_fulfilled?
-    self.item_orders.fulfilled.count == self.item_orders.count
+    item_orders.fulfilled.count == item_orders.count
   end
 
   def merchant_items(merchant_id)

@@ -5,6 +5,8 @@ class ItemOrder <ApplicationRecord
   belongs_to :item
   belongs_to :order
 
+  scope :fulfilled, -> { where('fulfill_status = ?', "fulfilled")}
+  
   def self.unique_items
     select(:item_id).distinct.count
   end

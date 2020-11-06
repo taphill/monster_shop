@@ -24,20 +24,16 @@ describe 'as a default user' do
 
       within "#order-#{@order_1.id}" do
         expect(page).to have_link("#{@order_1.id}")
-        expect(page).to have_content(@order_1.created_at)
-        expect(page).to have_content(@order_1.updated_at)
         expect(page).to have_content(@order_1.status)
         expect(page).to have_content(@order_1.total_quantity)
-        expect(page).to have_content(@order_1.grandtotal)
+        expect(page).to have_content("$2100.00")
       end
 
       within "#order-#{@order_2.id}" do
         expect(page).to have_link("#{@order_2.id}")
-        expect(page).to have_content(@order_2.created_at)
-        expect(page).to have_content(@order_2.updated_at)
         expect(page).to have_content(@order_2.status)
         expect(page).to have_content(@order_2.total_quantity)
-        expect(page).to have_content(@order_2.grandtotal)
+        expect(page).to have_content("$10000.00")
       end
     end
   end
@@ -58,11 +54,8 @@ describe 'as a default user' do
 
       within ".order-info" do
         expect(page).to have_content(@order_1.id)
-        expect(page).to have_content(@order_1.created_at)
-        expect(page).to have_content(@order_1.updated_at)
         expect(page).to have_content(@order_1.status)
         expect(page).to have_content(@order_1.total_quantity)
-        expect(page).to have_content(@order_1.grandtotal)
       end
 
       within "#item-#{@gelatinous_cube.id}" do
@@ -70,12 +63,9 @@ describe 'as a default user' do
         expect(page).to have_content(@gelatinous_cube.description)
         expect(page).to have_xpath("//img[contains(@src,'#{@gelatinous_cube.image}')]")
         expect(page).to have_content(@item_order_1.quantity)
-        expect(page).to have_content(@gelatinous_cube.price)
-        expect(page).to have_content(@item_order_1.subtotal)
       end
       within "#item-#{@owlbear.id}" do
         expect(page).to have_content(@owlbear.name)
-        expect(page).to have_content(@item_order_2.subtotal)
       end
     end
   end
