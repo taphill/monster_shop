@@ -28,37 +28,81 @@ describe Order, type: :model do
       @item_order_1 = @order_1.item_orders.create!(item: @tire, price: @tire.price, quantity: 2)
       @item_order_2 = @order_1.item_orders.create!(item: @pull_toy, price: @pull_toy.price, quantity: 3)
     end
-    it 'grandtotal' do
+
+    it '#grandtotal' do
       expect(@order_1.grandtotal).to eq(230)
+
+      @chew_toy = @meg.items.create(name: "Chew Toy", description: "Great chew toy!", price: 20, image: "http://lovencaretoys.com/image/cache/dog/tug-toy-dog-pull-9010_2-800x800.jpg", inventory: 15)
+      @item_order_3 = @order_1.item_orders.create!(item: @chew_toy, price: @chew_toy.price, quantity: 4)
+
+      expect(@order_1.grandtotal).to eq(310)
     end
 
-    it 'total_quantity' do
+    it '#total_quantity' do
       expect(@order_1.total_quantity).to eq(5)
+
+      @chew_toy = @meg.items.create(name: "Chew Toy", description: "Great chew toy!", price: 20, image: "http://lovencaretoys.com/image/cache/dog/tug-toy-dog-pull-9010_2-800x800.jpg", inventory: 15)
+      @item_order_3 = @order_1.item_orders.create!(item: @chew_toy, price: @chew_toy.price, quantity: 4)
+
+      expect(@order_1.total_quantity).to eq(9)
     end
 
-    it '#status_check' do
-      @item_order_1.fulfill_status = "fulfilled"
-      @item_order_1.save
-      @item_order_2.fulfill_status = "fulfilled"
-      @item_order_2.save
+    describe '#status_check' do
+      it 'will return packaged if all statuses are fulfilled for order' do
+        @item_order_1.fulfill_status = "fulfilled"
+        @item_order_1.save
+        @item_order_2.fulfill_status = "fulfilled"
+        @item_order_2.save
+        expect(@order_1.status_check).to eq("packaged")
+      end
 
-      expect(@order_1.status_check).to eq("packaged")
+      it 'will return pending if all statuses are not fulfilled' do
+        @item_order_1.fulfill_status = "unfulfilled"
+        @item_order_1.save
+        @item_order_2.fulfill_status = "fulfilled"
+        @item_order_2.save
+        expect(@order_1.status_check).to eq("pending")
+      end
     end
 
-    it '#all_fulfilled?' do
-      expect(@order_1.all_fulfilled?).to eq(false)
+    describe "#all_fullfilled?" do
+      it "returns true if all item_orders within an order are fulfilled" do
+        @item_order_1.fulfill_status = "fulfilled"
+        @item_order_1.save
+        @item_order_2.fulfill_status = "fulfilled"
+        @item_order_2.save
+        expect(@order_1.all_fulfilled?).to eq(true)
+      end
 
-      @item_order_1.fulfill_status = "fulfilled"
-      @item_order_1.save
-      @item_order_2.fulfill_status = "fulfilled"
-      @item_order_2.save
+      it "returns false if one or more item_orders within an order are not fulfilled" do
+        @item_order_1.fulfill_status = "unfulfilled"
+        @item_order_1.save
+        @item_order_2.fulfill_status = "fulfilled"
+        @item_order_2.save
+        expect(@order_1.all_fulfilled?).to eq(false)
 
-      expect(@order_1.all_fulfilled?).to eq(true)
-
+        @item_order_2.fulfill_status = "unfulfilled"
+        expect(@order_1.all_fulfilled?).to eq(false)
+      end
     end
 
-    it "#merchant_items" do
-      expect(@order_1.merchant_items(@meg.id)).to eq([@tire])
+    describe "#merchant_items" do
+      it "returns only an item belonging to the merchant" do
+        @chew_toy = @meg.items.create(name: "Chew Toy", description: "Great chew toy!", price: 20, image: "http://lovencaretoys.com/image/cache/dog/tug-toy-dog-pull-9010_2-800x800.jpg", inventory: 15)
+        @item_order_3 = @order_1.item_orders.create!(item: @chew_toy, price: @chew_toy.price, quantity: 4)
+
+        expect(@order_1.merchant_items(@meg.id)).to eq([@tire, @chew_toy])
+        expect(@order_1.merchant_items(@brian.id)).to eq([@pull_toy])
+      end
+
+      it "does not return items belonging to another merchant" do
+        @chew_toy = @meg.items.create(name: "Chew Toy", description: "Great chew toy!", price: 20, image: "http://lovencaretoys.com/image/cache/dog/tug-toy-dog-pull-9010_2-800x800.jpg", inventory: 15)
+        @item_order_3 = @order_1.item_orders.create!(item: @chew_toy, price: @chew_toy.price, quantity: 4)
+
+        expect(@order_1.merchant_items(@brian.id)).to_not eq([@tire, @chew_toy])
+        expect(@order_1.merchant_items(@meg.id)).to_not eq([@pull_toy])
+      end
     end
+
   end
 end
