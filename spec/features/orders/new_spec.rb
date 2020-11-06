@@ -24,6 +24,7 @@ RSpec.describe("New Order Page") do
       visit "/items/#{@pencil.id}"
       click_on "Add To Cart"
     end
+
     it "I see all the information about my current cart" do
       visit "/cart"
 
@@ -66,6 +67,18 @@ RSpec.describe("New Order Page") do
       expect(page).to have_field(:state)
       expect(page).to have_field(:zip)
       expect(page).to have_button("Create Order")
+    end
+
+    it 'must fill out complete address to checkout' do
+      visit '/cart'
+      click_on 'Checkout'
+      click_on 'Create Order'
+      
+      fill_in 'Address', with: '90 st.'
+      fill_in 'State', with: 'CO'
+      fill_in 'Zip', with: '12345'
+
+      expect(page).to have_content('Please complete address form to create an order') 
     end
   end
 end
