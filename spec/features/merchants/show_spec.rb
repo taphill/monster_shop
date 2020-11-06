@@ -23,4 +23,23 @@ RSpec.describe 'merchant show page', type: :feature do
       expect(current_path).to eq("/merchants/#{@bike_shop.id}/items")
     end
   end
+
+  describe 'As a merchant' do
+    context 'when I visit the bashboard' do
+      it 'has a link to merchant/discounts' do
+        merchant = create(:merchant)
+        user = create(:user, role: 1, merchant: merchant)
+
+        visit login_path
+        fill_in :email, with: user.email
+        fill_in :password, with: user.password
+        click_button "Login"
+
+        visit merchant_root_path
+
+        click_link 'Discounts Dashboard'
+        expect(page).to have_current_path(merchant_discounts_path)
+      end
+    end
+  end
 end
