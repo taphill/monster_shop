@@ -13,15 +13,15 @@
 
 <section class="pending-orders">
   <h3>Pending Orders</h3>
+  <ul>
   <% @merchant.pending_orders.each do |order| %>
-    <ul>
-      <div class="order" id="order-<%= order.id %>">
-        <li>Order: <%= link_to order.id, "/merchant/orders/#{order.id}" %></li>
-        <li>Date of order: <%= format_date(order.created_at) %></li>
-        <li>Order quantity: <%= @merchant.order_item_quantity(order) %></li>
-        <li>Order total: <%= format_price(@merchant.order_total(order)) %></li>
-      </div>
-    </ul>
+    <div class="order" id="order-<%= order.id %>">
+      <li><b>Order: <%= link_to order.id, "/merchant/orders/#{order.id}" %></b><br />
+      Date of order: <%= format_date(order.created_at) %><br />
+      Order quantity: <%= @merchant.order_item_quantity(order) %><br />
+      Order total: <%= format_price(@merchant.order_total(order)) %></li>
+    </div>
   <% end %>
+  </ul>
 </section>
 </center>
