@@ -85,7 +85,7 @@ describe 'As a visitor' do
   end
 
   describe 'as any user while logged in' do
-    it 'I can logout and will be redirected to the welcome page with a flash message' do
+    it 'Regular User: I can logout and will be redirected to the welcome page with a flash message' do
       user = create(:user)
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
 
@@ -112,6 +112,53 @@ describe 'As a visitor' do
       within ".topnav" do
         expect(page).to have_content("Cart: 0")
       end
+    end
+
+    it 'Merchant User: I can logout and will be redirected to the welcome page with a flash message' do
+
+      megan = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
+      brian = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
+      ogre = megan.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 20, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', inventory: 5 )
+      giant = megan.items.create!(name: 'Giant', description: "I'm a Giant!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', inventory: 2 )
+      hippo = brian.items.create!(name: 'Hippo', description: "I'm a Hippo!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', inventory: 3 )
+
+      user = create(:user, role: 1, merchant_id: megan.id)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+
+      visit "/items"
+      click_on "Ogre"
+      click_on "Add To Cart"
+
+      within ".topnav" do
+        expect(page).to have_content("Cart: 1")
+      end
+
+      click_on "Logout"
+
+      expect(current_path).to eq(root_path)
+      expect(page).to have_content("You are now logged out.")
+
+      within ".topnav" do
+        expect(page).to have_content("Cart: 0")
+      end
+    end
+
+    it 'Admin User: I can logout and will be redirected to the welcome page with a flash message' do
+      user = create(:user, role: 2)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
+
+      megan = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
+      brian = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
+      ogre = megan.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 20, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', inventory: 5 )
+      giant = megan.items.create!(name: 'Giant', description: "I'm a Giant!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', inventory: 2 )
+      hippo = brian.items.create!(name: 'Hippo', description: "I'm a Hippo!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', inventory: 3 )
+
+      visit '/admin'
+
+      click_on "Logout"
+
+      expect(current_path).to eq(root_path)
+      expect(page).to have_content("You are now logged out.")
     end
   end
 end
