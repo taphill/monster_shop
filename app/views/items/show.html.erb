@@ -1,8 +1,8 @@
 <h1><%= link_to @item.name, "/items/#{@item.id}" %></h1>
+<% if @item.average_review %>
+<p align="center" id="average-rating">Average Rating: <%= @item.average_review %></p>
+<% end %>
 <p align="center">Sold by: <%=link_to @item.merchant.name, "/merchants/#{@item.merchant.id}" %> </p>
-<section align = "center" id = "average-rating">
-  <p>Average Rating: <%= @item.average_review %></p>
-</section>
 <center>
   <section class = "item-show-grid">
     <section class = "item-show-item">
@@ -14,6 +14,7 @@
       <p>Inventory: <%= @item.inventory %> </p>
       <% if @item.active? %>
         <p style= "color:green">Active</p>
+        <div class="checkout"><%= button_to "Add To Cart", "/cart/#{@item.id}", method: :post %></div>
       <% else %>
         <p style= "color:red">Inactive</p>
       <% end %>
@@ -25,13 +26,14 @@
       <p><%= link_to "Edit Item", "/admin/merchants/#{@item.merchant_id}/items/#{@item.id}/edit" %></p>
       <p><%= link_to "Delete Item", "/admin/merchants/#{@item.merchant_id}/items/#{@item.id}", method: :delete if @item.no_orders? %></p>
       <% end %>
-      <%= link_to "Add Review", "/items/#{@item.id}/reviews/new" %>
-      <%= button_to "Add To Cart", "/cart/#{@item.id}", method: :post %>
+
+
     </section>
   </section>
 </center>
 <center>
 <section class = "review-stats">
+  <p><%= link_to "Add Review", "/items/#{@item.id}/reviews/new" %></p>
   <%if @item.reviews.empty? %>
     <h3>This item has not yet been reviewed.</h3>
   <% else %>

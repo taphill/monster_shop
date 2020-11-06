@@ -36,7 +36,7 @@ pull_toy = dog_shop.items.create(name: "Pull Toy", description: "Great pull toy!
 dog_bone = dog_shop.items.create(name: "Dog Bone", description: "They'll love it!", price: 21, image: "https://img.chewy.com/is/image/catalog/54226_MAIN._AC_SL1500_V1534449573_.jpg", active?:false, inventory: 21)
 frisbee = dog_shop.items.create(name: "Frisbee", description: "You can't beat the classics!", price: 12, image: "https://img.chewy.com/is/image/catalog/59178_MAIN._AC_SL1500_V1518037644_.jpg", inventory: 14)
 tennis_balls = dog_shop.items.create(name: "Tennis Balls", description: "Dogs love tennis balls!", price: 4, image: "https://www.tennisexpress.com/prodimages/45486-DEFAULT-l.jpg", inventory: 24)
-# rope_ball = dog_shop.items.create(name: "Rope Ball", description: "Long lasting!", price: 6, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTwfiN0gFv8L9fNBhqq-gJck51PZqIlTOifLw&usqp=CAU", inventory: 12)
+rope_ball = dog_shop.items.create(name: "Rope Ball", description: "Long lasting!", price: 6, image: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTwfiN0gFv8L9fNBhqq-gJck51PZqIlTOifLw&usqp=CAU", inventory: 12)
 
 #bagel_and_deli items
 bagel = bagel_and_deli.items.create(name: "Kosher Bagels", description: "Boiled and dense", price: 10, image: "https://www.tennisexpress.com/prodimages/45486-DEFAULT-l.jpg", inventory: 30)
@@ -52,12 +52,12 @@ order_5 = Order.create!(name: user_2.name, address: user_2.street_address, city:
 #item_orders
 item_order_1 = ItemOrder.create!(order_id: order_1.id, item_id: pull_toy.id, price: pull_toy.price, quantity: 5)
 item_order_2 = ItemOrder.create!(order_id: order_2.id, item_id: brakes.id, price: brakes.price, quantity: 4)
-item_order_3 = ItemOrder.create!(order_id: order_3.id, item_id: pull_toy.id, price: pull_toy.price, quantity: 3)
-item_order_4 = ItemOrder.create!(order_id: order_4.id, item_id: pull_toy.id, price: pull_toy.price, quantity: 1)
-item_order_5 = ItemOrder.create!(order_id: order_5.id, item_id: pull_toy.id, price: pull_toy.price, quantity: 6)
+item_order_3 = ItemOrder.create!(order_id: order_3.id, item_id: tire.id, price: tire.price, quantity: 3)
+item_order_4 = ItemOrder.create!(order_id: order_4.id, item_id: rope_ball.id, price: pull_toy.price, quantity: 10)
+item_order_5 = ItemOrder.create!(order_id: order_5.id, item_id: tennis_balls.id, price: pull_toy.price, quantity: 16)
 item_order_6 = ItemOrder.create!(order_id: order_5.id, item_id: bagel.id, price: bagel.price, quantity: 6)
 item_order_7 = ItemOrder.create!(order_id: order_1.id, item_id: steamer.id, price: steamer.price, quantity: 8)
 item_order_8 = ItemOrder.create!(order_id: order_3.id, item_id: helmet.id, price: helmet.price, quantity: 7)
 item_order_9 = ItemOrder.create!(order_id: order_4.id, item_id: frisbee.id, price: frisbee.price, quantity: 20)
-item_order_10 = ItemOrder.create!(order_id: order_1.id, item_id: frisbee.id, price: frisbee.price, quantity: 5)
+item_order_10 = ItemOrder.create!(order_id: order_1.id, item_id: frame.id, price: frame.price, quantity: 2)
 item_order_11 = ItemOrder.create!(order_id: order_2.id, item_id: dog_bone.id, price: dog_bone.price, quantity: 14)

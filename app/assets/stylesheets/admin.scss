@@ -1,0 +1,44 @@
+section.admin-grid-item form {
+  background-color:  #17BEBB;
+  width: 60%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+section.admin-grid-item input {
+  background-color: #f2f2f2;
+  color: #17BEBB;
+  margin: 0px;
+  order: 1;
+}
+
+section.admin-grid-item input:hover {
+  background-color: #17BEBB;
+  color: #f2f2f2;
+  border: 1px solid;
+}
+
+.all-orders {
+  background-color: #17BEBB;
+  color: #f2f2f2;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+section.packaged-orders, .pending-orders, .shipped-orders, .cancelled-orders {
+  background-color: #f2f2f2;
+  color: #17BEBB;
+  width: 50%;
+  border: 1px solid black;
+  margin-top: 20px;
+  padding-left: 10px;
+}
+
+section a {
+  color: #002244;
+}
+
+section p {
+  padding-left: 10px;
+}

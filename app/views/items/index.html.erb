@@ -11,6 +11,8 @@
 
 <section class="grid-container">
   <% @items.each do |item| %>
+    <% next if !item.active? && !(current_admin? || current_merchant?)%>
+
     <section class = "grid-item" id= 'item-<%=item.id%>'>
       <h2> <%=link_to item.name, "/items/#{item.id}" %> </h2>
       <p>Sold by: <%=link_to item.merchant.name, "/merchants/#{item.merchant.id}" %></p>
@@ -18,24 +20,26 @@
       <p> <%= item.description unless @merchant %> </p>
       <p>Price: <%=number_to_currency(item.price) %> </p>
       <p>Inventory: <%= item.inventory %> </p>
+      <center>
       <% if item.active? %>
         <p>Active
-          <%= link_to '| Deactivate', "/merchant/items/#{item.id}?status=deactivate", method: :patch if current_merchant? %>
-          <%= link_to '| Deactivate', "/admin/merchants/#{item.merchant_id}/items/#{item.id}?status=deactivate", method: :patch if current_admin? %>
+          <%= link_to 'Deactivate', "/merchant/items/#{item.id}?status=deactivate", method: :patch if current_merchant? %>
+          <%= link_to 'Deactivate', "/admin/merchants/#{item.merchant_id}/items/#{item.id}?status=deactivate", method: :patch if current_admin? %>
         </p>
       <% else %>
         <p>Inactive
-          <%= link_to '| Activate', "/merchant/items/#{item.id}?status=activate", method: :patch if current_merchant? %>
-          <%= link_to '| Activate', "/admin/merchants/#{item.merchant_id}/items/#{item.id}?status=activate", method: :patch if current_admin? %>
+          <%= link_to 'Activate', "/merchant/items/#{item.id}?status=activate", method: :patch if current_merchant? %>
+          <%= link_to 'Activate', "/admin/merchants/#{item.merchant_id}/items/#{item.id}?status=activate", method: :patch if current_admin? %>
         </p>
       <% end %>
       <% if current_merchant? %>
-        <p><%= button_to 'Edit', "/merchant/items/#{item.id}/edit", method: :get %></p>
-        <p><%= button_to 'Delete', "/merchant/items/#{item.id}", params: { merchant_id: item.merchant_id }, method: :delete if item.no_orders? %></p>
+        <%= button_to 'Edit', "/merchant/items/#{item.id}/edit", method: :get %>
+        <%= button_to 'Delete', "/merchant/items/#{item.id}", params: { merchant_id: item.merchant_id }, method: :delete if item.no_orders? %>
       <% elsif current_admin? %>
-        <p><%= button_to 'Edit', "/admin/merchants/#{item.merchant_id}/items/#{item.id}/edit", method: :get %></p>
-        <p><%= button_to 'Delete', "/admin/merchants/#{item.merchant_id}/items/#{item.id}", params: { merchant_id: item.merchant_id }, method: :delete if item.no_orders? %></p>
+        <%= button_to 'Edit', "/admin/merchants/#{item.merchant_id}/items/#{item.id}/edit", method: :get %>
+        <%= button_to 'Delete', "/admin/merchants/#{item.merchant_id}/items/#{item.id}", params: { merchant_id: item.merchant_id }, method: :delete if item.no_orders? %>
       <% end %>
+      </center>
     </section>
     <% end %>
 </section>

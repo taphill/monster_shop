@@ -32,5 +32,12 @@ RSpec.describe 'Cart creation' do
         expect(page).to have_content("Cart: 2")
       end
     end
+
+    it "I cannot add inactive items to my cart" do
+      broken_pencil = @mike.items.create(name: "Broken pencil", active?: false, description: "It's so sad.", price: 0.99, image: "https://images-na.ssl-images-amazon.com/images/I/31BlVr01izL._SX425_.jpg", inventory: 22)
+
+      visit "/items/#{broken_pencil.id}"
+      expect(page).to_not have_button("Add To Cart")
+    end
   end
 end

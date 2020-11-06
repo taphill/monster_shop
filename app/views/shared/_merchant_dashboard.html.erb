@@ -1,5 +1,6 @@
 <h1>Merchant Dashboard</h1>
 
+<center>
 <section class="merchant-info">
   <p>Name: <%= @merchant.name %></p>
   <p>Street Address: <%= @merchant.address %></p>
@@ -8,6 +9,7 @@
   <p>Zip: <%= @merchant.zip %></p>
   <p>Registered Merchant Since: <%= format_date(@merchant.created_at) %></p>
 </section>
+
 
 <section class="pending-orders">
   <h3>Pending Orders</h3>
@@ -22,3 +24,4 @@
     </ul>
   <% end %>
 </section>
+</center>
