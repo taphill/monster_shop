@@ -126,5 +126,15 @@ RSpec.describe "As an admin" do
       expect(page).to have_content('This item is now deleted.')
       expect(page).to_not have_content(@chain.name)
     end
+
+    it "I don't see other merchant items" do
+      visit "/admin/merchants/#{@meg.id}/items"
+
+      brian = Merchant.create!(name: "Brian's Dog Shop", address: '125 Doggo St.', city: 'Denver', state: 'CO', zip: 80210)
+      item = brian.items.create!(name: "The Bone", description: "Can't destroy it!", price: 52, image: "https://dogtime.com/assets/uploads/2017/06/bones-safe-for-dogs-1.jpg", inventory: 5)
+
+      expect(page).to_not have_content(item.name)
+      expect(page).to_not have_content(item.description)
+    end
   end
 end

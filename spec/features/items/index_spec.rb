@@ -72,6 +72,13 @@ RSpec.describe "Items Index Page" do
       expect(page).to_not have_content(item2.description)
     end
 
+    it 'does not see edit or delete buttons' do
+      visit '/items'
+
+      expect(page).to_not have_button("Edit")
+      expect(page).to_not have_button("Delete")
+    end
+
     it 'has statistics when there are enough unique item_orders' do
       merchant = create(:merchant, :with_items, item_count: 12)
       create(:item_order, item: merchant.items[2], quantity: 6)
@@ -162,6 +169,13 @@ RSpec.describe "Items Index Page" do
       expect(page).to have_link(item.name)
       expect(page).to have_content(item.description)
     end
+
+    it 'sees edit and delete buttons' do
+      visit '/items'
+
+      expect(page).to have_button("Edit")
+      expect(page).to have_button("Delete")
+    end
   end
 
   describe "When a merchant visits the items index page" do
@@ -198,6 +212,13 @@ RSpec.describe "Items Index Page" do
 
       expect(page).to have_link(item.name)
       expect(page).to have_content(item.description)
+    end
+
+    it 'sees edit and delete buttons' do
+      visit '/items'
+
+      expect(page).to have_button("Edit")
+      expect(page).to have_button("Delete")
     end
   end
 end
