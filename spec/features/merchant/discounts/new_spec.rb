@@ -10,14 +10,30 @@ RSpec.describe "merchant/discounts/new", type: :feature do
       fill_in :email, with: user.email
       fill_in :password, with: user.password
       click_button "Login"
-
-      visit new_merchant_discount_path
-      fill_in 'Percentage', with: '5'
-      fill_in 'Item quantity', with: '20'
-      click_button 'Create'
     end
 
-    it { expect(page).to have_current_path(merchant_discounts_path) }
-    it { expect(page).to have_link("#{merchant.discounts[0].percentage}% discount on #{merchant.discounts[0].item_quantity} or more items")}
+    context 'when successfully filled out' do
+      it 'can create a new discount' do
+        visit new_merchant_discount_path
+        fill_in 'Percentage', with: '5'
+        fill_in 'Item quantity', with: '20'
+        click_button 'Create'
+
+        expect(page).to have_current_path(merchant_discounts_path)
+        expect(page).to have_link("#{merchant.discounts[0].percentage}% discount on #{merchant.discounts[0].item_quantity} or more items")
+        expect(page).to have_content('New discount successfully created')
+      end
+    end
+
+    context 'when unsuccessfully filled out' do
+      it 'can see flash error' do
+        visit new_merchant_discount_path
+        fill_in 'Percentage', with: ' '
+        fill_in 'Item quantity', with: '20'
+        click_button 'Create'
+        
+        expect(page).to have_content("Percentage can't be blank")
+      end
+    end
   end
 end
