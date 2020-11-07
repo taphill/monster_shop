@@ -19,5 +19,10 @@ RSpec.describe 'merchant/discounts', type: :feature do
         expect(page).to have_link("#{merchant.discounts[0].item_quantity}")
       end
     end
+
+    it 'can see link to create discount' do
+      click_link 'Create New Discount'
+      expect(page).to have_current_path(new_merchant_discount_path)
+    end
   end
 end
