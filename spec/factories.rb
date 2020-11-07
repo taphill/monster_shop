@@ -39,7 +39,23 @@ FactoryBot.define do
         create(:item_order, item: merchant.items[2]) 
       end
     end
+
+    trait :with_discounts do
+      transient do
+        discount_count { 3 }
+      end
+
+      after(:create) do |merchant, evaluator|
+        merchant.discounts << create_list(:discount, evaluator.discount_count)
+      end
+    end
   end
+
+ factory :discount do
+    percentage { Faker::Number.between(from: 5, to: 60) }
+    item_quantity { Faker::Number.between(from: 5, to: 20) }
+    merchant
+ end
 
   factory :item do
     sequence(:name) { |n| "Item ##{n}" }
