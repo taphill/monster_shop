@@ -20,10 +20,10 @@ Rails.application.routes.draw do
 
   namespace :merchant do
     root 'dashboard#index'
+    resources :discounts
     resources :items, except: [:show]
     get '/orders/:order_id', to: "orders#show"
     patch '/orders/:order_id', to: "orders#update"
-    resources :discounts
   end
 
   resources :merchants, except: [:delete]
