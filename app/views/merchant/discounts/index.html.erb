@@ -1,1 +1,10 @@
 <h1>Discounts Dashboard</h1>
+
+<section>
+  <% @merchant.discounts.each do |discount| %>
+    <div id="discount-<%= discount.id %>">
+      <%= link_to("#{discount.percentage}% discount on #{discount.item_quantity} or more items",
+                  merchant_discount_path(discount)) %>
+    </div>
+  <% end %>
+</section>
