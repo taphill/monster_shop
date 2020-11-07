@@ -22,6 +22,12 @@ RSpec.describe 'merchant show page', type: :feature do
 
       expect(current_path).to eq("/merchants/#{@bike_shop.id}/items")
     end
+
+    it 'can not see a link to merchant/discounts' do
+      visit "/merchants/#{@bike_shop.id}"
+      save_and_open_page
+      expect(page).to_not have_link('Discounts Dashboard') 
+    end
   end
 
   describe 'As a merchant' do
