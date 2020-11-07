@@ -13,10 +13,22 @@ RSpec.describe 'merchant/discounts', type: :feature do
       visit merchant_discounts_path
     end
 
-    it 'can see all bulk discounts' do
+    it 'can see all bulk discounts as a link to its show page' do
       within "#discount-#{merchant.discounts[0].id}" do
-        expect(page).to have_link("#{merchant.discounts[0].percentage}")
-        expect(page).to have_link("#{merchant.discounts[0].item_quantity}")
+        click_link "#{merchant.discounts[0].percentage}% discount on #{merchant.discounts[0].item_quantity} or more items"
+        expect(page).to have_current_path(merchant_discount_path(merchant.discounts[0]))
+      end
+
+      visit merchant_discounts_path
+      within "#discount-#{merchant.discounts[1].id}" do
+        click_link "#{merchant.discounts[1].percentage}% discount on #{merchant.discounts[1].item_quantity} or more items"
+        expect(page).to have_current_path(merchant_discount_path(merchant.discounts[1]))
+      end
+
+      visit merchant_discounts_path
+      within "#discount-#{merchant.discounts[2].id}" do
+        click_link "#{merchant.discounts[2].percentage}% discount on #{merchant.discounts[2].item_quantity} or more items"
+        expect(page).to have_current_path(merchant_discount_path(merchant.discounts[2]))
       end
     end
 
