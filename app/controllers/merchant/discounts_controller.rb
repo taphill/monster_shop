@@ -5,4 +5,7 @@ class Merchant::DiscountsController < Merchant::BaseController
 
   def show
   end
+
+  def new
+  end
 end
