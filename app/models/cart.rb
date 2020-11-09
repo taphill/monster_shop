@@ -30,7 +30,27 @@ class Cart
   end
 
   def subtotal(item)
-    item.price * @contents[item.id.to_s]
+    return item.price * @contents[item.id.to_s] unless discount?(item)
+
+    total = (item.price * @contents[item.id.to_s])
+    discount = total / discount(item)
+
+    total - discount
+  end
+
+  def discount(item)
+    item.merchant.discounts
+    .select(:percentage, :item_quantity)
+    .where('item_quantity <= ?', 3)
+    .order(item_quantity: :desc).limit(1)
+    .first.percentage
+  end
+
+  def discount?(item)
+    !(item.merchant.discounts
+          .select(:item_quantity)
+          .where('item_quantity <= ?', @contents[item.id.to_s])
+          .empty?)
   end
 
   def total
@@ -42,5 +62,4 @@ class Cart
   def inventory_check(item)
     @contents[item.id.to_s] < item.inventory
   end
-
 end
