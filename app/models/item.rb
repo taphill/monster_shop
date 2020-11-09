@@ -50,4 +50,19 @@ class Item < ApplicationRecord
   def insufficient_inventory?(order_id)
     item_orders.where(order_id: order_id).first.quantity > self.inventory
   end
+
+  def discount(quantity)
+    merchant.discounts
+    .select(:percentage, :item_quantity)
+    .where('item_quantity <= ?', quantity)
+    .order(item_quantity: :desc).limit(1)
+    .first.percentage / 100.to_f
+  end
+
+  def discount?(quantity)
+    !(merchant.discounts
+      .select(:item_quantity)
+      .where('item_quantity <= ?', quantity)
+      .empty?)
+  end
 end

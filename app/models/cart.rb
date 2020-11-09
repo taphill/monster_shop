@@ -30,32 +30,18 @@ class Cart
   end
 
   def subtotal(item)
-    return item.price * @contents[item.id.to_s] unless discount?(item)
-
-    total = (item.price * @contents[item.id.to_s])
-    discount = total / discount(item)
+    quantity = @contents[item.id.to_s]
+    return item.price * quantity unless item.discount?(quantity)
+ 
+    total = item.price * quantity
+    discount = total * item.discount(quantity)
 
     total - discount
   end
 
-  def discount(item)
-    item.merchant.discounts
-    .select(:percentage, :item_quantity)
-    .where('item_quantity <= ?', 3)
-    .order(item_quantity: :desc).limit(1)
-    .first.percentage
-  end
-
-  def discount?(item)
-    !(item.merchant.discounts
-          .select(:item_quantity)
-          .where('item_quantity <= ?', @contents[item.id.to_s])
-          .empty?)
-  end
-
   def total
     @contents.sum do |item_id,quantity|
-      Item.find(item_id).price * quantity
+      subtotal(Item.find(item_id))
     end
   end
 
