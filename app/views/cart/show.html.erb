@@ -38,7 +38,7 @@
         </center>
       </td>
       <td>
-        <p><%= cart.present_discount_for(item) %>%</p>
+        <p id="cart-discount-<%= item.id %>"><%= cart.present_discount_for(item) %>%</p>
       </td>
       <td>
         <p><%=number_to_currency(cart.subtotal(item))%></p>
