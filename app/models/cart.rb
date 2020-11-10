@@ -48,4 +48,11 @@ class Cart
   def inventory_check(item)
     @contents[item.id.to_s] < item.inventory
   end
+
+  def present_discount_for(item)
+    quantity = @contents[item.id.to_s]
+    return 0 unless item.discount?(quantity)
+
+    (item.discount(quantity).round(2) * 100).to_i
+  end
 end
