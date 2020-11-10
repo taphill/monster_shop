@@ -131,5 +131,51 @@ describe Item, type: :model do
       expect(@chain.insufficient_inventory?(order_2.id)).to eq(true)
       expect(@chain.insufficient_inventory?(order_1.id)).to eq(false)
     end
+
+    describe '#discount' do
+      context 'when an item quantity qualifies for a discount' do
+        it 'returns the the discount amount' do
+          merchant = create(:merchant)
+          item = create(:item, merchant: merchant)
+          create(:discount, percentage: 5, item_quantity: 3, merchant: merchant)
+
+          expect(item.discount(4)).to eq(0.05)
+        end
+      end
+
+      context 'when an item quantity qualifies for multiple discounts' do
+        it 'chooses the larger discount by item quantity' do
+          merchant = create(:merchant)
+          item = create(:item, merchant: merchant)
+          create(:discount, percentage: 5, item_quantity: 3, merchant: merchant)
+          create(:discount, percentage: 10, item_quantity: 5, merchant: merchant)
+
+          expect(item.discount(6)).to eq(0.10)
+        end
+      end
+    end
+
+    describe '#discount?' do
+      context 'when an item quantity qualifies for a discount' do
+        it 'returns true' do
+          merchant = create(:merchant)
+          item = create(:item, merchant: merchant)
+          create(:discount, percentage: 5, item_quantity: 3, merchant: merchant)
+
+          expect(item.discount?(3)).to eq(true)
+          expect(item.discount?(4)).to eq(true)
+        end
+      end
+
+      context 'else' do
+        it 'returns false' do
+          merchant = create(:merchant)
+          item = create(:item, merchant: merchant)
+          create(:discount, percentage: 5, item_quantity: 3, merchant: merchant)
+
+          expect(item.discount?(2)).to eq(false)
+        end
+      end
+    end
   end
 end
