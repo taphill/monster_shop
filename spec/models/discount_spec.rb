@@ -17,7 +17,7 @@ describe Discount, type: :model do
       context 'when a discount with a specific item_quanity does not already exist' do
         it 'returns true' do
           merchant = create(:merchant)
-          discount1 = build(:discount, item_quantity: 3) 
+          discount1 = build(:discount, item_quantity: 3, merchant: merchant) 
 
           expect(discount1.valid_item_quantity?).to eq(true)
         end
@@ -26,8 +26,8 @@ describe Discount, type: :model do
       context 'else' do
         it 'returns false' do
           merchant = create(:merchant)
-          discount1 = create(:discount, item_quantity: 3) 
-          discount2 = build(:discount, item_quantity: 3) 
+          discount1 = create(:discount, item_quantity: 3, merchant: merchant) 
+          discount2 = build(:discount, item_quantity: 3, merchant: merchant) 
       
           expect(discount2.valid_item_quantity?).to eq(false)
         end
@@ -38,8 +38,8 @@ describe Discount, type: :model do
       context 'when a disccount with a higher percentage and lower item threshold already exists' do
         it 'returns false' do
           merchant = create(:merchant)
-          discount1 = create(:discount, percentage: 10, item_quantity: 5) 
-          discount2 = build(:discount, percentage: 5, item_quantity: 15) 
+          discount1 = create(:discount, percentage: 10, item_quantity: 5, merchant: merchant) 
+          discount2 = build(:discount, percentage: 5, item_quantity: 15, merchant: merchant) 
           
           expect(discount2.logical_discount?).to eq(false)
         end
@@ -48,8 +48,8 @@ describe Discount, type: :model do
       context 'else' do
         it 'returns true' do
           merchant = create(:merchant)
-          discount1 = create(:discount, percentage: 10, item_quantity: 5) 
-          discount2 = build(:discount, percentage: 15, item_quantity: 15) 
+          discount1 = create(:discount, percentage: 10, item_quantity: 5, merchant: merchant) 
+          discount2 = build(:discount, percentage: 15, item_quantity: 15, merchant: merchant) 
           
           expect(discount2.logical_discount?).to eq(true)
         end
