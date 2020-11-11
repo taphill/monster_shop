@@ -29,8 +29,7 @@ class Cart
     item_quantity
   end
 
-  def subtotal(item)
-    quantity = @contents[item.id.to_s]
+  def subtotal(item, quantity)
     return item.price * quantity unless item.discount?(quantity)
  
     total = item.price * quantity
@@ -41,7 +40,7 @@ class Cart
 
   def total
     @contents.sum do |item_id,quantity|
-      subtotal(Item.find(item_id))
+      subtotal(Item.find(item_id), quantity)
     end
   end
 
@@ -49,8 +48,7 @@ class Cart
     @contents[item.id.to_s] < item.inventory
   end
 
-  def present_discount_for(item)
-    quantity = @contents[item.id.to_s]
+  def present_discount_for(item, quantity)
     return 0 unless item.discount?(quantity)
 
     (item.discount(quantity).round(2) * 100).to_i
