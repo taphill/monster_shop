@@ -57,6 +57,19 @@ RSpec.describe "merchant/discounts/edit", type: :feature do
         expect(page).to have_content("A discount with #{discount.item_quantity} item(s) already exists")
       end
 
+      it 'will show error if a discount with specific percentage already exists' do
+        discount2 = create(:discount, percentage: 15, item_quantity: 30, merchant: merchant)
+
+        visit merchant_discount_path(discount2)
+        click_link 'Edit Discount'
+
+        fill_in 'Percentage', with: discount.percentage.to_s
+        fill_in 'Item quantity', with: '35'
+        click_button 'Edit'
+
+        expect(page).to have_content("A discount for #{discount.percentage}% already exists")
+      end
+
       it 'will show error if a smaller discount with more required items exists' do
         discount2 = create(:discount, percentage: 15, item_quantity: 30, merchant: merchant)
 
