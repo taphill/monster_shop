@@ -5,7 +5,7 @@
   <%= f.number_field(:percentage, in: 1..100, step: 1) %>
 
   <%= f.label :item_quantity %>
-  <%= f.number_field(:item_quantity, step: 1) %>
+  <%= f.number_field(:item_quantity, in: 1..1000, step: 1) %>
 
   <%= f.submit 'Create' %>
 <% end %>
