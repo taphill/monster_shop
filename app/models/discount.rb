@@ -6,11 +6,15 @@ class Discount < ApplicationRecord
   validates :item_quantity, presence: true
 
   def valid_item_quantity?
-    Discount.where(item_quantity: self.item_quantity).empty?
+    Discount.where(merchant_id: self.merchant_id)
+            .where(item_quantity: self.item_quantity)
+            .empty?
   end
 
   def valid_percentage?
-    Discount.where(percentage: self.percentage).empty?
+    Discount.where(merchant_id: self.merchant_id)
+            .where(percentage: self.percentage)
+            .empty?
   end
 
   def logical_discount?
@@ -21,6 +25,7 @@ class Discount < ApplicationRecord
 
   def larger_discount_with_less_items?
     Discount.select(:percentage, :item_quantity)
+            .where(merchant_id: self.merchant_id)
             .where('item_quantity < ?', self.item_quantity)
             .where('percentage > ?', self.percentage)
             .empty?
@@ -28,6 +33,7 @@ class Discount < ApplicationRecord
 
   def smaller_discount_with_more_items?
     Discount.select(:percentage, :item_quantity)
+            .where(merchant_id: self.merchant_id)
             .where('item_quantity > ?', self.item_quantity)
             .where('percentage < ?', self.percentage)
             .empty?
