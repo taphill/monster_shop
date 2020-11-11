@@ -80,16 +80,17 @@ class Merchant::DiscountsController < Merchant::BaseController
   end
 
   def valid_edit?(discount)
-    return true if (discount.item_quantity == Discount.find(discount.id).item_quantity) && discount.logical_discount?
+    return true if (discount.item_quantity == Discount.find(discount.id).item_quantity) && discount.logical_discount? && discount.valid_percentage?
+    return true if (discount.percentage == Discount.find(discount.id).percentage) && discount.logical_discount? && discount.valid_item_quantity?
 
-    if !discount.valid_item_quantity?
+    if !discount.logical_discount?
+      flash[:error] = "This discount would make an existing discount invalid"
+      false
+    elsif !discount.valid_item_quantity?
       flash[:error] = "A discount with #{discount.item_quantity} item(s) already exists"
       false
     elsif !discount.valid_percentage?
       flash[:error] = "A discount for #{discount.percentage}% already exists"
-      false
-    elsif !discount.logical_discount?
-      flash[:error] = "This discount would make an existing discount invalid"
       false
     else
       true
