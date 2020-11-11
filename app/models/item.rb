@@ -52,6 +52,8 @@ class Item < ApplicationRecord
   end
 
   def discount(quantity)
+    return nil unless discount?(quantity)
+
     merchant.discounts
     .select(:percentage, :item_quantity)
     .where('item_quantity <= ?', quantity)
