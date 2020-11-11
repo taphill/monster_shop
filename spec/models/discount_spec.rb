@@ -34,12 +34,44 @@ describe Discount, type: :model do
       end
     end
 
+    describe '#valid_percentage?' do
+      context 'when a discount with a specific percentage already exists' do
+        it 'returns false' do
+          merchant = create(:merchant)
+          discount1 = create(:discount, percentage: 5, merchant: merchant) 
+          discount2 = build(:discount, percentage: 5, merchant: merchant) 
+      
+          expect(discount2.valid_percentage?).to eq(false)
+        end
+      end
+
+      context 'else' do
+        it 'returns true' do
+          merchant = create(:merchant)
+          discount1 = create(:discount, percentage: 5, merchant: merchant) 
+          discount2 = build(:discount, percentage: 10, merchant: merchant) 
+      
+          expect(discount2.valid_percentage?).to eq(true)
+        end
+      end
+    end
+
     describe '#logical_discount?' do
-      context 'when a disccount with a higher percentage and lower item threshold already exists' do
+      context 'when a larger discount with less required items already exists' do
         it 'returns false' do
           merchant = create(:merchant)
           discount1 = create(:discount, percentage: 10, item_quantity: 5, merchant: merchant) 
           discount2 = build(:discount, percentage: 5, item_quantity: 15, merchant: merchant) 
+          
+          expect(discount2.logical_discount?).to eq(false)
+        end
+      end
+
+      context 'when a smaller discount with more required items already exists' do
+        it 'returns false' do
+          merchant = create(:merchant)
+          discount1 = create(:discount, percentage: 10, item_quantity: 5, merchant: merchant) 
+          discount2 = build(:discount, percentage: 25, item_quantity: 1, merchant: merchant) 
           
           expect(discount2.logical_discount?).to eq(false)
         end
