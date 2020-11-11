@@ -31,10 +31,59 @@ RSpec.describe "merchant/discounts/edit", type: :feature do
         expect(page).to have_link('5% discount on 20 or more items')
         expect(page).to have_content('Discount successfully edited')
       end
+
+      it 'can update discount if it is logical' do
+        fill_in 'Percentage', with: '15'
+        fill_in 'Item quantity', with: discount.item_quantity.to_s
+        click_button 'Edit'
+
+        expect(page).to have_current_path(merchant_discounts_path)
+        expect(page).to have_link("5% discount on #{discount.item_quantity} or more items")
+        expect(page).to have_content('Discount successfully edited')
+      end
     end
 
-    context 'when unsuccessfully filled out' do
-      it 'shows flash error' do
+    context 'sad paths' do
+      it 'will show error if a discount with specific item quantity already exists' do
+        discount2 = create(:discount, percentage: 15, item_quantity: 30)
+
+        visit merchant_discount_path(discount2)
+        click_link 'Edit Discount'
+
+        fill_in 'Percentage', with: '5'
+        fill_in 'Item quantity', with: discount.item_quantity.to_s
+        click_button 'Edit'
+
+        expect(page).to have_content("A discount with #{discount.item_quantity} item(s) already exists")
+      end
+
+      it 'will show error if smaller discount with more items' do
+        discount2 = create(:discount, percentage: 15, item_quantity: 30)
+
+        visit merchant_discount_path(discount2)
+        click_link 'Edit Discount'
+
+        fill_in 'Percentage', with: '5'
+        fill_in 'Item quantity', with: '35'
+        click_button 'Edit'
+
+        expect(page).to have_content("This discount would make an existing discount invalid")
+      end
+
+      it 'will show error if larger discount with less items' do
+        discount2 = create(:discount, percentage: 5, item_quantity: 10)
+
+        visit merchant_discount_path(discount2)
+        click_link 'Edit Discount'
+
+        fill_in 'Percentage', with: '50'
+        fill_in 'Item quantity', with: '5'
+        click_button 'Edit'
+
+        expect(page).to have_content("This discount would make an existing discount invalid")
+      end
+
+      it "shows can't be blank error" do
         fill_in 'Percentage', with: ''
         fill_in 'Item quantity', with: '20'
         click_button 'Edit'
