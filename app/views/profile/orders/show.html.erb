@@ -19,6 +19,9 @@
       <p>Item Description: <%= item_order.item.description %><br>
       Item Price: <%= format_price(item_order.item.price) %><br>
       Quantity of Item in Order: <%= item_order.quantity %><br>
+      <% if item_order.discount_applied %>
+        Discount Applied: <%= item_order.discount_applied %>%<br>
+      <% end %>
       Order Subtotal: <%= format_price(item_order.subtotal) %></p>
     </section>
   <% end %>
