@@ -48,7 +48,7 @@ RSpec.describe "merchant/discounts/new", type: :feature do
         expect(page).to have_content('A discount for 5% already exists')
       end
 
-      it 'will show error if smaller discount with more items exists' do
+      it 'will show error if smaller discount with more required items exists' do
         create(:discount, percentage: 10, item_quantity: 20, merchant: merchant)
 
         visit new_merchant_discount_path
@@ -59,7 +59,7 @@ RSpec.describe "merchant/discounts/new", type: :feature do
         expect(page).to have_content("This discount would make an existing discount invalid")
       end
 
-      it 'will show error if larger discount with less items exists' do
+      it 'will show error if larger discount with less required items exists' do
         create(:discount, percentage: 10, item_quantity: 20, merchant: merchant)
 
         visit new_merchant_discount_path

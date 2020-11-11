@@ -14,12 +14,13 @@ describe Discount, type: :model do
 
   describe 'instance methods' do
     describe '#valid_item_quantity' do
-      context 'when a discount with a specific item_quanity does not already exist' do
+      context 'when a discount with a specific item quanity does not already exist' do
         it 'returns true' do
           merchant = create(:merchant)
           discount1 = build(:discount, item_quantity: 3, merchant: merchant) 
+          discount2 = build(:discount, item_quantity: 5, merchant: merchant) 
 
-          expect(discount1.valid_item_quantity?).to eq(true)
+          expect(discount2.valid_item_quantity?).to eq(true)
         end
       end
 
