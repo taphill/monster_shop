@@ -69,11 +69,6 @@ RSpec.describe Cart do
       expect(@cart.total).to eq(120)
     end
 
-    it '.subtotal()' do
-      expect(@cart.subtotal(@ogre)).to eq(20)
-      expect(@cart.subtotal(@giant)).to eq(100)
-    end
-
     it '.inventory_check(item)' do
       expect(@cart.inventory_check(@giant)).to eq(false)
       expect(@cart.inventory_check(@ogre)).to eq(true)
@@ -93,8 +88,8 @@ RSpec.describe Cart do
             item2.id.to_s => 4
             })
 
-          expect(cart.subtotal(item1)).to eq(40.0)
-          expect(cart.subtotal(item2)).to eq(190.0)
+          expect(cart.subtotal(item1, 2)).to eq(40.0)
+          expect(cart.subtotal(item2, 4)).to eq(190.0)
         end
       end
     end
@@ -124,7 +119,7 @@ RSpec.describe Cart do
             item.id.to_s => 4
             })
 
-          expect(cart.present_discount_for(item)).to eq(5)
+          expect(cart.present_discount_for(item, 4)).to eq(5)
         end
       end
 
@@ -137,7 +132,7 @@ RSpec.describe Cart do
             item.id.to_s => 1
             })
 
-          expect(cart.present_discount_for(item)).to eq(0)
+          expect(cart.present_discount_for(item, 1)).to eq(0)
         end
       end
     end
