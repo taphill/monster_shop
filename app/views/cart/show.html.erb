@@ -8,6 +8,7 @@
     <th>Sold By</th>
     <th>Price</th>
     <th>Quantity</th>
+    <th>Discount</th>
     <th>Subtotal</th>
   </tr>
   <% @items.each do |item,quantity| %>
@@ -35,10 +36,13 @@
           <%= button_to "-", "/cart/#{item.id}", method: :patch, params: {type: 'down'} unless quantity.zero? %>
           <p><%= link_to "Remove", "/cart/#{item.id}",method: :delete %></p>
         </center>
-        </td>
+      </td>
       <td>
-        <p><%=number_to_currency(cart.subtotal(item))%></p>
-    </td>
+        <p id="cart-discount-<%= item.id %>"><%= cart.present_discount_for(item, quantity) %>%</p>
+      </td>
+      <td>
+        <p><%=number_to_currency(cart.subtotal(item, quantity))%></p>
+      </td>
     </tr>
   <% end %>
 </table>

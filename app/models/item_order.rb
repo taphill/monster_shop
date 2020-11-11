@@ -1,5 +1,5 @@
 class ItemOrder <ApplicationRecord
-  validates_presence_of :item_id, :order_id, :price, :quantity
+validates_presence_of :item_id, :order_id, :price, :quantity, :subtotal
   scope :fulfilled, -> { where('fulfill_status = ?', "fulfilled")}
   
   belongs_to :item
@@ -11,7 +11,9 @@ class ItemOrder <ApplicationRecord
     select(:item_id).distinct.count
   end
 
-  def subtotal
-    price * quantity
+  def discount_applied
+    return nil if discount.nil?
+
+    (discount * 100).to_i
   end
 end

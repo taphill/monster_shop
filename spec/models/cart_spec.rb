@@ -69,15 +69,72 @@ RSpec.describe Cart do
       expect(@cart.total).to eq(120)
     end
 
-    it '.subtotal()' do
-      expect(@cart.subtotal(@ogre)).to eq(20)
-      expect(@cart.subtotal(@giant)).to eq(100)
-    end
-
     it '.inventory_check(item)' do
       expect(@cart.inventory_check(@giant)).to eq(false)
       expect(@cart.inventory_check(@ogre)).to eq(true)
     end
+  end
 
+  describe 'instance methods for discounts' do
+    describe '#subtotal' do
+      context 'when passed an item' do
+        it 'returns the subtotal' do
+          merchant = create(:merchant)
+          item1 = create(:item, price: 20, merchant: merchant)
+          item2 = create(:item, price: 50, merchant: merchant)
+          discount = create(:discount, percentage: 5, item_quantity: 3, merchant: merchant)
+          cart = Cart.new({
+            item1.id.to_s => 2,
+            item2.id.to_s => 4
+            })
+
+          expect(cart.subtotal(item1, 2)).to eq(40.0)
+          expect(cart.subtotal(item2, 4)).to eq(190.0)
+        end
+      end
+    end
+
+    describe '#total' do
+      it 'calculates all subtotals' do
+        merchant = create(:merchant)
+        item1 = create(:item, price: 20, merchant: merchant)
+        item2 = create(:item, price: 50, merchant: merchant)
+        discount = create(:discount, percentage: 5, item_quantity: 3, merchant: merchant)
+        cart = Cart.new({
+          item1.id.to_s => 2,
+          item2.id.to_s => 4
+          })
+
+        expect(cart.total).to eq(230.0)
+      end
+    end
+
+    describe '#present_discount_for' do
+      context 'when an item in the cart has a discount' do
+        it 'returns the discount percentage' do
+          merchant = create(:merchant)
+          item = create(:item, price: 50, merchant: merchant)
+          discount = create(:discount, percentage: 5, item_quantity: 3, merchant: merchant)
+          cart = Cart.new({
+            item.id.to_s => 4
+            })
+
+          expect(cart.present_discount_for(item, 4)).to eq(5)
+        end
+      end
+
+      context 'else' do
+        it 'returns 0' do
+          merchant = create(:merchant)
+          item = create(:item, price: 50, merchant: merchant)
+          discount = create(:discount, percentage: 5, item_quantity: 3, merchant: merchant)
+          cart = Cart.new({
+            item.id.to_s => 1
+            })
+
+          expect(cart.present_discount_for(item, 1)).to eq(0)
+        end
+      end
+    end
   end
 end

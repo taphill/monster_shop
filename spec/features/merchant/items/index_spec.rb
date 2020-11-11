@@ -103,7 +103,8 @@ RSpec.describe "Merchant Items Index Page" do
         order_id: order.id,
         item_id: @tire.id,
         price: @tire.price,
-        quantity: 1
+        quantity: 1,
+        subtotal: (@tire.price * 1)
       )
 
       visit "/merchant/items"

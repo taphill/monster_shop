@@ -81,5 +81,6 @@ FactoryBot.define do
     order
     price { Faker::Commerce.price }
     quantity { 1 }
+    subtotal { price * quantity }
   end
 end

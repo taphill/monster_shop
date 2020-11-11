@@ -25,14 +25,67 @@ RSpec.describe "merchant/discounts/new", type: :feature do
       end
     end
 
-    context 'when unsuccessfully filled out' do
-      it 'can see flash error' do
+    context 'sad paths' do
+      it 'can not create a discount with an existing item quantity' do
+        create(:discount, percentage: 10, item_quantity: 20, merchant: merchant)
+
+        visit new_merchant_discount_path
+        fill_in 'Percentage', with: '5'
+        fill_in 'Item quantity', with: '20'
+        click_button 'Create'
+        
+        expect(page).to have_content('A discount with 20 item(s) already exists')
+      end
+
+      it 'can not create a discount with an existing percentage' do
+        create(:discount, percentage: 5, item_quantity: 10, merchant: merchant)
+
+        visit new_merchant_discount_path
+        fill_in 'Percentage', with: '5'
+        fill_in 'Item quantity', with: '20'
+        click_button 'Create'
+        
+        expect(page).to have_content('A discount for 5% already exists')
+      end
+
+      it 'will show error if smaller discount with more required items exists' do
+        create(:discount, percentage: 10, item_quantity: 20, merchant: merchant)
+
+        visit new_merchant_discount_path
+        fill_in 'Percentage', with: '50'
+        fill_in 'Item quantity', with: '5'
+        click_button 'Create'
+
+        expect(page).to have_content("This discount would make an existing discount invalid")
+      end
+
+      it 'will show error if larger discount with less required items exists' do
+        create(:discount, percentage: 10, item_quantity: 20, merchant: merchant)
+
+        visit new_merchant_discount_path
+        fill_in 'Percentage', with: '5'
+        fill_in 'Item quantity', with: '25'
+        click_button 'Create'
+
+        expect(page).to have_content("This discount would make an existing discount invalid")
+      end
+
+      it "percentage can't be blank" do
         visit new_merchant_discount_path
         fill_in 'Percentage', with: ' '
         fill_in 'Item quantity', with: '20'
         click_button 'Create'
         
         expect(page).to have_content("Percentage can't be blank")
+      end
+
+      it "item quantity can't be blank" do
+        visit new_merchant_discount_path
+        fill_in 'Percentage', with: '5'
+        fill_in 'Item quantity', with: ' '
+        click_button 'Create'
+        
+        expect(page).to have_content("Item quantity can't be blank")
       end
     end
   end
