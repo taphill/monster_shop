@@ -102,16 +102,29 @@ RSpec.describe 'Cart show' do
         expect(page).to_not have_content(@pencil.name)
       end
 
-      it 'displays the discount percentage applied' do
-        5.times do
-          visit "/items/#{@pencil.id}"
-          click_on "Add To Cart"
+      context 'when an item qualifies for a discount' do
+        it 'displays the discount percentage applied' do
+          5.times do
+            visit "/items/#{@pencil.id}"
+            click_on "Add To Cart"
+          end
+          
+          visit '/cart'
+          within("#cart-item-#{@pencil.id}") do
+            within("#cart-discount-#{@pencil.id}") do
+              expect(page).to have_content('10%') 
+            end
+          end
         end
-        
-        visit '/cart'
-        within("#cart-item-#{@pencil.id}") do
-          within("#cart-discount-#{@pencil.id}") do
-            expect(page).to have_content('10%') 
+      end
+
+      context 'when an item does not qualify for a discount' do
+        it 'displays 0%' do
+          visit '/cart'
+          within("#cart-item-#{@pencil.id}") do
+            within("#cart-discount-#{@pencil.id}") do
+              expect(page).to have_content('0%') 
+            end
           end
         end
       end
