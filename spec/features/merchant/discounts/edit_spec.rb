@@ -45,7 +45,7 @@ RSpec.describe "merchant/discounts/edit", type: :feature do
 
     context 'sad paths' do
       it 'will show error if a discount with specific item quantity already exists' do
-        discount2 = create(:discount, percentage: 15, item_quantity: 30)
+        discount2 = create(:discount, percentage: 15, item_quantity: 30, merchant: merchant)
 
         visit merchant_discount_path(discount2)
         click_link 'Edit Discount'
@@ -58,7 +58,7 @@ RSpec.describe "merchant/discounts/edit", type: :feature do
       end
 
       it 'will show error if a smaller discount with more required items exists' do
-        discount2 = create(:discount, percentage: 15, item_quantity: 30)
+        discount2 = create(:discount, percentage: 15, item_quantity: 30, merchant: merchant)
 
         visit merchant_discount_path(discount2)
         click_link 'Edit Discount'
@@ -71,7 +71,7 @@ RSpec.describe "merchant/discounts/edit", type: :feature do
       end
 
       it 'will show error if a larger discount with less required items exists' do
-        discount2 = create(:discount, percentage: 5, item_quantity: 10)
+        discount2 = create(:discount, percentage: 5, item_quantity: 10, merchant: merchant)
 
         visit merchant_discount_path(discount2)
         click_link 'Edit Discount'
